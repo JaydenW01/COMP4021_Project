@@ -1,0 +1,14 @@
+{
+ "test": {
+  "name": "Test",
+  "password": "$2b$10$Yxb2fSgA5RFn9Oz9TxjLLuve/GiPXCs2DWVFhyFDr4qz39qglwp8e"
+ },
+ "test2": {
+  "displayName": "test2",
+  "password": "$2b$10$rXulwUw7zmeYBOrjvQXI9e7MnkPHxL4BNH7MbTsQJals2eaKcB3t2"
+ },
+ "test3": {
+  "displayName": "test3",
+  "password": "$2b$10$S9xkz3MMLMXw51cDCxTb.eEcP6bEn8feaZJ8uS6IF3XR3PSn9VGQi"
+ }
+}
