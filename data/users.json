@@ -10,5 +10,9 @@
  "test3": {
   "displayName": "test3",
   "password": "$2b$10$S9xkz3MMLMXw51cDCxTb.eEcP6bEn8feaZJ8uS6IF3XR3PSn9VGQi"
+ },
+ "test4": {
+  "displayName": "test4",
+  "password": "$2b$10$Mjh9nJsqkF0TBgXlhlspl.5jqGEk80KcLs79Y1SBv/wO7HZotquF."
  }
 }

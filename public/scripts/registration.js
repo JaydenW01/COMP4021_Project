@@ -7,13 +7,13 @@ const Registration = (function(){
     //                 request is successful in this form `onSuccess()`
     // * `onError`   - This is a callback function to be called when the
     //                 request fails in this form `onError(error)`
-    const register = function(username, name, password, onSuccess, onError) {
+    const register = function(username, displayName, password, onSuccess, onError) {
 
         //
         // A. Preparing the user data
         //
         // create the json data
-        const json = JSON.stringify( {username, name, password} );
+        const json = JSON.stringify( {username, displayName, password} );
         //
         // B. Sending the AJAX request to the server
         //
