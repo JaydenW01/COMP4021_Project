@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="./assets/charlie/icon.jpg" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Audiowide"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&family=Darumadrop+One&display=swap"
+      rel="stylesheet"
+    />
+    <link href="styles.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://kit.fontawesome.com/5b54f3d95e.js" crossorigin="anonymous"></script>
+    <title>COMP4021 Bomberman</title>
+  </head>
+  <body>
+    <div class="canvas-container">
+      <canvas id="canvas"></canvas>
+      <div id="signin-overlay" class="overlay row">
+        <div class="content shadow row">
+            <form id="signin-form" class="col">
+                <div class="caption">SIGN IN</div>
+                <div class="spacer-0"></div>
+                <input id="signin-username" placeholder="Enter your username"></input>
+                <input id="signin-password" type="password" placeholder="Enter your password"></input>
+                <div class="spacer-0"></div>
+                <button type="submit">Sign In</button>
+                <div id="signin-message" class="warning center"></div>
+                <div class="spacer-grow"></div>
+            </form>
+
+            <div class="spacer-0"></div>
+
+            <form id="register-form" class="col">
+                <div class="caption">REGISTER A NEW ACCOUNT</div>
+                <div class="spacer-0"></div>
+                <input id="register-username" maxlength="10" placeholder="Enter your username"></input>
+                <input id="register-name" maxlength="16" placeholder="Enter your name"></input>
+                <input id="register-password" type="password" placeholder="Enter your password"></input>
+                <input id="register-confirm" type="password" placeholder="Enter your password again"></input>
+                <div class="spacer-0"></div>
+                <button type="submit">Register</button>
+                <div id="register-message" class="warning center"></div>
+            </form>
+        </div>
+    </div>
+      <!-- menu page -->
+      <div id="menu">
+        <h1 style="font-size: 60px;" onclick="gameOver.enterGameOver()">Bomberman</h2>
+        <div class="button-base slide-in-button" onclick="gameLobby.enterLobby()" id="game-start">
+            <div>
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div></div>
+            <div>Start Game</div>
+        </div>
+        <div class="button-base slide-in-button" onclick="gameStat.enterStat()">
+            <div>
+                <i class="far fa-chart-bar"></i>
+            </div>
+            <div></div>
+            <div>Game Stats</div>
+        </div>
+        <div class="button-base slide-in-button" onclick="gameInfo.enterGameInfo()">
+            <div>
+                <i class="far fa-question-circle"></i>
+            </div>
+            <div></div>
+            <div>
+                Game Info
+            </div>
+        </div>
+        <div class="button-base slide-in-button" onclick="gameMenu.signout()">
+          <div>
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          </div>
+          <div></div>
+          <div>
+              Sign Out
+          </div>
+        </div>
+      </div>
+      <!-- game lobby page -->
+      <div id="game-lobby" style="display: none;">
+        <div class="lobby-boxes">
+          <div class="lobby-box" id="lobby-player1">
+            <div class="join-button" onclick="gameLobby.joinAsPlayer(1)">Join</div>
+            <div class="player-joined">
+              <div class="lobby-heading">
+                <div class="player-number"> Player 1</div>
+                <div class="player-name"> Tony Lam</div>
+              </div>
+              <div class="avatar" id="config-skin">
+                <div class="selector" id="left" onclick="gameLobby.chooseLeftSkin()"> < </div>
+                <img id="avatar-image" src="assets/player1.png">
+                <div class="selector" id="right" onclick="gameLobby.chooseRightSkin()"> > </div>
+              </div>
+              <div id="config-life">
+                <div> Number of Life:</div>
+                <div class="config-num-block">
+                  <div class="num-change" id="decrease" onclick="gameLobby.decreaseHealth()"> - </div>
+                  <div id="config-life-num" class="config-result">3</div>
+                  <div class="num-change" id="increase" onclick="gameLobby.increaseHealth()"> + </div>                    
+                </div>
+              </div>
+              <div id="config-init-bomb">
+                <div> Number of Initial Bombs:</div>
+                <div class="config-num-block">
+                  <div class="num-change" id="decrease" onclick="gameLobby.decreaseBomb()"> - </div>
+                  <div id="config-init-bomb-num" class="config-result">1</div>
+                  <div class="num-change" id="increase" onclick="gameLobby.increaseBomb()"> + </div>                    
+                </div>
+              </div>
+              <div class="leave-button" onclick="gameLobby.leaveAsPlayer()">Leave</div>
+              <div class="ready-button" onclick="gameLobby.playerReady(true)">Ready</div>
+              <div class="cancel-button" onclick="gameLobby.playerReady(false)">Cancel</div>
+              <div class="ready-message">I am ready!</div>
+            </div>
+          </div>
+          <div class="lobby-box" id="lobby-game-config">
+            <div id="config-time">
+              <div>Game Time</div>
+              <div class="config-num-block">
+                <div onclick="gameLobby.decreaseGameDuration()" class="num-change" id="decrease"> - </div>
+                <div class="game-duration">0</div>
+                <div onclick="gameLobby.increaseGameDuration()" class="num-change" id="increase"> + </div>                
+              </div>
+            </div>
+            <!-- <div id="config-powerup">
+              <div> Power Up:</div>
+              <div id="config-powerup-control" class="config-result">Enabled</div>
+            </div> -->
+          </div>
+          <div class="lobby-box" id="lobby-player2">
+            <div class="join-button" onclick="gameLobby.joinAsPlayer(2)">Join</div>
+              <div class="player-joined">
+                <div class="lobby-heading">
+                  <div class="player-number"> Player 2</div>
+                  <div class="player-name"> Tony Lam</div>
+                </div>
+                <div class="avatar" id="config-skin">
+                  <div class="selector" id="left" onclick="gameLobby.chooseLeftSkin()"> < </div>
+                  <img id="avatar-image" src="assets/player1.png">
+                  <div class="selector" id="right" onclick="gameLobby.chooseRightSkin()"> > </div>
+                </div>
+                <div id="config-life">
+                  <div> Number of Life:</div>
+                  <div class="config-num-block">
+                    <div class="num-change" id="decrease" onclick="gameLobby.decreaseHealth()"> - </div>
+                    <div id="config-life-num" class="config-result">3</div>
+                    <div class="num-change" id="increase" onclick="gameLobby.increaseHealth()"> + </div>                    
+                  </div>
+                </div>
+                <div id="config-init-bomb">
+                  <div> Number of Initial Bombs:</div>
+                  <div class="config-num-block">
+                    <div class="num-change" id="decrease" onclick="gameLobby.decreaseBomb()"> - </div>
+                    <div id="config-init-bomb-num" class="config-result">1</div>
+                    <div class="num-change" id="increase" onclick="gameLobby.increaseBomb()"> + </div>                    
+                  </div>
+                </div>
+                <div class="leave-button" onclick="gameLobby.leaveAsPlayer()">Leave</div>
+                <div class="ready-button" onclick="gameLobby.playerReady(true)">Ready</div>
+                <div class="cancel-button" onclick="gameLobby.playerReady(false)">Cancel</div>
+                <div class="ready-message">I am ready!</div>
+              </div>
+            </div>
+          </div>   
+          <div class="back-button" onclick="gameLobby.backToMenu()">Back</div>       
+        </div>
+        <!-- game start countdown -->
+        <div id="countdown" style="display: none;">0</div>
+        <!-- ranking page -->
+        <div id="ranking" style="display: none;">
+          <table>
+            <caption>Game Statistics Board</caption>
+            <thead>
+              <tr>
+                <th scope="col">Ranking</th>
+                <th scope="col">User Name</th>
+                <th scope="col">Win</th>
+                <th scope="col">Lose</th>
+              </tr>
+            </thead>
+            <tbody id="table-body">
+              <tr>
+                <td scope="row" data-label="Ranking">1</td>
+                <td data-label="Username">Tony</td>
+                <td data-label="Wins">3</td>
+                <td data-label="Lose">0</td>
+              </tr>
+              <tr>
+                <td scope="row" data-label="Ranking">2</td>
+                <td data-label="Username">Terry</td>
+                <td data-label="Wins">2</td>
+                <td data-label="Lose">1</td>
+              </tr>
+              <tr>
+                <td scope="row" data-label="Ranking">3</td>
+                <td data-label="Username">Edward</td>
+                <td data-label="Wins">0</td>
+                <td data-label="Lose">3</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="back-button" onclick="gameStat.backToMenu()">Back</div>       
+        </div>
+        <!-- game info page  -->
+        <div id="game-info" style="display: none;">
+          <div id="game-info-content">
+            <div id="game-info-title">Game Information</div>
+            <div class="info-block">
+              <div class="game-info-header">Description</div>
+              <div class="game-info-text">
+                This is a 2-player online bomberman game. You need to place bombs to defeat another player within the game time. Otherwise, this will be a draw game.
+              </div>
+            </div>
+            <div class="game-info-row">
+              <div class="info-block-minor">
+                <div class="game-info-header">Control</div>
+                <div class="game-info-text">
+                  WASD: Player movement
+                  Space: Place bomb
+                  C: enable cheating mode
+                  V: disable cheating mode
+                </div>            
+              </div>
+              <div class="info-block-minor">
+                <div class="game-info-header">Items</div>
+                <div class="game-info-text">
+                  <img src="assets/range potion.png"> : + Explosion Range
+                  <img src="assets/heart.png"> : + Extra Life
+                  <img src="assets/extra bomb.png"> : + Number of Bombs
+                  <img src="assets/unbreakable wall.png"> : Unbreakable Wall
+                  <img src="assets/breakable wall.png"> : Breakable Wall
+                </div>            
+              </div>
+            </div>
+          </div>
+          <div id="back-button-gameinfo" onclick="gameInfo.backToMenu()">Back</div>       
+        </div>
+        <!-- game over page -->
+        <div id="game-over" style="display: none;">
+          <div id="game-over-content">
+            Game Over!!
+            <!-- <div id="game-result">
+              You Win!
+            </div>
+            <div id="game-over-stat">
+              <div id="game-over-player1">
+                <div class="game-over-username">
+                  Player 1
+                </div>
+                <div class="game-over-stat-row">
+                  Health: 100
+                </div>
+                <div class="game-over-stat-row">
+                  Bomb: 3
+                </div>
+                <div class="game-over-stat-row">
+                  Range: 2
+                </div>
+              </div>
+              <div id="game-over-player2">
+                <div class="game-over-username">
+                  Player 2
+                </div>
+                <div class="game-over-stat-row">
+                  Health: 60
+                </div>
+                <div class="game-over-stat-row">
+                  Bomb: 2
+                </div>
+                <div class="game-over-stat-row">
+                  Range: 4
+                </div>
+              </div> -->
+            </div>
+            <div id="back-button-gameover" onclick="gameOver.backToMenu()">Back To Menu</div>       
+          </div>
+        </div>
+        <div id="clock" style="display: none;">
+          <div id="clock-title"> Time left: </div>
+          <div id="clock-content">
+            <div id="minute">0</div>: <div id="seconds">0</div>
+          </div>
+        </div>
+    </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <script src="/socket.io/socket.io.min.js"></script>
+    <script src="scripts/socket.js"></script>
+    <script src="scripts/UI.js"></script>
+    <script src="scripts/gameLobby.js"></script>
+    <script src="scripts/registration.js"></script>
+    <script src="scripts/authentication.js"></script>
+    <!-- Sprite -->
+    <!-- <script src="scripts/Player.js"></script>
+    <script src="scripts/MapItems.js" ></script>
+    <script src="scripts/Sprite.js"></script>
+    <script src="scripts/BoundingBox.js"></script>
+    <script src="scripts/Bomb.js"></script>
+    <script src="scripts/PowerUps.js"></script>
+    <script src="scripts/bomberman.js"></script> -->
+    <script>
+      $(document).ready(function () {
+        // Initialize the UI
+        SignInForm.initialize();
+        
+        // Validate the signin
+        Authentication.validate(
+          () => { SignInForm.hide(); },
+          () => { SignInForm.show(); }
+        );
+      });
+    </script>
+  </body>
+</html>
