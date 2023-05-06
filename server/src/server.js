@@ -3,6 +3,7 @@ const session = require("express-session");
 const bcrypt = require("bcrypt");
 const fs = require("fs");
 
+const Lobby = require("./Lobby");
 const app = express();
 app.use(express.static('public'));
 app.use(express.json());
@@ -87,7 +88,7 @@ app.post("/signin", (req, res) => {
     }
 
     //generate user session
-    req.session.user = {username,avatar:user.avatar,name:user.name};
+    req.session.user = {username,displayName:user.displayName};
     //
     // G. Sending a success response with the user account
     //
@@ -137,7 +138,18 @@ app.get("/ranking",(req,res)=>{
     //console.log(ranking)
 })
 
-
+app.post("/post_score",(req,res)=>{
+    if (req.session.user){
+        const {points} = req.body;
+        const displayName = req.session.user.displayName;
+        const ranking = JSON.parse(fs.readFileSync('data/ranking.json'));
+        ranking.push({displayName,points});
+        fs.writeFileSync('data/ranking.json', JSON.stringify(ranking, null, ' '));
+        res.status(200).json({status:'success'});
+    } else {
+        res.status(404).json({status:'error',message:"Unauthorized user"});
+    }
+})
 
 
 
@@ -147,38 +159,58 @@ const {Server} = require("socket.io");
 const httpServer = createServer(app);
 const io = new Server(httpServer);
 
+
 io.use((socket,next)=>{
     bombermanSession(socket.request,{},next);
 });
-// Online User list
-const inLobby = {};
+
 io.on("connection",(socket)=>{
     // print out who has connected 
-    console.log(socket.request.session.user?.username);
+    console.log(`${socket.request.session.user?.username} has logged in`);
 
-    // when player is ready to start the game
-    socket.on('joinLobby',()=>{
-        io.emit('someoneJoinedLobby',JSON.stringify({name:socket.request.session.user?.name}));
+    // when player is ready to start the game, for CHARLIE: to join lobby: socket.emit("joinLobby","red");
+    socket.on('joinLobby',(colour)=>{
+        const result = Lobby.addPlayer(socket.request.session.user?.username,socket.request.session.user?.displayName,colour)
+        if (result.result === "successful"){
+            const lobbyInfo = Lobby.getLobbyInfo();
+            socket.emit('joinedLobby successfully',JSON.stringify(lobbyInfo)); // Frontend should listen to this event before allowing the user to join the lobby
+            io.emit('newPlayer',JSON.stringify(lobbyInfo));
+        } else {
+            socket.emit("failed to join lobby",result.message);
+        }
     })
 
-    if (socket.request.session.user){ 
-        const {username,avatar,name} = socket.request.session.user;
-        onlineUsers[username] = {avatar,name};
-        io.emit("add user",JSON.stringify({username,avatar,name}));
-    }
+    socket.on("leaveLobby",(username)=>{
+        Lobby.removePlayer(username);
+    })
+
+    socket.on("setGameTime",(time)=>{ // time is in seconds, and can only increment by 30 seconds
+        const result = Lobby.setGameTime(time);
+        if (result.result !== "successful"){
+            socket.emit("failed",result.message);
+        } else {
+            io.emit("newGameTime",time);
+        }
+    })
+
+    socket.on("changeColour",(newColour)=>{
+        const result = Lobby.changeColour(socket.request.session.user?.username,newColour);
+    })
 
     // remove the user (when the player disconnect/logout)
     socket.on("disconnect",()=>{
-        if (socket.request.session.user){
-            const {username,name} = socket.request.session.user;
-            delete inLobby[username];
-            io.emit("remove user",JSON.stringify({username,name}));
-        }
+        Lobby.removePlayer(username);
+    })
+
+    socket.on("post-game message",(content)=>{
+        const {username,displayName} = socket.request.session.user;
+        const message = {username,displayName,message:content};
+        io.emit("new post-game message",JSON.stringify(message));
     })
 
 })
 
 
 httpServer.listen(8000, () => {
-    console.log("The chat server has started at localhost 8000...");
+    console.log("The server has started at localhost 8000...");
 });
