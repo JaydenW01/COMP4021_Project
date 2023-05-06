@@ -1,18 +1,18 @@
 [
     {
-        "username":"test2",
+        "displayName":"test2",
         "points":100
     },
     {
-        "username":"test4",
+        "displayName":"test4",
         "points":50
     },
     {
-        "username":"test1",
+        "displayName":"test1",
         "points":120
     },
     {
-        "username":"test3",
+        "displayName":"test3",
         "points":60
     }
 ]

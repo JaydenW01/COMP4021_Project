@@ -134,7 +134,7 @@ app.get("/ranking",(req,res)=>{
     const ranking = JSON.parse(fs.readFileSync("data/ranking.json"));
     ranking.sort((a, b) => b.points - a.points);
     res.json(JSON.stringify(ranking));
-    console.log(ranking)
+    //console.log(ranking)
 })
 
 
