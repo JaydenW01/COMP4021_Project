@@ -130,6 +130,13 @@ app.get("/signout", (req, res) => {
     // res.json({ status: "error", error: "This endpoint is not yet implemented." });
 });
 
+app.get("/ranking",(req,res)=>{
+    const ranking = JSON.parse(fs.readFileSync("data/ranking.json"));
+    ranking.sort((a, b) => b.points - a.points);
+    res.json(JSON.stringify(ranking));
+    console.log(ranking)
+})
+
 
 
 
@@ -139,6 +146,37 @@ const {createServer} = require("http");
 const {Server} = require("socket.io");
 const httpServer = createServer(app);
 const io = new Server(httpServer);
+
+io.use((socket,next)=>{
+    bombermanSession(socket.request,{},next);
+});
+// Online User list
+const inLobby = {};
+io.on("connection",(socket)=>{
+    // print out who has connected 
+    console.log(socket.request.session.user?.username);
+
+    // when player is ready to start the game
+    socket.on('joinLobby',()=>{
+        io.emit('someoneJoinedLobby',JSON.stringify({name:socket.request.session.user?.name}));
+    })
+
+    if (socket.request.session.user){ 
+        const {username,avatar,name} = socket.request.session.user;
+        onlineUsers[username] = {avatar,name};
+        io.emit("add user",JSON.stringify({username,avatar,name}));
+    }
+
+    // remove the user (when the player disconnect/logout)
+    socket.on("disconnect",()=>{
+        if (socket.request.session.user){
+            const {username,name} = socket.request.session.user;
+            delete inLobby[username];
+            io.emit("remove user",JSON.stringify({username,name}));
+        }
+    })
+
+})
 
 
 httpServer.listen(8000, () => {
