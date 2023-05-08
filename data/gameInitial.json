@@ -1,6 +1,6 @@
 {
     "players":[{
-        "username":"test1",
+        "playerNo":1,
         "facing":"left",
         "colour": "yellow",
         "health":3,
@@ -9,7 +9,7 @@
         "location":{"x":0,"y":0}
     },
     {
-        "username":"test2",
+        "playerNo":2,
         "facing":"up",
         "colour": "black",
         "health":2,
