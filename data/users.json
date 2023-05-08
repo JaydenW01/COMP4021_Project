@@ -22,5 +22,9 @@
  "asd": {
   "displayName": "asd",
   "password": "$2b$10$u2kP3qaMaCf5hhMO5cw6e.5ovZHHg0cK4K5ALRBaETUb84CaU6nAe"
+ },
+ "bob": {
+  "displayName": "bob",
+  "password": "$2b$10$QqDXNkQ4Pt8w3QIDNy/YH.2vNat6/GtKDrnKTjDSAubE6Pj5MGO.O"
  }
 }

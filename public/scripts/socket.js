@@ -38,12 +38,15 @@ const Socket = (function () {
             gameLobby.startCountdown();
         });
 
-        socket.on('gameInfo', (gameInfo) => {
-            gameInfo = JSON.parse(gameInfo);
+        socket.on('updateBoard', (gameBoard) => {
+            gameBoard = JSON.parse(gameBoard);
             requestAnimationFrame(() => {
-                bomberman.updateGameCanvas(gameInfo);
+                game.updateBoard(gameBoard);
             });
-            bomberman.playAudio(gameInfo);
+        });
+
+        socket.on('explode', (bombID) => {
+            game.explodeBomb(bombID);
         });
 
         socket.on('gameOver', () => {
@@ -84,28 +87,26 @@ const Socket = (function () {
         socket.emit('post playerReady', message);
     };
 
-    const updateGameDuration = function (gameDuration) {
-        const message = JSON.stringify({
-            gameMap: 'default',
-            gameDuration,
-            powerUpEnabled: true
-        });
-        socket.emit('post updateGameConfig', message);
+    const moveUp = function () {
+        socket.emit("moveUp");
     };
 
-    const playerOperation = function (operation) {
-        const message = JSON.stringify({
-            operation
-        });
-        socket.emit('post playerOperation', message);
+    const moveDown = function () {
+        socket.emit("moveDown");
     };
 
-    const enablePlayerCheatMode = function (enable) {
-        const message = JSON.stringify({
-            enable
-        });
-        socket.emit('post enableCheat', message);
+    const moveLeft = function () {
+        socket.emit("moveLeft");
     };
+
+    const moveRight = function () {
+        socket.emit("moveRight");
+    };
+
+    const placeBomb = function () {
+        socket.emit("placeBomb");
+    };
+
 
     return {
         getSocket,
@@ -115,8 +116,10 @@ const Socket = (function () {
         updatePlayerConfig,
         playerLeaveLobby,
         setPlayerReady,
-        updateGameDuration,
-        playerOperation,
-        enablePlayerCheatMode
+        moveUp,
+        moveDown,
+        moveLeft,
+        moveRight,
+        placeBomb
     };
 })();
