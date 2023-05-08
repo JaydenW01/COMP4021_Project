@@ -377,6 +377,11 @@ io.on("connection",(socket)=>{
     const explode = (id)=>{
         gameboard.setOffBomb(id);
         io.emit("explode",id);
+        io.emit("updateBoard",JSON.stringify({
+            players:[player1.playerInfo,player2.playerInfo],
+            breakables:gameboard.gameboardInfo().breakables,
+            bombs: gameboard.gameboardInfo().bombs
+        }));
         clearInterval(bombTimer[id]);
     }
 
