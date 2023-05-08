@@ -20,7 +20,7 @@ const Lobby = function() {
             return {result: "failed",message:"The lobby is full"};
         }
         // check if the colour is correctly input
-        if (!['white','black','red','blue'].includes(colour)){
+        if (!['yellow','black','red','blue'].includes(colour)){
             return {result: "failed",message:"Wrong colour input"};
         }
         // No problem: Can add the player in
@@ -87,7 +87,7 @@ const Lobby = function() {
     }
 
     const changeColour = (username,newColour) => {
-        if (!['white','black','red','blue'].includes(newColour)){
+        if (!['yellow','black','red','blue'].includes(newColour)){
             return {result: "failed",message:"Wrong colour input"};
         }
         // check if the player is in the lobby
