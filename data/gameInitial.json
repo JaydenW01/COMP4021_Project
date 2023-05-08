@@ -2,6 +2,7 @@
     "players":[{
         "username":"test1",
         "facing":"left",
+        "colour": "yellow",
         "health":3,
         "ability": null,
         "cheat": false,
@@ -10,6 +11,7 @@
     {
         "username":"test2",
         "facing":"up",
+        "colour": "black",
         "health":2,
         "ability": null,
         "cheat": false,
