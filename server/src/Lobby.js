@@ -10,8 +10,12 @@ export default class Lobby {
     //     colour: "XXX",
     //     ready: true/false
     // }
+    reset() {
+        this.players = [];
+        this.gameTime = 180; 
+    }
 
-    addPlayer = (username,displayName,colour) => {
+    addPlayer(username,displayName,colour){
         // check if the player is already in the lobby
         for (const player of this.players){
             if (player.username === username){ // if the player is in the lobby, return
@@ -31,7 +35,19 @@ export default class Lobby {
         return {result: "successful"};
     }
 
-    removePlayer = (username) => {
+    getPlayerNo(username){
+        if (players[0].username === username){
+            return 1;
+        }
+        if (this.players.length === 2){
+            if (players[1].username === username){
+                return 2;
+            }
+        }
+        return;
+    }
+
+    removePlayer(username){
         // check if the player is in the lobby
         for (const player of this.players){
             if (player.username === username){ // found
@@ -42,7 +58,7 @@ export default class Lobby {
         return {result: "failed",message:"The player is not in the lobby"}; // not in the lobby
     }
 
-    setGameTime = (time) => {
+    setGameTime(time){
         if (time < 30){
             return {result: "failed",message:"The game period is too short"};
         } else if (time % 30 !== 0) {
@@ -53,16 +69,16 @@ export default class Lobby {
         }
     }
 
-    getLobbyInfo = () => {
+    getLobbyInfo(){
         return {players:this.players,gameTime:this.gameTime}
     }
 
-    startGame = () => {
+    startGame(){
         this.players = [];
         this.gameTime = 180;
     }
 
-    checkBothReady = () => {
+    checkBothReady(){
         if (this.players.length !== 2){
             return false;
         } else {
@@ -74,7 +90,7 @@ export default class Lobby {
         }
     }
 
-    onReady = (username) => {
+    onReady(username){
         // check if the player is already in the lobby
         for (let i = 0;i < this.players.length;i++){
             if (this.players[i].username === username){ // if the player is in the lobby, return

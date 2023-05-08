@@ -3,17 +3,34 @@ export default class Player {
         this.colour = null;
         this.playerNo = playerNo;
         this.username = null;
+        this.displayName = null;
         this.x = playerNo == 0 ? 0 : 12;
         this.y = playerNo == 0 ? 0 : 10;
         this.facing = "down";
         this.health = 3;
         this.cheat = false;
         this.ability = null;
+        this.points = 0;
     }
 
-    setUser(username,colour){
+    reset() {
+        this.colour = null;
+        this.playerNo = playerNo;
+        this.username = null;
+        this.displayName = null;
+        this.x = playerNo == 0 ? 0 : 12;
+        this.y = playerNo == 0 ? 0 : 10;
+        this.facing = "down";
+        this.health = 3;
+        this.cheat = false;
+        this.ability = null;
+        this.points = 0;
+    }
+
+    setUser(username,colour,displayName){
         this.username = username;
         this.colour = colour;
+        this.displayName = displayName;
     }
  
     moveUp(){
@@ -77,6 +94,47 @@ export default class Player {
 
     getUsername(){
         return this.username;
+    }
+
+    getColour(){
+        return this.colour;
+    }
+
+    checkExplosion(explosion){
+        if (this.x === explosion.up.x && this.y ===  this.explosion.up.y){
+            if (!this.reduceHealth()){
+                return false;
+            }
+        } else if (this.x === explosion.down.x && this.y ===  this.explosion.down.y){
+            if (!this.reduceHealth()){
+                return false;
+            }
+        } else if (this.x === explosion.left.x && this.y ===  this.explosion.left.y){
+            if (!this.reduceHealth()){
+                return false;
+            }
+        } else if (this.x === explosion.right.x && this.y ===  this.explosion.right.y){
+            if (!this.reduceHealth()){
+                return false;
+            }
+        } else if (this.x === explosion.center.x && this.y ===  this.explosion.center.y){
+            if (!this.reduceHealth()){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    addPoints(points){
+        this.points += points;
+    }
+
+    getPoints(){
+        return this.points;
+    }
+
+    getDisplayName(){
+        return this.displayName;
     }
 
 }

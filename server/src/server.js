@@ -182,9 +182,9 @@ io.on("connection",(socket)=>{
         if (result.result === "successful"){
             const lobbyInfo = lobby.getLobbyInfo();
             if (lobbyInfo.players.length === 1){
-                player1.setUser(socket.request.session.user?.username,colour);
+                player1.setUser(socket.request.session.user?.username,colour,socket.request.session.user?.displayName);
             } else {
-                player2.setUser(socket.request.session.user?.username,colour);
+                player2.setUser(socket.request.session.user?.username,colour,socket.request.session.user?.displayName);
             }
             socket.emit('joinedLobby successfully',JSON.stringify(lobbyInfo)); // Frontend should listen to this event before allowing the user to join the lobby
             io.emit('newPlayer',{username:socket.request.session.user?.username,displayName:socket.request.session.user?.displayName,colour});
@@ -220,6 +220,11 @@ io.on("connection",(socket)=>{
 
     // remove the user (when the player disconnect/logout)
     socket.on("disconnect",(username)=>{
+        const number = lobby.getPlayerNo(username);
+        if (number === 1 && lobby.players.length == 2){
+            player1.setUser(player2.getUsername(),player2.getColour(),player2.getDisplayName());
+            player2.reset();
+        }
         lobby.removePlayer(username);
     })
 
@@ -375,25 +380,46 @@ io.on("connection",(socket)=>{
     })
 
     const explode = (id)=>{
-        gameboard.setOffBomb(id);
+        const explosion = gameboard.setOffBomb(id);
+        const player1AfterExplosion = player1.checkExplosion(explosion);
+        const player2AfterExplosion = player2.checkExplosion(explosion);
         io.emit("explode",id);
         io.emit("updateBoard",JSON.stringify({
             players:[player1.playerInfo,player2.playerInfo],
             breakables:gameboard.gameboardInfo().breakables,
             bombs: gameboard.gameboardInfo().bombs
         }));
-        clearInterval(bombTimer[id]);
+        clearInterval(bombTimer[id].timer);
+        if (explosion[id].player === 1){
+            player1.addPoints(explosion.points);
+        } else if (explosion[id].player === 2){
+            player2.addPoints(explosion.points);
+        }
+        if (!player1AfterExplosion){
+            io.emit("GameOver",JSON.stringify({message:"Player1 died!",player1:player1.getPoints(),player2:player2.getPoints()}));
+            gameboard.reset();
+            player1.reset();
+            player2.reset();
+            return;
+        }
+        if (!player2AfterExplosion){
+            io.emit("GameOver",JSON.stringify({message:"Player2 died!",player1:player1.getPoints(),player2:player2.getPoints()}));
+            gameboard.reset();
+            player1.reset();
+            player2.reset();
+            return;
+        }
     }
 
     socket.on("placeBomb",()=>{
         if (socket.request.session.user?.username === player1.getUsername()){
             let bombID = setInterval(explode(currentBombID));
-            bombTimer[currentBombID] = bombID;
+            bombTimer[currentBombID] = {timer:bombID,player:1};
             gameboard.placeBomb(player1.getPos(),currentBombID);
             currentBombID += 1;
         } else if (socket.request.session.user?.username === player2.getUsername()){
             let bombID = setInterval(explode(currentBombID));
-            bombTimer[currentBombID] = bombID;
+            bombTimer[currentBombID] = {timer:bombID,player:2};
             gameboard.placeBomb(player2.getPos(),currentBombID);
             currentBombID += 1;
         }
@@ -402,6 +428,13 @@ io.on("connection",(socket)=>{
             breakables:gameboard.gameboardInfo().breakables,
             bombs: gameboard.gameboardInfo().bombs
         }))
+    })
+
+    socket.on("Time's Up",()=>{
+        io.emit("GameOver",JSON.stringify({message:"Time's up!",player1Points:player1.getPoints(),player2Points:player2.getPoints(),player1Name:player1.getDisplayName(),player2Name:player2.getDisplayName()}));
+        gameboard.reset();
+        player1.reset();
+        player2.reset();
     })
 
 

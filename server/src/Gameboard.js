@@ -52,6 +52,12 @@ export default class Gameboard {
         this.bombs = [];
     }
 
+    reset() {
+        this.walls = initialWalls;
+        this.breakables = initialBreakables;
+        this.bombs = [];
+    }
+
     findBlockByPos(x,y){
         if (x < 0 || y < 0){
             return "out of bound";
@@ -142,6 +148,7 @@ export default class Gameboard {
     }
 
     setOffBomb(id) {
+        let points = 0;
         for (let i = 0;i<this.bombs.length;i++){
             if (this.bombs[i].id === id){
                 const bombX = this.bombs[i].x;
@@ -152,21 +159,25 @@ export default class Gameboard {
                 const right = this.findBlockByPos(bombX+1,bombY) !== "breakable" ? false : true;
                 if (up){
                     this.removeBlockByPos(bombX,bombY-1);
+                    points += 1;
                 }
                 if (down){
                     this.removeBlockByPos(bombX,bombY+1);
+                    points += 1;
                 }
                 if (left){
                     this.removeBlockByPos(bombX-1,bombY);
+                    points += 1;
                 }
                 if (right){
                     this.removeBlockByPos(bombX+1,bombY);
+                    points += 1;
                 }
                 this.bombs.splice(i,0);
                 break;
             }
         }
-        return this.gameboardInfo();
+        return {up:{x:bombX,y:bombY-1},down:{x:bombX,y:bombY+1},left:{x:bombX-1,y:bombY},right:{x:bombX+1,y:bombY},center:{x:bombX,y:bombY},points:points};
     }
 
 }
