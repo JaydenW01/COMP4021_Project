@@ -5,8 +5,14 @@ import fs from 'fs';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import Lobby from './Lobby.js';
+import Gameboard from './Gameboard.js';
+import Player from './Player.js';
 
 const lobby = new Lobby();
+const gameboard = new Gameboard();
+const player1 = new Player(1);
+const player2 = new Player(2);
+
 const app = express();
 app.use(express.static('public'));
 app.use(express.json());
@@ -159,7 +165,8 @@ app.post("/post_score",(req,res)=>{
 // WebSocket codes ...
 const httpServer = createServer(app);
 const io = new Server(httpServer);
-
+let currentBombID = 1;
+let bombTimer = {};
 
 io.use((socket,next)=>{
     bombermanSession(socket.request,{},next);
@@ -174,6 +181,11 @@ io.on("connection",(socket)=>{
         const result = lobby.addPlayer(socket.request.session.user?.username,socket.request.session.user?.displayName,colour)
         if (result.result === "successful"){
             const lobbyInfo = lobby.getLobbyInfo();
+            if (lobbyInfo.players.length === 1){
+                player1.setUser(socket.request.session.user?.username,colour);
+            } else {
+                player2.setUser(socket.request.session.user?.username,colour);
+            }
             socket.emit('joinedLobby successfully',JSON.stringify(lobbyInfo)); // Frontend should listen to this event before allowing the user to join the lobby
             io.emit('newPlayer',{username:socket.request.session.user?.username,displayName:socket.request.session.user?.displayName,colour});
         } else {
@@ -206,10 +218,6 @@ io.on("connection",(socket)=>{
         }
     })
 
-    // socket.on("changeColour",(newColour)=>{
-    //     const result = Lobby.changeColour(socket.request.session.user?.username,newColour);
-    // })
-
     // remove the user (when the player disconnect/logout)
     socket.on("disconnect",(username)=>{
         lobby.removePlayer(username);
@@ -220,6 +228,177 @@ io.on("connection",(socket)=>{
         const message = {username,displayName,message:content};
         io.emit("new post-game message",JSON.stringify(message));
     })
+
+    // in game sockets
+    socket.on("moveUp",()=>{
+        if (socket.request.session.user?.username === player1.getUsername()){
+            if (gameboard.checkWalkable(player1.getPos(),"up")){ // can walk there
+                player1.moveUp();
+                io.emit("updateBoard",JSON.stringify({
+                    players:[player1.playerInfo,player2.playerInfo],
+                    breakables:gameboard.gameboardInfo().breakables,
+                    bombs: gameboard.gameboardInfo().bombs
+                }))
+            } else {
+                player1.faceUp();
+                io.emit("updateBoard",JSON.stringify({
+                    players:[player1.playerInfo,player2.playerInfo],
+                    breakables:gameboard.gameboardInfo().breakables,
+                    bombs: gameboard.gameboardInfo().bombs
+                }))
+            }
+        } else if (socket.request.session.user?.username === player2.getUsername()){
+            if (gameboard.checkWalkable(player2.getPos(),"up")){ // can walk there
+                player2.moveUp();
+                io.emit("updateBoard",JSON.stringify({
+                    players:[player1.playerInfo,player2.playerInfo],
+                    breakables:gameboard.gameboardInfo().breakables,
+                    bombs: gameboard.gameboardInfo().bombs
+                }))
+            } else {
+                player2.faceUp();
+                io.emit("updateBoard",JSON.stringify({
+                    players:[player1.playerInfo,player2.playerInfo],
+                    breakables:gameboard.gameboardInfo().breakables,
+                    bombs: gameboard.gameboardInfo().bombs
+                }))
+            }
+        }
+    })
+
+    socket.on("moveDown",()=>{
+        if (socket.request.session.user?.username === player1.getUsername()){
+            if (gameboard.checkWalkable(player1.getPos(),"down")){ // can walk there
+                player1.moveDown();
+                io.emit("updateBoard",JSON.stringify({
+                    players:[player1.playerInfo,player2.playerInfo],
+                    breakables:gameboard.gameboardInfo().breakables,
+                    bombs: gameboard.gameboardInfo().bombs
+                }))
+            } else {
+                player1.faceDown();
+                io.emit("updateBoard",JSON.stringify({
+                    players:[player1.playerInfo,player2.playerInfo],
+                    breakables:gameboard.gameboardInfo().breakables,
+                    bombs: gameboard.gameboardInfo().bombs
+                }))
+            }
+        } else if (socket.request.session.user?.username === player2.getUsername()){
+            if (gameboard.checkWalkable(player2.getPos(),"down")){ // can walk there
+                player2.moveDown();
+                io.emit("updateBoard",JSON.stringify({
+                    players:[player1.playerInfo,player2.playerInfo],
+                    breakables:gameboard.gameboardInfo().breakables,
+                    bombs: gameboard.gameboardInfo().bombs
+                }))
+            } else {
+                player2.faceDown();
+                io.emit("updateBoard",JSON.stringify({
+                    players:[player1.playerInfo,player2.playerInfo],
+                    breakables:gameboard.gameboardInfo().breakables,
+                    bombs: gameboard.gameboardInfo().bombs
+                }))
+            }
+        }
+    })
+
+    socket.on("moveLeft",()=>{
+        if (socket.request.session.user?.username === player1.getUsername()){
+            if (gameboard.checkWalkable(player1.getPos(),"left")){ // can walk there
+                player1.moveLeft();
+                io.emit("updateBoard",JSON.stringify({
+                    players:[player1.playerInfo,player2.playerInfo],
+                    breakables:gameboard.gameboardInfo().breakables,
+                    bombs: gameboard.gameboardInfo().bombs
+                }))
+            } else {
+                player1.faceLeft();
+                io.emit("updateBoard",JSON.stringify({
+                    players:[player1.playerInfo,player2.playerInfo],
+                    breakables:gameboard.gameboardInfo().breakables,
+                    bombs: gameboard.gameboardInfo().bombs
+                }))
+            }
+        } else if (socket.request.session.user?.username === player2.getUsername()){
+            if (gameboard.checkWalkable(player2.getPos(),"left")){ // can walk there
+                player2.moveLeft();
+                io.emit("updateBoard",JSON.stringify({
+                    players:[player1.playerInfo,player2.playerInfo],
+                    breakables:gameboard.gameboardInfo().breakables,
+                    bombs: gameboard.gameboardInfo().bombs
+                }))
+            } else {
+                player2.faceLeft();
+                io.emit("updateBoard",JSON.stringify({
+                    players:[player1.playerInfo,player2.playerInfo],
+                    breakables:gameboard.gameboardInfo().breakables,
+                    bombs: gameboard.gameboardInfo().bombs
+                }))
+            }
+        }
+    })
+
+    socket.on("moveRight",()=>{
+        if (socket.request.session.user?.username === player1.getUsername()){
+            if (gameboard.checkWalkable(player1.getPos(),"right")){ // can walk there
+                player1.moveRight();
+                io.emit("updateBoard",JSON.stringify({
+                    players:[player1.playerInfo,player2.playerInfo],
+                    breakables:gameboard.gameboardInfo().breakables,
+                    bombs: gameboard.gameboardInfo().bombs
+                }))
+            } else {
+                player1.faceRight();
+                io.emit("updateBoard",JSON.stringify({
+                    players:[player1.playerInfo,player2.playerInfo],
+                    breakables:gameboard.gameboardInfo().breakables,
+                    bombs: gameboard.gameboardInfo().bombs
+                }))
+            }
+        } else if (socket.request.session.user?.username === player2.getUsername()){
+            if (gameboard.checkWalkable(player2.getPos(),"right")){ // can walk there
+                player1.moveRight();
+                io.emit("updateBoard",JSON.stringify({
+                    players:[player1.playerInfo,player2.playerInfo],
+                    breakables:gameboard.gameboardInfo().breakables,
+                    bombs: gameboard.gameboardInfo().bombs
+                }))
+            } else {
+                player2.faceRight();
+                io.emit("updateBoard",JSON.stringify({
+                    players:[player1.playerInfo,player2.playerInfo],
+                    breakables:gameboard.gameboardInfo().breakables,
+                    bombs: gameboard.gameboardInfo().bombs
+                }))
+            }
+        }
+    })
+
+    const explode = (id)=>{
+        gameboard.setOffBomb(id);
+        io.emit("explode",id);
+        clearInterval(bombTimer[id]);
+    }
+
+    socket.on("placeBomb",()=>{
+        if (socket.request.session.user?.username === player1.getUsername()){
+            let bombID = setInterval(explode(currentBombID));
+            bombTimer[currentBombID] = bombID;
+            gameboard.placeBomb(player1.getPos(),currentBombID);
+            currentBombID += 1;
+        } else if (socket.request.session.user?.username === player2.getUsername()){
+            let bombID = setInterval(explode(currentBombID));
+            bombTimer[currentBombID] = bombID;
+            gameboard.placeBomb(player2.getPos(),currentBombID);
+            currentBombID += 1;
+        }
+        io.emit("updateBoard",JSON.stringify({
+            players:[player1.playerInfo,player2.playerInfo],
+            breakables:gameboard.gameboardInfo().breakables,
+            bombs: gameboard.gameboardInfo().bombs
+        }))
+    })
+
 
 })
 
