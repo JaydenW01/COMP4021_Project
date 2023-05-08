@@ -49,7 +49,7 @@
     </div>
       <!-- menu page -->
       <div id="menu">
-        <h1 style="font-size: 60px;" onclick="gameOver.enterGameOver()">Game Menu</h2>
+        <h1 style="font-size: 60px;">Game Menu</h2>
         <div class="button-50" onclick="gameLobby.enterLobby()" id="game-start">
             <!-- <div>
               <i class="fa-solid fa-gamepad"></i>
@@ -83,6 +83,58 @@
           </div>
         </div>
       </div>
+      <!-- character page -->
+      <div id="character-lobby" style="display: none;">
+          <h1 style="font-size: 30px;">Choose one character</h2>
+          <div class="character-container">
+            <img src="assets/charlie/player1.png" class="player-image" data-color="blue">
+            <img src="assets/charlie/player2.png" class="player-image" data-color="red">
+            <img src="assets/charlie/player3.png" class="player-image" data-color="yellow">
+            <img src="assets/charlie/player4.png" class="player-image" data-color="black">
+          </div>
+          <div class="button-container">
+            <button id="back-button">Back</button>   
+            <button id="ok-button">OK</button>
+          </div>
+           
+      </div>
+
+      <script>
+        // const menuPage = document.getElementById('menu');
+        // const lobbyPage = document.getElementById('character-lobby');
+        // const gameStartButton = document.getElementById('game-start');
+      
+        // gameStartButton.addEventListener('click', () => {
+        //   menuPage.style.display = 'none';
+        //   lobbyPage.style.display = 'block';
+        // });
+      
+        const images = document.querySelectorAll('.player-image');
+        
+        images.forEach(img => {
+          img.addEventListener('click', () => {
+            images.forEach(img => img.classList.remove('selected'));
+            img.classList.add('selected');
+          });
+        });
+      
+        const okButton = document.querySelector('#ok-button');
+
+        okButton.addEventListener('click', () => {
+          const selectedImage = document.querySelector('.player-image.selected');
+          const selectedColor = selectedImage ? selectedImage.dataset.color : null;
+      
+          if (selectedColor) {
+            console.log(selectedColor);
+            console.log("OK button clicked");
+            socket.emit('joinLobby', [selectedColor]);
+          }
+          else {
+            console.log("Please select a character");
+          }
+        });
+      </script>
+
       <!-- game lobby page -->
       <div id="game-lobby" style="display: none;">
         <div class="lobby-boxes">
@@ -297,6 +349,8 @@
     <script src="scripts/gameLobby.js"></script>
     <script src="scripts/registration.js"></script>
     <script src="scripts/authentication.js"></script>
+    <script src="scripts/Lobby.js"></script>
+    
     <!-- Sprite -->
     <!-- <script src="scripts/Player.js"></script>
     <script src="scripts/MapItems.js" ></script>

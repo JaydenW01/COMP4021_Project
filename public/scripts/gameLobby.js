@@ -6,8 +6,7 @@ const gameLobby = (function () {
         const currentUser = Authentication.getUser();
         if (currentUser) {
             $('#menu').hide();
-            $('#game-lobby').show();
-            $('.player-joined').hide();
+            $('#character-lobby').show(); 
             Socket.connect();
         }
     };
