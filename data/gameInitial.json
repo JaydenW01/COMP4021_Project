@@ -3,12 +3,16 @@
         "username":"test1",
         "facing":"left",
         "health":3,
+        "ability": null,
+        "cheat": false,
         "location":{"x":0,"y":0}
     },
     {
         "username":"test2",
         "facing":"up",
         "health":2,
+        "ability": null,
+        "cheat": false,
         "location":{"x":12,"y":10} 
     }],
     "breakables":[
