@@ -174,7 +174,7 @@ io.on("connection",(socket)=>{
         if (result.result === "successful"){
             const lobbyInfo = Lobby.getLobbyInfo();
             socket.emit('joinedLobby successfully',JSON.stringify(lobbyInfo)); // Frontend should listen to this event before allowing the user to join the lobby
-            io.emit('newPlayer',JSON.stringify(lobbyInfo));
+            io.emit('newPlayer',{username:socket.request.session.user?.username,displayName:socket.request.session.user?.displayName,colour});
         } else {
             socket.emit("failed to join lobby",result.message);
         }
@@ -182,6 +182,7 @@ io.on("connection",(socket)=>{
 
     socket.on("leaveLobby",(username)=>{
         Lobby.removePlayer(username);
+        io.emit("playerLeft",username);
     })
 
     socket.on("setGameTime",(time)=>{ // time is in seconds, and can only increment by 30 seconds
@@ -193,9 +194,20 @@ io.on("connection",(socket)=>{
         }
     })
 
-    socket.on("changeColour",(newColour)=>{
-        const result = Lobby.changeColour(socket.request.session.user?.username,newColour);
+    socket.on("onReady",(username)=>{
+        const result = Lobby.onReady(username);
+        if (result.result === "StartGame"){
+            io.emit("StartGame",JSON.stringify(result.players));
+        } else if (result.result === "failed") {
+            socket.emit("failed to ready",result.message);
+        } else {
+            io.emit("playerIsReady",username);
+        }
     })
+
+    // socket.on("changeColour",(newColour)=>{
+    //     const result = Lobby.changeColour(socket.request.session.user?.username,newColour);
+    // })
 
     // remove the user (when the player disconnect/logout)
     socket.on("disconnect",()=>{

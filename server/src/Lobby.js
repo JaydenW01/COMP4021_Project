@@ -4,7 +4,8 @@ const Lobby = function() {
     // player ={ 
     //     username: "XXX",
     //     displayName: "XXX",
-    //     colour: "XXX"
+    //     colour: "XXX",
+    //     ready: true/false
     // }
 
     const addPlayer = (username,displayName,colour) => {
@@ -23,19 +24,19 @@ const Lobby = function() {
             return {result: "failed",message:"Wrong colour input"};
         }
         // No problem: Can add the player in
-        players.push({username,displayName,colour});
+        players.push({username,displayName,colour,ready:false});
         return {result: "successful"};
     }
 
     const removePlayer = (username) => {
-        // check if the player is already in the lobby
+        // check if the player is in the lobby
         for (const player of players){
-            if (player.username === username){ // if the player is in the lobby, return
-                return {result: "failed",message:"The player is not in the lobby"};
+            if (player.username === username){ // found
+                players = players.filter(obj => obj.username !== username);
+                return {result: "successful"};
             }
         } 
-        players = players.filter(obj => obj.username !== username);
-        return {result: "successful"};
+        return {result: "failed",message:"The player is not in the lobby"}; // not in the lobby
     }
 
     const setGameTime = (time) => {
@@ -58,6 +59,33 @@ const Lobby = function() {
         gameTime = 180;
     }
 
+    const checkBothReady = () => {
+        if (players.length !== 2){
+            return false;
+        } else {
+            if (players[0].ready && players[1].ready){
+                return true
+            } else {
+                return false;
+            }
+        }
+    }
+
+    const onReady = (username) => {
+        // check if the player is already in the lobby
+        for (let i = 0;i < players.length;i++){
+            if (players[i].username === username){ // if the player is in the lobby, return
+                players[i].ready = true;
+                if (checkBothReady()){
+                    return {result:"StartGame",players:[players[0].username,players[1].username]};
+                } else {
+                    return {result:"successful"};
+                }
+            }
+        } 
+        return {result:"failed","message":"User not found"};
+    }
+
     const changeColour = (username,newColour) => {
         if (!['white','black','red','blue'].includes(newColour)){
             return {result: "failed",message:"Wrong colour input"};
@@ -78,6 +106,7 @@ const Lobby = function() {
         setGameTime:setGameTime,
         getLobbyInfo:getLobbyInfo,
         startGame:startGame,
-        changeColour:changeColour
+        changeColour:changeColour,
+        onReady:onReady 
     };
 };
