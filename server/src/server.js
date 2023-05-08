@@ -210,7 +210,7 @@ io.on("connection",(socket)=>{
     // })
 
     // remove the user (when the player disconnect/logout)
-    socket.on("disconnect",()=>{
+    socket.on("disconnect",(username)=>{
         Lobby.removePlayer(username);
     })
 
