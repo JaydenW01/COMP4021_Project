@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Bomber-man COMP4021 Project Group 28",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node ./server/src/server.js",
     "dev": "nodemon ./server/src/server.js",

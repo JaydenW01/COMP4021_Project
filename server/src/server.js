@@ -1,9 +1,12 @@
-const express = require("express");
-const session = require("express-session");
-const bcrypt = require("bcrypt");
-const fs = require("fs");
+import express from 'express';
+import session from 'express-session';
+import bcrypt from 'bcrypt';
+import fs from 'fs';
+import { createServer } from 'http';
+import { Server } from 'socket.io';
+import Lobby from './Lobby.js';
 
-const Lobby = require("./Lobby");
+const lobby = new Lobby();
 const app = express();
 app.use(express.static('public'));
 app.use(express.json());
@@ -154,8 +157,6 @@ app.post("/post_score",(req,res)=>{
 
 
 // WebSocket codes ...
-const {createServer} = require("http");
-const {Server} = require("socket.io");
 const httpServer = createServer(app);
 const io = new Server(httpServer);
 
@@ -170,9 +171,9 @@ io.on("connection",(socket)=>{
 
     // when player is ready to start the game, for CHARLIE: to join lobby: socket.emit("joinLobby","red");
     socket.on('joinLobby',(colour)=>{
-        const result = Lobby.addPlayer(socket.request.session.user?.username,socket.request.session.user?.displayName,colour)
+        const result = lobby.addPlayer(socket.request.session.user?.username,socket.request.session.user?.displayName,colour)
         if (result.result === "successful"){
-            const lobbyInfo = Lobby.getLobbyInfo();
+            const lobbyInfo = lobby.getLobbyInfo();
             socket.emit('joinedLobby successfully',JSON.stringify(lobbyInfo)); // Frontend should listen to this event before allowing the user to join the lobby
             io.emit('newPlayer',{username:socket.request.session.user?.username,displayName:socket.request.session.user?.displayName,colour});
         } else {
@@ -181,12 +182,12 @@ io.on("connection",(socket)=>{
     })
 
     socket.on("leaveLobby",(username)=>{
-        Lobby.removePlayer(username);
+        lobby.removePlayer(username);
         io.emit("playerLeft",username);
     })
 
     socket.on("setGameTime",(time)=>{ // time is in seconds, and can only increment by 30 seconds
-        const result = Lobby.setGameTime(time);
+        const result = lobby.setGameTime(time);
         if (result.result !== "successful"){
             socket.emit("failed",result.message);
         } else {
@@ -195,7 +196,7 @@ io.on("connection",(socket)=>{
     })
 
     socket.on("onReady",(username)=>{
-        const result = Lobby.onReady(username);
+        const result = lobby.onReady(username);
         if (result.result === "StartGame"){
             io.emit("StartGame",JSON.stringify(result.players));
         } else if (result.result === "failed") {
@@ -211,7 +212,7 @@ io.on("connection",(socket)=>{
 
     // remove the user (when the player disconnect/logout)
     socket.on("disconnect",(username)=>{
-        Lobby.removePlayer(username);
+        lobby.removePlayer(username);
     })
 
     socket.on("post-game message",(content)=>{

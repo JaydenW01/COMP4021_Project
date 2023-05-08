@@ -98,7 +98,7 @@
           </div>
            
       </div>
-
+      <script src="/socket.io/socket.io.min.js"></script>
       <script>
         // const menuPage = document.getElementById('menu');
         // const lobbyPage = document.getElementById('character-lobby');
@@ -110,7 +110,7 @@
         // });
       
         const images = document.querySelectorAll('.player-image');
-        
+        const socket = io();
         images.forEach(img => {
           img.addEventListener('click', () => {
             images.forEach(img => img.classList.remove('selected'));
@@ -343,7 +343,6 @@
     </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-    <script src="/socket.io/socket.io.min.js"></script>
     <script src="scripts/socket.js"></script>
     <script src="scripts/UI.js"></script>
     <script src="scripts/gameLobby.js"></script>
