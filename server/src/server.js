@@ -22,7 +22,7 @@ const bombermanSession = session({
     resave : false,
     saveUninitialed : false,
     rolling : true,
-    cookie: {maxAge: 99999999}
+    cookie: {maxAge: 99999999},
 });
 app.use(bombermanSession);
 
@@ -97,7 +97,8 @@ app.post("/signin", (req, res) => {
     }
 
     //generate user session
-    req.session.user = {username,displayName:user.displayName};
+    req.session.user = {username:username,displayName:user.displayName};
+    console.log(req.session);
     //
     // G. Sending a success response with the user account
     //
@@ -125,13 +126,11 @@ app.get("/validate", (req, res) => {
 
 // Handle the /signout endpoint
 app.get("/signout", (req, res) => {
-
+    console.log(req.session)
     //
     // Deleting req.session.user
     //
-    if (req.session.user){
-        delete req.session.user;
-    }
+    req.session.user = null;
     //
     // Sending a success response
     //
@@ -168,16 +167,13 @@ const io = new Server(httpServer);
 let currentBombID = 1;
 let bombTimer = {};
 
-io.use((socket,next)=>{
-    bombermanSession(socket.request,{},next);
-});
-
 io.on("connection",(socket)=>{
     // print out who has connected 
     console.log(`${socket.request.session.user?.username} has logged in`);
 
     // when player is ready to start the game, for CHARLIE: to join lobby: socket.emit("joinLobby","red");
     socket.on('joinLobby',(colour)=>{
+        console.log(socket.request.session);
         const result = lobby.addPlayer(socket.request.session.user?.username,socket.request.session.user?.displayName,colour)
         if (result.result === "successful"){
             const lobbyInfo = lobby.getLobbyInfo();
@@ -219,14 +215,14 @@ io.on("connection",(socket)=>{
     })
 
     // remove the user (when the player disconnect/logout)
-    socket.on("disconnect",(username)=>{
-        const number = lobby.getPlayerNo(username);
-        if (number === 1 && lobby.players.length == 2){
-            player1.setUser(player2.getUsername(),player2.getColour(),player2.getDisplayName());
-            player2.reset();
-        }
-        lobby.removePlayer(username);
-    })
+    // socket.on("disconnect",(username)=>{
+    //     const number = lobby.getPlayerNo(username);
+    //     if (number === 1 && lobby.players.length == 2){
+    //         player1.setUser(player2.getUsername(),player2.getColour(),player2.getDisplayName());
+    //         player2.reset();
+    //     }
+    //     lobby.removePlayer(username);
+    // })
 
     socket.on("post-game message",(content)=>{
         const {username,displayName} = socket.request.session.user;
@@ -440,6 +436,9 @@ io.on("connection",(socket)=>{
 
 })
 
+io.use((socket, next) => {
+    bombermanSession(socket.request, {}, next);
+});
 
 httpServer.listen(8000, () => {
     console.log("The server has started at localhost 8000...");
