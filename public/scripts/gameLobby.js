@@ -111,7 +111,7 @@ const gameLobby = (function () {
     const backToMenu = function () {
         $('#game-lobby').hide();
         $('#menu').show();
-        $('#canvas').css('background-image', "url('./assets/gameBackground.png')").css('background-color', 'none');
+        $('#canvas').css('background-image', "url('./assets/jayden/game_background.jpg')").css('background-color', 'none');
 
         // Disconnect user from websocket.
         Socket.disconnect();

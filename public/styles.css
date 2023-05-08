@@ -11,7 +11,7 @@ body {
     font-family: 'Bruno Ace SC', cursive;
   }
   canvas {
-    background-image: url("./assets/gameBackground.png");
+    background-image: url("./assets/jayden/game_background.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: right;
@@ -95,6 +95,30 @@ body {
   select {
     color: gray;
   }
+  .button-50 {
+    appearance: button;
+    background-color: #000;
+    border-radius: 2px;
+    box-shadow: #fff 4px 4px 0 0, #000 4px 4px 0 1px;
+    color: #fff;
+    cursor: pointer;
+    display: block;
+    padding: 12px 40px;
+    margin: 0;
+    border: 0;
+    font-size: 16px;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    margin-top: 25px;
+    margin-left: -100px;
+    width: 200px;
+    height: 40px;
+    text-align: center;
+    box-sizing: border-box;
+    opacity: 0.8;
+    font-family: 'Bruno Ace SC', cursive;
+  }
   button {
     font-weight: bold;
     height: 40px;
@@ -125,7 +149,7 @@ body {
     z-index: 2;
     position: absolute;
     text-align: center;
-    color: rgb(133, 118, 118)(206, 169, 169);
+    color: rgb(113, 78, 207)(206, 169, 169);
   }
   
   .button-base {

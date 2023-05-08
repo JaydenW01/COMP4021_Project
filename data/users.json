@@ -14,5 +14,13 @@
  "test4": {
   "displayName": "test4",
   "password": "$2b$10$Mjh9nJsqkF0TBgXlhlspl.5jqGEk80KcLs79Y1SBv/wO7HZotquF."
+ },
+ "Charlie": {
+  "displayName": "Charlie",
+  "password": "$2b$10$wEsvf.oJjjG6uHWCLM4RQ.STsv4w.fnwuTemLOzbq9TXyuwJAQ9A2"
+ },
+ "asd": {
+  "displayName": "asd",
+  "password": "$2b$10$u2kP3qaMaCf5hhMO5cw6e.5ovZHHg0cK4K5ALRBaETUb84CaU6nAe"
  }
 }
