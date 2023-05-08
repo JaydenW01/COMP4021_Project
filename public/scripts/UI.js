@@ -1,5 +1,5 @@
-const GG = new Audio('assets/audio/Gameover.wav');
-const BGM = new Audio('assets/audio/Background.mp3');
+const GG = new Audio('assets/audio/gameover.mp3');
+const BGM = new Audio('assets/audio/game_background.wav');
 BGM.volume = 0.6;
 
 const SignInForm = (function () {

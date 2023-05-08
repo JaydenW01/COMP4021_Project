@@ -50,7 +50,7 @@
       <!-- menu page -->
       <div id="menu">
         <h1 style="font-size: 60px;">Game Menu</h2>
-        <div class="button-50" onclick="gameLobby.enterLobby()" id="game-start">
+        <div class="button-50"  id="game-start">
             <!-- <div>
               <i class="fa-solid fa-gamepad"></i>
             </div> -->
@@ -98,133 +98,55 @@
           </div>
            
       </div>
-      <script src="/socket.io/socket.io.min.js"></script>
-      <script>
-        // const menuPage = document.getElementById('menu');
-        // const lobbyPage = document.getElementById('character-lobby');
-        // const gameStartButton = document.getElementById('game-start');
-      
-        // gameStartButton.addEventListener('click', () => {
-        //   menuPage.style.display = 'none';
-        //   lobbyPage.style.display = 'block';
-        // });
-      
-        const images = document.querySelectorAll('.player-image');
-        const socket = io();
-        images.forEach(img => {
-          img.addEventListener('click', () => {
-            images.forEach(img => img.classList.remove('selected'));
-            img.classList.add('selected');
-          });
-        });
-      
-        const okButton = document.querySelector('#ok-button');
-
-        okButton.addEventListener('click', () => {
-          const selectedImage = document.querySelector('.player-image.selected');
-          const selectedColor = selectedImage ? selectedImage.dataset.color : null;
-      
-          if (selectedColor) {
-            console.log(selectedColor);
-            console.log("OK button clicked");
-            socket.emit('joinLobby', [selectedColor]);
-          }
-          else {
-            console.log("Please select a character");
-          }
-        });
-      </script>
 
       <!-- game lobby page -->
       <div id="game-lobby" style="display: none;">
         <div class="lobby-boxes">
           <div class="lobby-box" id="lobby-player1">
-            <div class="join-button" onclick="gameLobby.joinAsPlayer(1)">Join</div>
             <div class="player-joined">
               <div class="lobby-heading">
                 <div class="player-number"> Player 1</div>
                 <div class="player-name"> Tony Lam</div>
               </div>
               <div class="avatar" id="config-skin">
-                <div class="selector" id="left" onclick="gameLobby.chooseLeftSkin()"> < </div>
-                <img id="avatar-image" src="assets/player1.png">
-                <div class="selector" id="right" onclick="gameLobby.chooseRightSkin()"> > </div>
+                <img id="avatar-image1" src="assets/charlie/player1.png">
               </div>
-              <div id="config-life">
-                <div> Number of Life:</div>
-                <div class="config-num-block">
-                  <div class="num-change" id="decrease" onclick="gameLobby.decreaseHealth()"> - </div>
-                  <div id="config-life-num" class="config-result">3</div>
-                  <div class="num-change" id="increase" onclick="gameLobby.increaseHealth()"> + </div>                    
-                </div>
-              </div>
-              <div id="config-init-bomb">
-                <div> Number of Initial Bombs:</div>
-                <div class="config-num-block">
-                  <div class="num-change" id="decrease" onclick="gameLobby.decreaseBomb()"> - </div>
-                  <div id="config-init-bomb-num" class="config-result">1</div>
-                  <div class="num-change" id="increase" onclick="gameLobby.increaseBomb()"> + </div>                    
-                </div>
-              </div>
-              <div class="leave-button" onclick="gameLobby.leaveAsPlayer()">Leave</div>
+
+
               <div class="ready-button" onclick="gameLobby.playerReady(true)">Ready</div>
               <div class="cancel-button" onclick="gameLobby.playerReady(false)">Cancel</div>
-              <div class="ready-message">I am ready!</div>
             </div>
           </div>
           <div class="lobby-box" id="lobby-game-config">
             <div id="config-time">
               <div>Game Time</div>
               <div class="config-num-block">
-                <div onclick="gameLobby.decreaseGameDuration()" class="num-change" id="decrease"> - </div>
-                <div class="game-duration">0</div>
-                <div onclick="gameLobby.increaseGameDuration()" class="num-change" id="increase"> + </div>                
+                <div class="game-duration">3:00</div>             
               </div>
             </div>
-            <!-- <div id="config-powerup">
-              <div> Power Up:</div>
-              <div id="config-powerup-control" class="config-result">Enabled</div>
-            </div> -->
+
           </div>
           <div class="lobby-box" id="lobby-player2">
-            <div class="join-button" onclick="gameLobby.joinAsPlayer(2)">Join</div>
               <div class="player-joined">
                 <div class="lobby-heading">
                   <div class="player-number"> Player 2</div>
                   <div class="player-name"> Tony Lam</div>
                 </div>
                 <div class="avatar" id="config-skin">
-                  <div class="selector" id="left" onclick="gameLobby.chooseLeftSkin()"> < </div>
-                  <img id="avatar-image" src="assets/player1.png">
-                  <div class="selector" id="right" onclick="gameLobby.chooseRightSkin()"> > </div>
+                  <img id="avatar-image2" src="assets/charlie/player1.png">
                 </div>
-                <div id="config-life">
-                  <div> Number of Life:</div>
-                  <div class="config-num-block">
-                    <div class="num-change" id="decrease" onclick="gameLobby.decreaseHealth()"> - </div>
-                    <div id="config-life-num" class="config-result">3</div>
-                    <div class="num-change" id="increase" onclick="gameLobby.increaseHealth()"> + </div>                    
-                  </div>
-                </div>
-                <div id="config-init-bomb">
-                  <div> Number of Initial Bombs:</div>
-                  <div class="config-num-block">
-                    <div class="num-change" id="decrease" onclick="gameLobby.decreaseBomb()"> - </div>
-                    <div id="config-init-bomb-num" class="config-result">1</div>
-                    <div class="num-change" id="increase" onclick="gameLobby.increaseBomb()"> + </div>                    
-                  </div>
-                </div>
-                <div class="leave-button" onclick="gameLobby.leaveAsPlayer()">Leave</div>
+
                 <div class="ready-button" onclick="gameLobby.playerReady(true)">Ready</div>
                 <div class="cancel-button" onclick="gameLobby.playerReady(false)">Cancel</div>
-                <div class="ready-message">I am ready!</div>
               </div>
             </div>
           </div>   
-          <div class="back-button" onclick="gameLobby.backToMenu()">Back</div>       
+          <button id="back-button-gamelobby">Back</button>        
         </div>
+
         <!-- game start countdown -->
         <div id="countdown" style="display: none;">0</div>
+
         <!-- ranking page -->
         <div id="ranking" style="display: none;">
           <table>
@@ -283,11 +205,11 @@
               <div class="info-block-minor">
                 <div class="game-info-header">Items</div>
                 <div class="game-info-text">
-                  <img src="assets/range potion.png"> : + Explosion Range
+                  <!-- <img src="assets/range potion.png"> : + Explosion Range
                   <img src="assets/heart.png"> : + Extra Life
                   <img src="assets/extra bomb.png"> : + Number of Bombs
                   <img src="assets/unbreakable wall.png"> : Unbreakable Wall
-                  <img src="assets/breakable wall.png"> : Breakable Wall
+                  <img src="assets/breakable wall.png"> : Breakable Wall -->
                 </div>            
               </div>
             </div>
@@ -348,8 +270,107 @@
     <script src="scripts/gameLobby.js"></script>
     <script src="scripts/registration.js"></script>
     <script src="scripts/authentication.js"></script>
-    <script src="scripts/Lobby.js"></script>
+    <script src="/socket.io/socket.io.min.js"></script>
+    <script>
+      const menuPage = document.getElementById('menu');
+      const characterPage = document.getElementById('character-lobby');
+      const gameStartButton = document.getElementById('game-start');
+      const backButton = document.getElementById('back-button');
+      const backButtonGamelobby = document.getElementById('back-button-gamelobby');
+      const gameLobbyPage = document.getElementById('game-lobby');
+      const playerNameElements = document.querySelectorAll('.player-name');
+      const playerAvatarElements = document.querySelectorAll('.avatar img');
     
+      backButton.addEventListener('click', () => {
+        menuPage.style.display = 'block';
+        characterPage.style.display = 'none';
+      });
+      backButtonGamelobby.addEventListener('click', () => {
+        socket.emit('leaveLobby');
+        gameLobbyPage.style.display = 'none';
+        characterPage.style.display = 'block';
+        Socket.disconnect();
+      });
+      gameStartButton.addEventListener('click', () => {
+        menuPage.style.display = 'none';
+        characterPage.style.display = 'block';
+      });
+    
+      const images = document.querySelectorAll('.player-image');
+      const socket = io();
+      images.forEach(img => {
+        img.addEventListener('click', () => {
+          images.forEach(img => img.classList.remove('selected'));
+          img.classList.add('selected');
+        });
+      });
+    
+      const okButton = document.querySelector('#ok-button');
+
+      socket.on('joinedLobby successfully', (lobbyInfoString) => {
+        const lobbyInfo = JSON.parse(lobbyInfoString);
+        console.log('1');
+        console.log(lobbyInfo.players[0].displayName);
+        console.log(lobbyInfo);
+        if (lobbyInfo.players.length >= 1) {
+          console.log(lobbyInfo.players.length);
+          console.log(lobbyInfo.players[0].color);
+        // Update player 1 name and avatar image
+          $('#lobby-player1 .player-name').text(lobbyInfo.players[0].displayName);
+          if(lobbyInfo.players[0].color === 'blue'){
+            $('#avatar-image1').attr('src', `assets/charlie/player1.png`);
+          }
+          if(lobbyInfo.players[0].color === 'red'){
+            $('#avatar-image1').attr('src', `assets/charlie/player2.png`);
+          }
+          if(lobbyInfo.players[0].color === 'yellow'){
+            $('#avatar-image1').attr('src', `assets/charlie/player3.png`);
+          }
+          if(lobbyInfo.players[0].color === 'black'){
+            $('#avatar-image1').attr('src', `assets/charlie/player4.png`);
+          }
+        }
+
+        if (lobbyInfo.players.length === 2) {
+        // Update player 2 name and avatar image
+          $('#lobby-player2 .player-name').text(lobbyInfo.players[1].displayName);
+          if(lobbyInfo.players[1].color === 'blue'){
+            $('#avatar-image2').attr('src', `assets/charlie/player1.png`);
+          }
+          if(lobbyInfo.players[1].color === 'red'){
+            $('#avatar-image2').attr('src', `assets/charlie/player2.png`);
+          }
+          if(lobbyInfo.players[1].color === 'yellow'){
+            $('#avatar-image2').attr('src', `assets/charlie/player3.png`);
+          }
+          if(lobbyInfo.players[1].color === 'black'){
+            $('#avatar-image2').attr('src', `assets/charlie/player4.png`);
+          }
+        }
+      });
+
+      okButton.addEventListener('click', () => {
+        Socket.connect();
+        const selectedImage = document.querySelector('.player-image.selected');
+        const selectedColor = selectedImage ? selectedImage.dataset.color : null;
+    
+        if (selectedColor) {
+          console.log(selectedColor);
+          console.log("OK button clicked");
+          socket.emit('joinLobby', selectedColor);
+
+          gameLobbyPage.style.display = 'block';
+          characterPage.style.display = 'none';
+        }
+        else {
+          console.log("Please select a character");
+        }
+
+
+      });
+
+    </script>
+
     <!-- Sprite -->
     <!-- <script src="scripts/Player.js"></script>
     <script src="scripts/MapItems.js" ></script>
