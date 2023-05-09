@@ -597,6 +597,12 @@ body {
     font-size: 50px;
     color: white;
   }
+  #winner {
+    position: relative;
+    top: 15%;
+    font-size: 50px;
+    color: rgb(224, 47, 47);
+  }
   
   #game-result {
     font-size: 40px;
