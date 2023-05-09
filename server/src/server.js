@@ -209,7 +209,8 @@ io.on("connection",(socket)=>{
         }
     })
 
-    socket.on("onReady",(username)=>{
+    socket.on("onReady",(playerNo)=>{
+        const username = lobby.getLobbyInfo().players[playerNo-1].username;
         const result = lobby.onReady(username);
         if (result.result === "StartGame"){
             io.emit("StartGame",JSON.stringify(result.players));
@@ -220,9 +221,16 @@ io.on("connection",(socket)=>{
         }
     })
 
-    socket.on("onCancelReady",(username)=>{
+    socket.on("onCancelReady",(playerNo)=>{
+        console.log("Hi")
+        const username = lobby.getLobbyInfo().players[playerNo-1].username;
+        console.log(username)
         const result = lobby.onCancelReady(username);
-        io.emit("update lobby",JSON.stringify(lobby.getLobbyInfo()));
+        if (result.result === "failed") {
+            socket.emit("failed to ready",result.message);
+        } else {
+            io.emit("update lobby",JSON.stringify(lobby.getLobbyInfo()));
+        }
     })
 
     // remove the user (when the player disconnect/logout)

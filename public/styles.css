@@ -219,8 +219,8 @@ body {
     font-size: 30px;
   }
   
-  .ready-button,
-  .cancel-button {
+  #ready-button-player1,#ready-button-player1,
+  #cancel-button-player1,#cancel-button-player1  {
     text-align: center;
     font-size: 25px;
   }
@@ -232,9 +232,9 @@ body {
   }
   
   .join-button:hover,
-  .cancel-button:hover,
-  .ready-button:hover,
   #start-button:hover,
+  #ready-button-player1:hover,#ready-button-player1:hover,
+  #cancel-button-player1:hover,#cancel-button-player1:hover
   .back-button:hover {
     cursor: pointer;
     color: red;

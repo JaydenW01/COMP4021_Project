@@ -113,8 +113,8 @@
               </div>
 
 
-              <div class="ready-button" onclick="gameLobby.playerReady(true)">Ready</div>
-              <div class="cancel-button" onclick="gameLobby.playerReady(false)">Cancel</div>
+              <div id="ready-button-player1"">Ready</div>
+              <div id="cancel-button-player1">Cancel</div>
             </div>
           </div>
           <div class="lobby-box" id="lobby-game-config">
@@ -136,8 +136,8 @@
                   <img id="avatar-image2" src="assets/charlie/player1.png">
                 </div>
 
-                <div class="ready-button" onclick="gameLobby.playerReady(true)">Ready</div>
-                <div class="cancel-button" onclick="gameLobby.playerReady(false)">Cancel</div>
+                <div id="ready-button-player2" >Ready</div>
+                <div id="cancel-button-player2">Cancel</div>
               </div>
             </div>
           </div>   
@@ -280,6 +280,107 @@
       const gameLobbyPage = document.getElementById('game-lobby');
       const playerNameElements = document.querySelectorAll('.player-name');
       const playerAvatarElements = document.querySelectorAll('.avatar img');
+      const player1Ready = document.getElementById('ready-button-player1');
+      const player2Ready = document.getElementById('ready-button-player2');
+      const player1CancelReady = document.getElementById('cancel-button-player1');
+      const player2CancelReady = document.getElementById('cancel-button-player2');
+
+      player1Ready.addEventListener('click',()=>{
+        socket.emit('onReady',1);
+      })
+      player2Ready.addEventListener('click',()=>{
+        socket.emit('onReady',2);
+      })
+      player1CancelReady.addEventListener('click',()=>{
+        socket.emit('onCancelReady',1);
+      })
+      player2CancelReady.addEventListener('click',()=>{
+        socket.emit('onCancelReady',2);
+      })
+
+      socket.on('update lobby',(lobbyInfoString)=>{
+        const lobbyInfo = JSON.parse(lobbyInfoString);
+        if (lobbyInfo.players.length === 1) {
+          if (lobbyInfo.players[0].ready === true){
+            $("#cancel-button-player1").show();
+            $("#ready-button-player1").hide();
+          } else {
+            $("#cancel-button-player1").hide();
+            $("#ready-button-player1").show();
+          }    
+        // Update player 1 name and avatar image
+          $('#lobby-player1 .player-name').text(`You: ${lobbyInfo.players[0].displayName}`);
+          if(lobbyInfo.players[0].colour === 'blue'){
+            $('#avatar-image1').attr('src', `assets/charlie/player1.png`);
+          }
+          if(lobbyInfo.players[0].colour === 'red'){
+            $('#avatar-image1').attr('src', `assets/charlie/player2.png`);
+          }
+          if(lobbyInfo.players[0].colour === 'yellow'){
+            $('#avatar-image1').attr('src', `assets/charlie/player3.png`);
+          }
+          if(lobbyInfo.players[0].colour === 'black'){
+            $('#avatar-image1').attr('src', `assets/charlie/player4.png`);
+          }
+          $('#lobby-player2 .player-name').hide();
+          $('#avatar-image2').hide()
+        }
+
+        if (lobbyInfo.players.length === 2) {
+          $('#lobby-player2 .player-name').show();
+          $('#avatar-image2').show()
+          if (lobbyInfo.players[0].username === JSON.parse(sessionStorage.getItem("user")).username){
+            $('#lobby-player1 .player-name').text(`You: ${lobbyInfo.players[0].displayName}`);
+            $('#lobby-player2 .player-name').text(lobbyInfo.players[1].displayName);
+            $("#ready-button-player2").hide()
+            $("#cancel-button-player2").hide()
+            if (lobbyIOnfo.players[0].ready === true){
+              $("#cancel-button-player1").show();
+              $("#ready-button-player1").hide();
+            } else {
+              $("#cancel-button-player1").hide();
+              $("#ready-button-player1").show();
+            }
+          } else {
+            $('#lobby-player1 .player-name').text(lobbyInfo.players[0].displayName);
+            $('#lobby-player2 .player-name').text(`You: ${lobbyInfo.players[1].displayName}`);
+            $("#ready-button-player1").hide()
+            $("#cancel-button-player1").hide()
+            if (lobbyIOnfo.players[1].ready === true){
+              $("#cancel-button-player2").show();
+              $("#ready-button-player2").hide();
+            } else {
+              $("#cancel-button-player2").hide();
+              $("#ready-button-player2").show();
+            }
+          }
+          if(lobbyInfo.players[0].colour === 'blue'){
+            $('#avatar-image1').attr('src', `assets/charlie/player1.png`);
+          }
+          if(lobbyInfo.players[0].colour === 'red'){
+            $('#avatar-image1').attr('src', `assets/charlie/player2.png`);
+          }
+          if(lobbyInfo.players[0].colour === 'yellow'){
+            $('#avatar-image1').attr('src', `assets/charlie/player3.png`);
+          }
+          if(lobbyInfo.players[0].colour === 'black'){
+            $('#avatar-image1').attr('src', `assets/charlie/player4.png`);
+          }
+        // Update player 2 name and avatar image
+          if(lobbyInfo.players[1].colour === 'blue'){
+            $('#avatar-image2').attr('src', `assets/charlie/player1.png`);
+          }
+          if(lobbyInfo.players[1].colour === 'red'){
+            $('#avatar-image2').attr('src', `assets/charlie/player2.png`);
+          }
+          if(lobbyInfo.players[1].colour === 'yellow'){
+            $('#avatar-image2').attr('src', `assets/charlie/player3.png`);
+          }
+          if(lobbyInfo.players[1].colour === 'black'){
+            $('#avatar-image2').attr('src', `assets/charlie/player4.png`);
+          }
+        }
+      })
       
       backButton.addEventListener('click', () => {
         menuPage.style.display = 'block';
@@ -315,6 +416,7 @@
         if (lobbyInfo.players.length === 1) {
           console.log(lobbyInfo.players.length);
           console.log(lobbyInfo.players[0].colour);
+          $("#cancel-button-player1").hide()
         // Update player 1 name and avatar image
           $('#lobby-player1 .player-name').text(`You: ${lobbyInfo.players[0].displayName}`);
           if(lobbyInfo.players[0].colour === 'blue'){
@@ -339,9 +441,13 @@
           if (lobbyInfo.players[0].username === JSON.parse(sessionStorage.getItem("user")).username){
             $('#lobby-player1 .player-name').text(`You: ${lobbyInfo.players[0].displayName}`);
             $('#lobby-player2 .player-name').text(lobbyInfo.players[1].displayName);
+            $("#ready-button-player2").hide()
+            $("#cancel-button-player2").hide()
           } else {
             $('#lobby-player1 .player-name').text(lobbyInfo.players[0].displayName);
             $('#lobby-player2 .player-name').text(`You: ${lobbyInfo.players[1].displayName}`);
+            $("#ready-button-player1").hide()
+            $("#cancel-button-player1").hide()
           }
           if(lobbyInfo.players[0].colour === 'blue'){
             $('#avatar-image1').attr('src', `assets/charlie/player1.png`);
@@ -378,6 +484,8 @@
           console.log(lobbyInfo.players[0].colour);
           $('#lobby-player2 .player-name').hide();
           $('#avatar-image2').hide()
+          $("#ready-button-player2").hide()
+          $("#cancel-button-player2").hide()
         // Update player 1 name and avatar image
           $('#lobby-player1 .player-name').text(`You: ${lobbyInfo.players[0].displayName}`);
           if(lobbyInfo.players[0].colour === 'blue'){
@@ -400,9 +508,13 @@
           if (lobbyInfo.players[0].username === JSON.parse(sessionStorage.getItem("user")).username){
             $('#lobby-player1 .player-name').text(`You: ${lobbyInfo.players[0].displayName}`);
             $('#lobby-player2 .player-name').text(lobbyInfo.players[1].displayName);
+            $("#ready-button-player2").hide()
+            $("#cancel-button-player2").hide()
           } else {
             $('#lobby-player1 .player-name').text(lobbyInfo.players[0].displayName);
             $('#lobby-player2 .player-name').text(`You: ${lobbyInfo.players[1].displayName}`);
+            $("#ready-button-player1").hide()
+            $("#cancel-button-player1").hide()
           }
           if(lobbyInfo.players[0].colour === 'blue'){
             $('#avatar-image1').attr('src', `assets/charlie/player1.png`);
@@ -437,6 +549,8 @@
         if (lobbyInfo.players.length === 1) {
           $('#lobby-player2 .player-name').hide();
           $('#avatar-image2').hide()
+          $("#ready-button-player2").hide()
+          $("#cancel-button-player2").hide()
           console.log(lobbyInfo.players.length);
           console.log(lobbyInfo.players[0].colour);
         // Update player 1 name and avatar image
@@ -461,9 +575,13 @@
           if (lobbyInfo.players[0].username === JSON.parse(sessionStorage.getItem("user")).username){
             $('#lobby-player1 .player-name').text(`You: ${lobbyInfo.players[0].displayName}`);
             $('#lobby-player2 .player-name').text(lobbyInfo.players[1].displayName);
+            $("#ready-button-player2").hide()
+            $("#cancel-button-player2").hide()
           } else {
             $('#lobby-player1 .player-name').text(lobbyInfo.players[0].displayName);
             $('#lobby-player2 .player-name').text(`You: ${lobbyInfo.players[1].displayName}`);
+            $("#ready-button-player1").hide()
+            $("#cancel-button-player1").hide()
           }
           if(lobbyInfo.players[0].colour === 'blue'){
             $('#avatar-image1').attr('src', `assets/charlie/player1.png`);

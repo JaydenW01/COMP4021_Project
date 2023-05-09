@@ -95,7 +95,7 @@ export default class Lobby {
         for (let i = 0;i < this.players.length;i++){
             if (this.players[i].username === username){ // if the player is in the lobby, return
                 this.players[i].ready = true;
-                if (checkBothReady()){
+                if (this.checkBothReady()){
                     return {result:"StartGame",players:[this.players[0].username,this.players[1].username]};
                 } else {
                     return {result:"successful"};
