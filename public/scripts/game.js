@@ -1,5 +1,5 @@
 const Game = function () {
-    const canvas = $('canvas').get(0);
+    const canvas = $('#canvas').get(0);
     canvas.width = 272; // 20 * 20 block. each block is 16px, so 16 * 20 = 320
     canvas.height = 208;
     const context = canvas.getContext('2d');
@@ -78,8 +78,11 @@ const Game = function () {
         const gameArea = BoundingBox(context, 32, 48, canvas.height - 32, canvas.width - 48);
         
         // draw map
-        var img = new Image(src="../assets/gameboard.png");
-        context.drawImage(img, 0, 0)
+        let img = new Image();
+        img.onload = () => {
+            context.drawImage(img, 0, 0);
+        }
+        img.src = "../assets/gameboard.png";
 
         // draw breakables
         let num_breakables_drawn = 0;
