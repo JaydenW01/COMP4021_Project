@@ -8,14 +8,14 @@ const Breakable = function(ctx, x, y) {
     // This is the sprite sequences of the gem of four colours
     // `green`, `red`, `yellow` and `purple`.
     const sequences = {
-        green:  { x: 0, y:  0, width: 16, height: 16, count: 1, timing: 200, loop: false },
+        default:  { x: 0, y:  0, width: 16, height: 16, count: 1, timing: 200, loop: false },
     };
 
     // This is the sprite object of the gem created from the Sprite module.
     const sprite = Sprite(ctx, x, y);
 
     // The sprite object is configured for the gem sprite here.
-    sprite.setSequence(sequences[color])
+    sprite.setSequence(sequences["default"])
           .setScale(1)
           .setShadowScale({ x: 0, y: 0 })
           .useSheet("breakable.png");

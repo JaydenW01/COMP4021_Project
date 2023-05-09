@@ -21,7 +21,7 @@ const Game = (function () {
      */
     for (let i = 0; i < 11; i++) {
         for (let j = 0; j < 13; j++) {
-            breakables[{x:i, y:j}] = new Breakable(ctx, j*blockWidth, i*blockHeight);
+            breakables[{x:i, y:j}] = new Breakable(context, j*blockWidth, i*blockHeight);
         }
     }
 
