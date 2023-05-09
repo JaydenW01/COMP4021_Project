@@ -254,6 +254,12 @@ io.on("connection",(socket)=>{
         if (socket.request.session.user?.username === player1.getUsername()){
             if (gameboard.checkWalkable(player1.getPos(),"up")){ // can walk there
                 player1.moveUp();
+                if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "fire"){
+                    player1.getAbility("fire");
+                    gameboard.deleteItem()
+                } else if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "heart"){
+                    player1.increaseHealth(player1.getPos().x,player1.getPos().y);
+                }
                 io.emit("updateBoard",JSON.stringify({
                     players:[player1.playerInfo,player2.playerInfo],
                     breakables:gameboard.gameboardInfo().breakables,
@@ -270,6 +276,12 @@ io.on("connection",(socket)=>{
         } else if (socket.request.session.user?.username === player2.getUsername()){
             if (gameboard.checkWalkable(player2.getPos(),"up")){ // can walk there
                 player2.moveUp();
+                if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "fire"){
+                    player2.getAbility("fire");
+                    gameboard.deleteItem()
+                } else if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "heart"){
+                    player2.increaseHealth(player2.getPos().x,player2.getPos().y);
+                }
                 io.emit("updateBoard",JSON.stringify({
                     players:[player1.playerInfo,player2.playerInfo],
                     breakables:gameboard.gameboardInfo().breakables,
@@ -290,6 +302,12 @@ io.on("connection",(socket)=>{
         if (socket.request.session.user?.username === player1.getUsername()){
             if (gameboard.checkWalkable(player1.getPos(),"down")){ // can walk there
                 player1.moveDown();
+                if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "fire"){
+                    player1.getAbility("fire");
+                    gameboard.deleteItem()
+                } else if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "heart"){
+                    player1.increaseHealth(player1.getPos().x,player1.getPos().y);
+                }
                 io.emit("updateBoard",JSON.stringify({
                     players:[player1.playerInfo,player2.playerInfo],
                     breakables:gameboard.gameboardInfo().breakables,
@@ -306,6 +324,12 @@ io.on("connection",(socket)=>{
         } else if (socket.request.session.user?.username === player2.getUsername()){
             if (gameboard.checkWalkable(player2.getPos(),"down")){ // can walk there
                 player2.moveDown();
+                if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "fire"){
+                    player2.getAbility("fire");
+                    gameboard.deleteItem()
+                } else if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "heart"){
+                    player2.increaseHealth(player2.getPos().x,player2.getPos().y);
+                }
                 io.emit("updateBoard",JSON.stringify({
                     players:[player1.playerInfo,player2.playerInfo],
                     breakables:gameboard.gameboardInfo().breakables,
@@ -326,6 +350,12 @@ io.on("connection",(socket)=>{
         if (socket.request.session.user?.username === player1.getUsername()){
             if (gameboard.checkWalkable(player1.getPos(),"left")){ // can walk there
                 player1.moveLeft();
+                if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "fire"){
+                    player1.getAbility("fire");
+                    gameboard.deleteItem()
+                } else if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "heart"){
+                    player1.increaseHealth(player1.getPos().x,player1.getPos().y);
+                }
                 io.emit("updateBoard",JSON.stringify({
                     players:[player1.playerInfo,player2.playerInfo],
                     breakables:gameboard.gameboardInfo().breakables,
@@ -342,6 +372,12 @@ io.on("connection",(socket)=>{
         } else if (socket.request.session.user?.username === player2.getUsername()){
             if (gameboard.checkWalkable(player2.getPos(),"left")){ // can walk there
                 player2.moveLeft();
+                if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "fire"){
+                    player2.getAbility("fire");
+                    gameboard.deleteItem()
+                } else if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "heart"){
+                    player2.increaseHealth(player2.getPos().x,player2.getPos().y);
+                }
                 io.emit("updateBoard",JSON.stringify({
                     players:[player1.playerInfo,player2.playerInfo],
                     breakables:gameboard.gameboardInfo().breakables,
@@ -362,6 +398,12 @@ io.on("connection",(socket)=>{
         if (socket.request.session.user?.username === player1.getUsername()){
             if (gameboard.checkWalkable(player1.getPos(),"right")){ // can walk there
                 player1.moveRight();
+                if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "fire"){
+                    player1.getAbility("fire");
+                    gameboard.deleteItem()
+                } else if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "heart"){
+                    player1.increaseHealth(player1.getPos().x,player1.getPos().y);
+                }
                 io.emit("updateBoard",JSON.stringify({
                     players:[player1.playerInfo,player2.playerInfo],
                     breakables:gameboard.gameboardInfo().breakables,
@@ -377,7 +419,13 @@ io.on("connection",(socket)=>{
             }
         } else if (socket.request.session.user?.username === player2.getUsername()){
             if (gameboard.checkWalkable(player2.getPos(),"right")){ // can walk there
-                player1.moveRight();
+                player2.moveRight();
+                if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "fire"){
+                    player2.getAbility("fire");
+                    gameboard.deleteItem()
+                } else if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "heart"){
+                    player2.increaseHealth(player2.getPos().x,player2.getPos().y);
+                }
                 io.emit("updateBoard",JSON.stringify({
                     players:[player1.playerInfo,player2.playerInfo],
                     breakables:gameboard.gameboardInfo().breakables,

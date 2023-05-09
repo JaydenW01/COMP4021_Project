@@ -50,6 +50,8 @@ export default class Gameboard {
         this.walls = initialWalls;
         this.breakables = initialBreakables;
         this.bombs = [];
+        this.fires = [];
+        this.hearts = [];
     }
 
     reset() {
@@ -72,6 +74,18 @@ export default class Gameboard {
                 return "breakable";
             }
         }
+
+        for (const fire of this.fires){
+            if (fire.x === x && fire.y === y){
+                return "fire";
+            }
+        }
+
+        for (const heart of this.hearts){
+            if (heart.x === x && heart.y === y){
+                return "heart";
+            }
+        }
         return "walkable";
     }
 
@@ -92,7 +106,7 @@ export default class Gameboard {
                 if (currentY === 0){ // already at the top
                     return false;
                 } else {
-                    if (this.checkWalkable(currentX,currentY-1) !== "walkable"){
+                    if (this.checkWalkable(currentX,currentY-1) === "wall" || this.checkWalkable(currentX,currentY-1) === "breakable" || this.checkWalkable(currentX,currentY-1) === "out of bound"){
                         return false;
                     } else {
                         return true;
@@ -102,7 +116,7 @@ export default class Gameboard {
                 if (currentY === 10){ // already at the bottom
                     return false;
                 } else {
-                    if (this.checkWalkable(currentX,currentY+1) !== "walkable"){
+                    if (this.checkWalkable(currentX,currentY+1) === "wall" || this.checkWalkable(currentX,currentY+1) === "breakable" || this.checkWalkable(currentX,currentY+1) === "out of bound"){
                         return false;
                     } else {
                         return true;
@@ -112,7 +126,7 @@ export default class Gameboard {
                 if (currentX === 0){ // already at the left-most
                     return false;
                 } else {
-                    if (this.checkWalkable(currentX-1,currentY) !== "walkable"){
+                    if (this.checkWalkable(currentX-1,currentY) === "wall" || this.checkWalkable(currentX-1,currentY) === "breakable" || this.checkWalkable(currentX-1,currentY) === "out of bound"){
                         return false;
                     } else {
                         return true;
@@ -122,7 +136,7 @@ export default class Gameboard {
                 if (currentX === 12){ // already at the right-most
                     return false;
                 } else {
-                    if (this.checkWalkable(currentX+1,currentY) !== "walkable"){
+                    if (this.checkWalkable(currentX+1,currentY) === "wall" || this.checkWalkable(currentX+1,currentY) === "breakable" || this.checkWalkable(currentX+1,currentY) === "out of bound"){
                         return false;
                     } else {
                         return true;
@@ -135,6 +149,13 @@ export default class Gameboard {
     removeBlockByPos(x,y){
         for (let i = 0; i < this.breakables.length;i++){
             if (this.breakables[i].x === x && this.breakables[i].y === y){
+                if (Math.random() < 0.3){ // there is a 0.3 chance to drop an item
+                    if (Math.random() > 0.5){
+                        this.fires.push({x:this.breakables[i].x,y:this.breakables[i].y})
+                    } else {
+                        this.hearts.push({x:this.breakables[i].x,y:this.breakables[i].y})
+                    }
+                }
                 this.breakables.splice(i,0);
                 break;
             }
@@ -178,6 +199,22 @@ export default class Gameboard {
             }
         }
         return {up:{x:bombX,y:bombY-1},down:{x:bombX,y:bombY+1},left:{x:bombX-1,y:bombY},right:{x:bombX+1,y:bombY},center:{x:bombX,y:bombY},points:points};
+    }
+
+    deleteItem(x,y){
+        for (let i = 0; i < this.fires.length;i++){
+            if (fires[i].x === x && fires[i].y === y){
+                this.fires.splice(i,0);
+                break;
+            }
+        }
+        for (let j = 0; j < this.hearts.length;j++){
+            if (hearts[j].x === x && hearts[j].y === y){
+                this.hearts.splice(j,0);
+                break;
+            }
+        }
+
     }
 
 }
