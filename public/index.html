@@ -278,6 +278,7 @@
     <script src="scripts/game.js"></script>
     <script>
       const socket = io();
+      const game = Game();
       const menuPage = document.getElementById('menu');
       const characterPage = document.getElementById('character-lobby');
       const gameStartButton = document.getElementById('game-start');
@@ -654,7 +655,6 @@
       socket.on("StartGame",(gameboardString)=>{
         const gameboardInfo = JSON.parse(gameboardString);
         console.log(gameboardInfo);
-        const game = Game();
         game.enableGameInput(true);
       })
 

@@ -1,4 +1,4 @@
-const Game = (function () {
+const Game = function () {
     const canvas = $('canvas').get(0);
     canvas.width = 272; // 20 * 20 block. each block is 16px, so 16 * 20 = 320
     canvas.height = 208;
@@ -99,4 +99,4 @@ const Game = (function () {
     };
 
     return { setInputEnabled, updateBoard };
-})();
+};
