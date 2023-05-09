@@ -655,8 +655,10 @@
       socket.on("StartGame",(gameboardString)=>{
         const gameboardInfo = JSON.parse(gameboardString);
         console.log(gameboardInfo);
-        game.enableGameInput(true);
-      })
+        $("#game-lobby").hide();
+        game.setInputEnabled(true);
+        game.updateBoard(gameboardInfo);
+      });
 
     </script>
 

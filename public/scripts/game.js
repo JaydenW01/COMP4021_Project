@@ -72,14 +72,15 @@ const Game = function () {
         const gameArea = BoundingBox(context, 32, 48, canvas.height - 32, canvas.width - 48);
         
         // draw map
-        canvas.drawImage("../assets/gameboard.png")
+        var img = new Image(src="../assets/gameboard.png");
+        context.drawImage(img, 0, 0)
 
         // draw breakables
         for (const breakable of gameBoard.breakables) {
             breakables[breakable].draw();
         }
 
-        for (const player of gameInfo.playerInfo) {
+        for (const player of gameBoard.players) {
             if (player in players) {
                 players[player.playerNo].update(player.location, player.facing, now);
             } else {
