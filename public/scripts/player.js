@@ -101,6 +101,8 @@ const Player = function(ctx, x, y, color) {
 
     // The methods are returned as an object here.
     return {
+        setFacing: setFacing,
+        setPosition: setPosition,
         getBoundingBox: sprite.getBoundingBox,
         draw: sprite.draw,
         update: update
