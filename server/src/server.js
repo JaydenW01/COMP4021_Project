@@ -142,7 +142,7 @@ app.get("/signout", (req, res) => {
 app.get("/ranking",(req,res)=>{
     const ranking = JSON.parse(fs.readFileSync("data/ranking.json"));
     ranking.sort((a, b) => b.points - a.points);
-    res.json(JSON.stringify(ranking));
+    res.json({status:"success",ranking:JSON.stringify(ranking)});
     //console.log(ranking)
 })
 

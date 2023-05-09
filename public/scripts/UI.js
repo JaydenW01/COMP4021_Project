@@ -101,28 +101,26 @@ const gameStat = (function () {
         $('#table-body').empty();
 
         // list for holding the ranking
-        const stat_list = [];
+        const full_ranking = [];
 
-        fetch('/statistic_board')
-            .then((response) => response.json())
+        fetch('/ranking')
+            .then((res) => res.json())
             .then((json) => {
                 if (json.status == 'success') {
-                    // don't know why i need to do that??
-                    const statistics = JSON.parse(json.stat);
+                    const ranking_arr = JSON.parse(json.ranking);
 
-                    for (const username in statistics) {
-                        let stat = { username: username, ...statistics[username] };
-                        stat_list.push(stat);
+                    for (const user of ranking_arr) {
+                        let stat = {displayName:user.displayName,points:user.points};
+                        full_ranking.push(stat);
                     }
-                    stat_list.sort((a, b) => b.win - a.win);
+                    console.log(full_ranking)
 
-                    for (let i = 0; i < stat_list.length; i++) {
+                    for (let i = 0; i < full_ranking.length; i++) {
                         let no = i + 1;
                         const rank = $('<tr></tr>')
                             .append($('<td>' + no + '</td>'))
-                            .append($('<td>' + stat_list[i].username + '</td>'))
-                            .append($('<td>' + stat_list[i].win + '</td>'))
-                            .append($('<td>' + stat_list[i].loss + '</td>'));
+                            .append($('<td>' + full_ranking[i].displayName + '</td>'))
+                            .append($('<td>' + full_ranking[i].points + '</td>'))
 
                         $('#table-body').append(rank);
                     }
