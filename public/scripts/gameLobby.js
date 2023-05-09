@@ -229,7 +229,6 @@ const gameLobby = (function () {
                     $('#countdown').hide();
                     $('#game-lobby').hide();
                     $('#canvas').css('background-image', 'none').css('background-color', 'white');
-                    bomberman.enableGameInput(true);
                 }, 1000);
             }, 1000);
         }, 1000);

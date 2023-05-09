@@ -270,6 +270,12 @@
     <script src="scripts/registration.js"></script>
     <script src="scripts/authentication.js"></script>
     <script src="/socket.io/socket.io.min.js"></script>
+    <!-- Sprite -->
+    <script src="scripts/player.js"></script>
+    <script src="scripts/sprite.js"></script>
+    <script src="scripts/boundingBox.js"></script>
+    <script src="scripts/breakable.js"></script>
+    <script src="scripts/game.js"></script>
     <script>
       const socket = io();
       const menuPage = document.getElementById('menu');
@@ -648,18 +654,12 @@
       socket.on("StartGame",(gameboardString)=>{
         const gameboardInfo = JSON.parse(gameboardString);
         console.log(gameboardInfo);
+        const game = Game();
+        game.enableGameInput(true);
       })
 
     </script>
 
-    <!-- Sprite -->
-    <!-- <script src="scripts/Player.js"></script>
-    <script src="scripts/MapItems.js" ></script>
-    <script src="scripts/Sprite.js"></script>
-    <script src="scripts/BoundingBox.js"></script>
-    <script src="scripts/Bomb.js"></script>
-    <script src="scripts/PowerUps.js"></script>
-    <script src="scripts/bomberman.js"></script> -->
     <script>
       $(document).ready(function () {
         // Initialize the UI

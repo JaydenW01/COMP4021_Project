@@ -26,5 +26,9 @@
  "bob": {
   "displayName": "bob",
   "password": "$2b$10$QqDXNkQ4Pt8w3QIDNy/YH.2vNat6/GtKDrnKTjDSAubE6Pj5MGO.O"
+ },
+ "brian": {
+  "displayName": "brian",
+  "password": "$2b$10$seyQSMFaDb/KdBYqrMtJiuIHG5eta6sGxQrOICd6IJmTXBbHZtoHC"
  }
 }
