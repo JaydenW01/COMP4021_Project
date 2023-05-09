@@ -91,7 +91,10 @@ const Game = function () {
 
         for (const player of gameBoard.players) {
             if (player in players) {
-                players[player.playerNo].update(player.location, player.facing, now);
+                players[player.playerNo].update(
+                    {x : player.location.y * blockWidth, y : player.location.x * blockHeight},
+                    player.facing,
+                    now);
             } else {
                 players[player.playerNo] = new Player(
                     context,
