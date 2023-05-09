@@ -286,7 +286,7 @@
         characterPage.style.display = 'none';
       });
       backButtonGamelobby.addEventListener('click', () => {
-        socket.emit('leaveLobby');
+        socket.emit('leaveLobby',JSON.parse(sessionStorage.user).username);
         gameLobbyPage.style.display = 'none';
         characterPage.style.display = 'block';
         Socket.disconnect();

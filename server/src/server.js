@@ -195,7 +195,9 @@ io.on("connection",(socket)=>{
     })
 
     socket.on("leaveLobby",(username)=>{
+        console.log(`${username} has left the lobby`);
         lobby.removePlayer(username);
+        console.log(lobby.getLobbyInfo().players);
         io.emit("playerLeft",username);
     })
 
