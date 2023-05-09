@@ -104,4 +104,14 @@ export default class Lobby {
         } 
         return {result:"failed","message":"User not found"};
     }
+
+    onCancelReady(username){
+        for (let i = 0;i < this.players.length;i++){
+            if (this.players[i].username === username){ // if the player is in the lobby, return
+                this.players[i].ready = false;
+                return {result:"successful"};
+            }
+        } 
+        return {result:"failed","message":"User not found"};
+    }
 }

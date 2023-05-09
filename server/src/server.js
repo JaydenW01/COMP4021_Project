@@ -187,7 +187,7 @@ io.on("connection",(socket)=>{
             }
             socket.emit('joinedLobby successfully',JSON.stringify(lobbyInfo)); // Frontend should listen to this event before allowing the user to join the lobby
             console.log(lobbyInfo)
-            io.emit('newPlayer',{username:socket.request.session.user?.username,displayName:socket.request.session.user?.displayName,colour});
+            io.emit('newPlayer',JSON.stringify(lobby.getLobbyInfo()));
         } else {
             console.log("failed to join lobby")
             socket.emit("failed to join lobby",result.message);
@@ -197,8 +197,7 @@ io.on("connection",(socket)=>{
     socket.on("leaveLobby",(username)=>{
         console.log(`${username} has left the lobby`);
         lobby.removePlayer(username);
-        console.log(lobby.getLobbyInfo().players);
-        io.emit("playerLeft",username);
+        io.emit("playerLeft",JSON.stringify(lobby.getLobbyInfo()));
     })
 
     socket.on("setGameTime",(time)=>{ // time is in seconds, and can only increment by 30 seconds
@@ -217,8 +216,13 @@ io.on("connection",(socket)=>{
         } else if (result.result === "failed") {
             socket.emit("failed to ready",result.message);
         } else {
-            io.emit("playerIsReady",username);
+            io.emit("update lobby",JSON.stringify(lobby.getLobbyInfo()));
         }
+    })
+
+    socket.on("onCancelReady",(username)=>{
+        const result = lobby.onCancelReady(username);
+        io.emit("update lobby",JSON.stringify(lobby.getLobbyInfo()));
     })
 
     // remove the user (when the player disconnect/logout)
@@ -438,6 +442,10 @@ io.on("connection",(socket)=>{
         gameboard.reset();
         player1.reset();
         player2.reset();
+    })
+
+    socket.on("debug",()=>{
+        console.log(socket.request.session.user);
     })
 
 
