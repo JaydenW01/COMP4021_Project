@@ -357,8 +357,8 @@
         if (selectedColor) {
           console.log(selectedColor);
           console.log("OK button clicked");
-          socket.emit('joinLobby', selectedColor);
-
+          const userobject = JSON.parse(sessionStorage.getItem("user"));
+          socket.emit('joinLobby', JSON.stringify({username:userobject.username,displayName:userobject.displayName,colour:selectedColor}));
           gameLobbyPage.style.display = 'block';
           characterPage.style.display = 'none';
         }

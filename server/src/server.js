@@ -172,7 +172,10 @@ io.on("connection",(socket)=>{
     console.log(`${socket.request.session.user?.username} has logged in`);
 
     // when player is ready to start the game, for CHARLIE: to join lobby: socket.emit("joinLobby","red");
-    socket.on('joinLobby',(colour)=>{
+    socket.on('joinLobby',(object)=>{
+        const obj = JSON.parse(object);
+        const {username,displayName,colour} = obj;
+        socket.request.session['user'] = {username,displayName};
         console.log(socket.request.session);
         const result = lobby.addPlayer(socket.request.session.user?.username,socket.request.session.user?.displayName,colour)
         if (result.result === "successful"){
@@ -183,8 +186,10 @@ io.on("connection",(socket)=>{
                 player2.setUser(socket.request.session.user?.username,colour,socket.request.session.user?.displayName);
             }
             socket.emit('joinedLobby successfully',JSON.stringify(lobbyInfo)); // Frontend should listen to this event before allowing the user to join the lobby
+            console.log(lobbyInfo)
             io.emit('newPlayer',{username:socket.request.session.user?.username,displayName:socket.request.session.user?.displayName,colour});
         } else {
+            console.log("failed to join lobby")
             socket.emit("failed to join lobby",result.message);
         }
     })

@@ -35,9 +35,11 @@ const Authentication = (function () {
                 if (json.status == 'error') {
                     if (onError) onError(json.error);
                 } else if (json.status == 'success') {
-                    user = json.user;
+                    console.log(json.user)
                     if (onSuccess) onSuccess();
                 }
+                const user = {username:json.user.username,displayName:json.user.displayName};
+                sessionStorage.setItem("user",JSON.stringify(user));
             })
             .catch((err) => {
                 console.log(err);
@@ -87,6 +89,7 @@ const Authentication = (function () {
             .then((json) => {
                 if (json.status == 'success') {
                     user = null;
+                    sessionStorage.clear();
                     if (onSuccess) onSuccess();
                 }
             });
