@@ -219,40 +219,14 @@
         <div id="game-over" style="display: none;">
           <div id="game-over-content">
             Game Over!!
-            <!-- <div id="game-result">
-              You Win!
             </div>
-            <div id="game-over-stat">
-              <div id="game-over-player1">
-                <div class="game-over-username">
-                  Player 1
-                </div>
-                <div class="game-over-stat-row">
-                  Health: 100
-                </div>
-                <div class="game-over-stat-row">
-                  Bomb: 3
-                </div>
-                <div class="game-over-stat-row">
-                  Range: 2
-                </div>
+            <div id="winner">
+              You are winner!
               </div>
-              <div id="game-over-player2">
-                <div class="game-over-username">
-                  Player 2
-                </div>
-                <div class="game-over-stat-row">
-                  Health: 60
-                </div>
-                <div class="game-over-stat-row">
-                  Bomb: 2
-                </div>
-                <div class="game-over-stat-row">
-                  Range: 4
-                </div>
-              </div> -->
-            </div>
-            <div id="back-button-gameover" onclick="gameOver.backToMenu()">Back To Menu</div>       
+            <div class="button-container">
+              <button id="back-button-gameover">Back to Menu</button>
+              <button id="restart">Restart</button>  
+            </div>       
           </div>
         </div>
         <div id="clock" style="display: none;">
@@ -286,9 +260,12 @@
       const backButtonGamelobby = document.getElementById('back-button-gamelobby');
       const backButtonGameinfo = document.getElementById('back-button-gameinfo');
       const backButtonRanking = document.getElementById('back-button-ranking');
+      const backButtonGameover = document.getElementById('back-button-gameover');
+      const restartButton = document.getElementById('restart');
       const gameLobbyPage = document.getElementById('game-lobby');
       const rankingPage = document.getElementById('ranking');
       const gameInfoPage = document.getElementById('game-info');
+      const gameOverPage = document.getElementById('game-over');
       const playerNameElements = document.querySelectorAll('.player-name');
       const playerAvatarElements = document.querySelectorAll('.avatar img');
       const player1Ready = document.getElementById('ready-button-player1');
@@ -405,11 +382,26 @@
         menuPage.style.display = 'block';
         gameInfoPage.style.display = 'none';
       });
+      backButtonGameover.addEventListener('click', () => {
+        menuPage.style.display = 'block';
+        gameOverPage.style.display = 'none';
+        $('#canvas').css('background-image', "url('./assets/jayden/game_background.jpg')").css('background-color', 'none');
+        const canvas = $('canvas').get(0);
+        const context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+      });
       backButtonGamelobby.addEventListener('click', () => {
         socket.emit('leaveLobby',JSON.parse(sessionStorage.user).username);
         gameLobbyPage.style.display = 'none';
         characterPage.style.display = 'block';
-
+      });
+      restartButton.addEventListener('click', () => {
+        gameOverPage.style.display = 'none';
+        characterPage.style.display = 'block';
+        $('#canvas').css('background-image', "url('./assets/jayden/game_background.jpg')").css('background-color', 'none');
+        const canvas = $('canvas').get(0);
+        const context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
       });
       gameStartButton.addEventListener('click', () => {
         menuPage.style.display = 'none';
