@@ -264,13 +264,14 @@
     </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-    <script src="scripts/socket.js"></script>
+    <!-- <script src="scripts/socket.js"></script> -->
     <script src="scripts/UI.js"></script>
-    <script src="scripts/gameLobby.js"></script>
+    <!-- <script src="scripts/gameLobby.js"></script> -->
     <script src="scripts/registration.js"></script>
     <script src="scripts/authentication.js"></script>
     <script src="/socket.io/socket.io.min.js"></script>
     <script>
+      const socket = io();
       const menuPage = document.getElementById('menu');
       const characterPage = document.getElementById('character-lobby');
       const gameStartButton = document.getElementById('game-start');
@@ -279,7 +280,7 @@
       const gameLobbyPage = document.getElementById('game-lobby');
       const playerNameElements = document.querySelectorAll('.player-name');
       const playerAvatarElements = document.querySelectorAll('.avatar img');
-    
+      
       backButton.addEventListener('click', () => {
         menuPage.style.display = 'block';
         characterPage.style.display = 'none';
@@ -288,7 +289,7 @@
         socket.emit('leaveLobby',JSON.parse(sessionStorage.user).username);
         gameLobbyPage.style.display = 'none';
         characterPage.style.display = 'block';
-        Socket.disconnect();
+
       });
       gameStartButton.addEventListener('click', () => {
         menuPage.style.display = 'none';
@@ -296,7 +297,6 @@
       });
     
       const images = document.querySelectorAll('.player-image');
-      const socket = io();
       images.forEach(img => {
         img.addEventListener('click', () => {
           images.forEach(img => img.classList.remove('selected'));
@@ -311,48 +311,165 @@
         console.log('1');
         console.log(lobbyInfo.players[0].displayName);
         console.log(lobbyInfo);
-        if (lobbyInfo.players.length >= 1) {
+        if (lobbyInfo.players.length === 1) {
           console.log(lobbyInfo.players.length);
-          console.log(lobbyInfo.players[0].color);
+          console.log(lobbyInfo.players[0].colour);
         // Update player 1 name and avatar image
           $('#lobby-player1 .player-name').text(lobbyInfo.players[0].displayName);
-          if(lobbyInfo.players[0].color === 'blue'){
+          if(lobbyInfo.players[0].colour === 'blue'){
             $('#avatar-image1').attr('src', `assets/charlie/player1.png`);
           }
-          if(lobbyInfo.players[0].color === 'red'){
+          if(lobbyInfo.players[0].colour === 'red'){
             $('#avatar-image1').attr('src', `assets/charlie/player2.png`);
           }
-          if(lobbyInfo.players[0].color === 'yellow'){
+          if(lobbyInfo.players[0].colour === 'yellow'){
             $('#avatar-image1').attr('src', `assets/charlie/player3.png`);
           }
-          if(lobbyInfo.players[0].color === 'black'){
+          if(lobbyInfo.players[0].colour === 'black'){
             $('#avatar-image1').attr('src', `assets/charlie/player4.png`);
           }
         }
 
         if (lobbyInfo.players.length === 2) {
+          $('#lobby-player1 .player-name').text(lobbyInfo.players[0].displayName);
+          if(lobbyInfo.players[0].colour === 'blue'){
+            $('#avatar-image1').attr('src', `assets/charlie/player1.png`);
+          }
+          if(lobbyInfo.players[0].colour === 'red'){
+            $('#avatar-image1').attr('src', `assets/charlie/player2.png`);
+          }
+          if(lobbyInfo.players[0].colour === 'yellow'){
+            $('#avatar-image1').attr('src', `assets/charlie/player3.png`);
+          }
+          if(lobbyInfo.players[0].colour === 'black'){
+            $('#avatar-image1').attr('src', `assets/charlie/player4.png`);
+          }
         // Update player 2 name and avatar image
           $('#lobby-player2 .player-name').text(lobbyInfo.players[1].displayName);
-          if(lobbyInfo.players[1].color === 'blue'){
+          if(lobbyInfo.players[1].colour === 'blue'){
             $('#avatar-image2').attr('src', `assets/charlie/player1.png`);
           }
-          if(lobbyInfo.players[1].color === 'red'){
+          if(lobbyInfo.players[1].colour === 'red'){
             $('#avatar-image2').attr('src', `assets/charlie/player2.png`);
           }
-          if(lobbyInfo.players[1].color === 'yellow'){
+          if(lobbyInfo.players[1].colour === 'yellow'){
             $('#avatar-image2').attr('src', `assets/charlie/player3.png`);
           }
-          if(lobbyInfo.players[1].color === 'black'){
+          if(lobbyInfo.players[1].colour === 'black'){
             $('#avatar-image2').attr('src', `assets/charlie/player4.png`);
           }
         }
       });
 
+      socket.on("newPlayer",(lobbyInfoString)=>{
+        const lobbyInfo = JSON.parse(lobbyInfoString);
+        if (lobbyInfo.players.length === 1) {
+          console.log(lobbyInfo.players.length);
+          console.log(lobbyInfo.players[0].colour);
+        // Update player 1 name and avatar image
+          $('#lobby-player1 .player-name').text(lobbyInfo.players[0].displayName);
+          if(lobbyInfo.players[0].colour === 'blue'){
+            $('#avatar-image1').attr('src', `assets/charlie/player1.png`);
+          }
+          if(lobbyInfo.players[0].colour === 'red'){
+            $('#avatar-image1').attr('src', `assets/charlie/player2.png`);
+          }
+          if(lobbyInfo.players[0].colour === 'yellow'){
+            $('#avatar-image1').attr('src', `assets/charlie/player3.png`);
+          }
+          if(lobbyInfo.players[0].colour === 'black'){
+            $('#avatar-image1').attr('src', `assets/charlie/player4.png`);
+          }
+        }
+
+        if (lobbyInfo.players.length === 2) {
+          $('#lobby-player1 .player-name').text(lobbyInfo.players[0].displayName);
+          if(lobbyInfo.players[0].colour === 'blue'){
+            $('#avatar-image1').attr('src', `assets/charlie/player1.png`);
+          }
+          if(lobbyInfo.players[0].colour === 'red'){
+            $('#avatar-image1').attr('src', `assets/charlie/player2.png`);
+          }
+          if(lobbyInfo.players[0].colour === 'yellow'){
+            $('#avatar-image1').attr('src', `assets/charlie/player3.png`);
+          }
+          if(lobbyInfo.players[0].colour === 'black'){
+            $('#avatar-image1').attr('src', `assets/charlie/player4.png`);
+          }
+        // Update player 2 name and avatar image
+          $('#lobby-player2 .player-name').text(lobbyInfo.players[1].displayName);
+          if(lobbyInfo.players[1].colour === 'blue'){
+            $('#avatar-image2').attr('src', `assets/charlie/player1.png`);
+          }
+          if(lobbyInfo.players[1].colour === 'red'){
+            $('#avatar-image2').attr('src', `assets/charlie/player2.png`);
+          }
+          if(lobbyInfo.players[1].colour === 'yellow'){
+            $('#avatar-image2').attr('src', `assets/charlie/player3.png`);
+          }
+          if(lobbyInfo.players[1].colour === 'black'){
+            $('#avatar-image2').attr('src', `assets/charlie/player4.png`);
+          }
+        }
+      })
+
+      socket.on("playerLeft",(lobbyInfoString)=>{
+        const lobbyInfo = JSON.parse(lobbyInfoString);
+        if (lobbyInfo.players.length === 1) {
+          console.log(lobbyInfo.players.length);
+          console.log(lobbyInfo.players[0].colour);
+        // Update player 1 name and avatar image
+          $('#lobby-player1 .player-name').text(lobbyInfo.players[0].displayName);
+          if(lobbyInfo.players[0].colour === 'blue'){
+            $('#avatar-image1').attr('src', `assets/charlie/player1.png`);
+          }
+          if(lobbyInfo.players[0].colour === 'red'){
+            $('#avatar-image1').attr('src', `assets/charlie/player2.png`);
+          }
+          if(lobbyInfo.players[0].colour === 'yellow'){
+            $('#avatar-image1').attr('src', `assets/charlie/player3.png`);
+          }
+          if(lobbyInfo.players[0].colour === 'black'){
+            $('#avatar-image1').attr('src', `assets/charlie/player4.png`);
+          }
+        }
+
+        if (lobbyInfo.players.length === 2) {
+          $('#lobby-player1 .player-name').text(lobbyInfo.players[0].displayName);
+          if(lobbyInfo.players[0].colour === 'blue'){
+            $('#avatar-image1').attr('src', `assets/charlie/player1.png`);
+          }
+          if(lobbyInfo.players[0].colour === 'red'){
+            $('#avatar-image1').attr('src', `assets/charlie/player2.png`);
+          }
+          if(lobbyInfo.players[0].colour === 'yellow'){
+            $('#avatar-image1').attr('src', `assets/charlie/player3.png`);
+          }
+          if(lobbyInfo.players[0].colour === 'black'){
+            $('#avatar-image1').attr('src', `assets/charlie/player4.png`);
+          }
+        // Update player 2 name and avatar image
+          $('#lobby-player2 .player-name').text(lobbyInfo.players[1].displayName);
+          if(lobbyInfo.players[1].colour === 'blue'){
+            $('#avatar-image2').attr('src', `assets/charlie/player1.png`);
+          }
+          if(lobbyInfo.players[1].colour === 'red'){
+            $('#avatar-image2').attr('src', `assets/charlie/player2.png`);
+          }
+          if(lobbyInfo.players[1].colour === 'yellow'){
+            $('#avatar-image2').attr('src', `assets/charlie/player3.png`);
+          }
+          if(lobbyInfo.players[1].colour === 'black'){
+            $('#avatar-image2').attr('src', `assets/charlie/player4.png`);
+          }
+        }
+      })
+
       okButton.addEventListener('click', () => {
-        Socket.connect();
+        
         const selectedImage = document.querySelector('.player-image.selected');
         const selectedColor = selectedImage ? selectedImage.dataset.color : null;
-    
+        console.log(selectedColor);
         if (selectedColor) {
           console.log(selectedColor);
           console.log("OK button clicked");
