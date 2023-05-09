@@ -213,7 +213,7 @@ io.on("connection",(socket)=>{
         const username = lobby.getLobbyInfo().players[playerNo-1].username;
         const result = lobby.onReady(username);
         if (result.result === "StartGame"){
-            io.emit("StartGame",JSON.stringify({players:[player1.playerInfo,player2.playerInfo],breakables:gameboard.gameboardInfo().breakables,bombs:gameboard.gameboardInfo().bombs,hearts:gameboard.gameboardInfo().hearts,fires:gameboard.gameboardInfo().fires}));
+            io.emit("StartGame",JSON.stringify({players:[player1.playerInfo(),player2.playerInfo()],breakables:gameboard.gameboardInfo().breakables,bombs:gameboard.gameboardInfo().bombs,hearts:gameboard.gameboardInfo().hearts,fires:gameboard.gameboardInfo().fires}));
         } else if (result.result === "failed") {
             socket.emit("failed to ready",result.message);
         } else {

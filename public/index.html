@@ -645,6 +645,11 @@
 
       });
 
+      socket.on("StartGame",(gameboardString)=>{
+        const gameboardInfo = JSON.parse(gameboardString);
+        console.log(gameboardInfo);
+      })
+
     </script>
 
     <!-- Sprite -->

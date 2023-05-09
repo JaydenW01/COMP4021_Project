@@ -90,7 +90,7 @@ export default class Gameboard {
     }
 
     gameboardInfo() {
-        return {breakables:this.breakables,bombs:this.bombs};
+        return {breakables:this.breakables,bombs:this.bombs,hearts:this.hearts,fires:this.fires};
     }
 
     // up : x,y-1
