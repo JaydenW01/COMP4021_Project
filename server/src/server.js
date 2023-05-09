@@ -187,7 +187,7 @@ io.on("connection",(socket)=>{
             }
             socket.emit('joinedLobby successfully',JSON.stringify(lobbyInfo)); // Frontend should listen to this event before allowing the user to join the lobby
             console.log(lobbyInfo)
-            io.emit('newPlayer',JSON.stringify(lobby.getLobbyInfo()));
+            io.emit('update lobby',JSON.stringify(lobby.getLobbyInfo()));
         } else {
             console.log("failed to join lobby")
             socket.emit("failed to join lobby",result.message);
@@ -197,7 +197,7 @@ io.on("connection",(socket)=>{
     socket.on("leaveLobby",(username)=>{
         console.log(`${username} has left the lobby`);
         lobby.removePlayer(username);
-        io.emit("playerLeft",JSON.stringify(lobby.getLobbyInfo()));
+        io.emit("update lobby",JSON.stringify(lobby.getLobbyInfo()));
     })
 
     socket.on("setGameTime",(time)=>{ // time is in seconds, and can only increment by 30 seconds

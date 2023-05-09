@@ -334,7 +334,7 @@
             $('#lobby-player2 .player-name').text(lobbyInfo.players[1].displayName);
             $("#ready-button-player2").hide()
             $("#cancel-button-player2").hide()
-            if (lobbyIOnfo.players[0].ready === true){
+            if (lobbyInfo.players[0].ready === true){
               $("#cancel-button-player1").show();
               $("#ready-button-player1").hide();
             } else {
@@ -346,7 +346,7 @@
             $('#lobby-player2 .player-name').text(`You: ${lobbyInfo.players[1].displayName}`);
             $("#ready-button-player1").hide()
             $("#cancel-button-player1").hide()
-            if (lobbyIOnfo.players[1].ready === true){
+            if (lobbyInfo.players[1].ready === true){
               $("#cancel-button-player2").show();
               $("#ready-button-player2").hide();
             } else {
@@ -409,14 +409,14 @@
 
       socket.on('joinedLobby successfully', (lobbyInfoString) => {
         const lobbyInfo = JSON.parse(lobbyInfoString);
-        console.log('1');
-        console.log(lobbyInfo.players[0].displayName);
-        console.log(lobbyInfo);
-
         if (lobbyInfo.players.length === 1) {
-          console.log(lobbyInfo.players.length);
-          console.log(lobbyInfo.players[0].colour);
-          $("#cancel-button-player1").hide()
+          if (lobbyInfo.players[0].ready === true){
+            $("#cancel-button-player1").show();
+            $("#ready-button-player1").hide();
+          } else {
+            $("#cancel-button-player1").hide();
+            $("#ready-button-player1").show();
+          }    
         // Update player 1 name and avatar image
           $('#lobby-player1 .player-name').text(`You: ${lobbyInfo.players[0].displayName}`);
           if(lobbyInfo.players[0].colour === 'blue'){
@@ -443,11 +443,25 @@
             $('#lobby-player2 .player-name').text(lobbyInfo.players[1].displayName);
             $("#ready-button-player2").hide()
             $("#cancel-button-player2").hide()
+            if (lobbyInfo.players[0].ready === true){
+              $("#cancel-button-player1").show();
+              $("#ready-button-player1").hide();
+            } else {
+              $("#cancel-button-player1").hide();
+              $("#ready-button-player1").show();
+            }
           } else {
             $('#lobby-player1 .player-name').text(lobbyInfo.players[0].displayName);
             $('#lobby-player2 .player-name').text(`You: ${lobbyInfo.players[1].displayName}`);
             $("#ready-button-player1").hide()
             $("#cancel-button-player1").hide()
+            if (lobbyInfo.players[1].ready === true){
+              $("#cancel-button-player2").show();
+              $("#ready-button-player2").hide();
+            } else {
+              $("#cancel-button-player2").hide();
+              $("#ready-button-player2").show();
+            }
           }
           if(lobbyInfo.players[0].colour === 'blue'){
             $('#avatar-image1').attr('src', `assets/charlie/player1.png`);
