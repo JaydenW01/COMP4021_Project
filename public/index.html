@@ -221,9 +221,12 @@
         <div id="game-over" style="display: none;">
           <div id="game-over-content">
             Game Over!!
+            <h1 style="font-size: 30px;">You are winner!</h2>  
             </div>
+            <div class="button-container">
             <button id="back-button-gameover">Back to Menu</button>   
-            <button id="restart">Restart</button>     
+            <button id="restart">Restart</button>   
+            </div>  
           </div>
         </div>
         <!-- <div id="clock" style="display: none;">
@@ -274,6 +277,8 @@
       const backButtonGamelobby = document.getElementById('back-button-gamelobby');
       const backButtonRanking = document.getElementById('back-button-ranking');
       const backButtonGameinfo = document.getElementById('back-button-gameinfo');
+      const backButtonGameover = document.getElementById('back-button-gameover');
+      const restartButton = document.getElementById('restart');
       const gameLobbyPage = document.getElementById('game-lobby');
       const rankingPage = document.getElementById('ranking');
       const gameInfoPage = document.getElementById('game-info');
@@ -392,6 +397,24 @@
       backButtonGameinfo.addEventListener('click', () => {
         menuPage.style.display = 'block';
         gameInfoPage.style.display = 'none';
+      });
+      backButtonGameover.addEventListener('click', () => {
+        menuPage.style.display = 'block';
+        GG.pause();
+        $('#game-over').hide();
+        $('#canvas').css('background-image', "url('./assets/jayden/game_background.jpg')").css('background-color', 'none');
+        const canvas = $('canvas').get(0);
+        const context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+      });
+      restartButton.addEventListener('click', () => {
+        characterPage.style.display = 'block';
+        GG.pause();
+        $('#game-over').hide();
+        $('#canvas').css('background-image', "url('./assets/jayden/game_background.jpg')").css('background-color', 'none');
+        const canvas = $('canvas').get(0);
+        const context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
       });
       backButtonGamelobby.addEventListener('click', () => {
         socket.emit('leaveLobby',JSON.parse(sessionStorage.user).username);
