@@ -466,14 +466,16 @@ io.on("connection",(socket)=>{
             bombs: gameboard.gameboardInfo().bombs
         }));
         if (!player1AfterExplosion){ // does not survive after explosion
-            io.emit("GameOver",JSON.stringify({message:"Player1 died!",player1:player1.getPoints(),player2:player2.getPoints()}));
+            io.emit("GameOver",JSON.stringify({message:"Player1 died!",player1:player1.getPoints(),player2:player2.getPoints(),player1Name:player1.getDisplayName()
+            ,player2Name:player2.getDisplayName(),player1Username:player1.getUsername(),player2Username:player2.getUsername()}));
             gameboard.reset();
             player1.reset();
             player2.reset();
             return;
         }
         if (!player2AfterExplosion){ // does not survive after explosion
-            io.emit("GameOver",JSON.stringify({message:"Player2 died!",player1:player1.getPoints(),player2:player2.getPoints()}));
+            io.emit("GameOver",JSON.stringify({message:"Player2 died!",player1:player1.getPoints(),player2:player2.getPoints(),player1Name:player1.getDisplayName()
+            ,player2Name:player2.getDisplayName(),player1Username:player1.getUsername(),player2Username:player2.getUsername()}));
             gameboard.reset();
             player1.reset();
             player2.reset();
