@@ -228,6 +228,15 @@
                 <button>Send</button>
             </div>
           </div> -->
+          <div class="message-box">
+            <div>
+              <div class="display-message" id="message-player1">123456</div>
+              <div class="display-message" id="message-player2">456789</div>
+              <label for="user-message">Type your message:</label>
+              <input type="text" id="user-message" name="user-message" required>
+              <button id="send-button">Send</button>
+            </div>
+          </div>
           <div class="button-container-gameover">
             <button id="back-button-gameover">Back to Menu</button>   
             <button id="restart">Restart</button>   
@@ -700,7 +709,8 @@
       socket.on("GameOver",(info)=>{
         const {message,player1Points,player2Points,player1Name,player2Name,player1Username,player2Username} = JSON.parse(info);
         console.log(message);
-        $('#game-over').show();
+        console.log(player1Username);
+        console.log(player2Username);
         if (player1Points > player2Points){
           
         } else if (player1Points < player2Points){
@@ -711,10 +721,10 @@
         }
         BGM.pause();
         GG.play();
-        console.log(player1Username);
-        console.log(player2Username);
-        // socket.emit('leaveLobby',player1Username);
-        // socket.emit('leaveLobby',player2Username);
+        
+        socket.emit('leaveLobby',player1Username);
+        socket.emit('leaveLobby',player2Username);
+        $('#game-over').show();
       })
 
     </script>
