@@ -164,8 +164,6 @@ app.post("/post_score",(req,res)=>{
 // WebSocket codes ...
 const httpServer = createServer(app);
 const io = new Server(httpServer);
-let currentBombID = 1;
-let bombTimer = {};
 
 io.on("connection",(socket)=>{
     // print out who has connected 
@@ -443,30 +441,38 @@ io.on("connection",(socket)=>{
         }
     })
 
-    const explode = (id)=>{
-        const explosion = gameboard.setOffBomb(id);
+    let bombID = [];
+    let playerPlaceBomb = [];
+
+    const explode = ()=>{
+        console.log(bombID);
+        console.log(playerPlaceBomb);
+        console.log(`${playerPlaceBomb[0]} exploded`)
+        clearInterval(bombID[0]);
+        bombID.splice(0,0);
+        const explosion = gameboard.setOffBomb(playerPlaceBomb[0]);
         const player1AfterExplosion = player1.checkExplosion(explosion);
         const player2AfterExplosion = player2.checkExplosion(explosion);
-        io.emit("explode",id);
+        if (playerPlaceBomb[0] === 1){
+            player1.addPoints(explosion.points);
+        } else if (playerPlaceBomb[0] === 2){
+            player2.addPoints(explosion.points);
+        }
+        io.emit("explode",playerPlaceBomb[0]);
+        playerPlaceBomb.splice(0,0);
         io.emit("updateBoard",JSON.stringify({
-            players:[player1.playerInfo,player2.playerInfo],
+            players:[player1.playerInfo(),player2.playerInfo()],
             breakables:gameboard.gameboardInfo().breakables,
             bombs: gameboard.gameboardInfo().bombs
         }));
-        clearInterval(bombTimer[id].timer);
-        if (explosion[id].player === 1){
-            player1.addPoints(explosion.points);
-        } else if (explosion[id].player === 2){
-            player2.addPoints(explosion.points);
-        }
-        if (!player1AfterExplosion){
+        if (!player1AfterExplosion){ // does not survive after explosion
             io.emit("GameOver",JSON.stringify({message:"Player1 died!",player1:player1.getPoints(),player2:player2.getPoints()}));
             gameboard.reset();
             player1.reset();
             player2.reset();
             return;
         }
-        if (!player2AfterExplosion){
+        if (!player2AfterExplosion){ // does not survive after explosion
             io.emit("GameOver",JSON.stringify({message:"Player2 died!",player1:player1.getPoints(),player2:player2.getPoints()}));
             gameboard.reset();
             player1.reset();
@@ -475,19 +481,21 @@ io.on("connection",(socket)=>{
         }
     }
 
+    
+
     socket.on("placeBomb",()=>{
         if (socket.request.session.user?.username === player1.getUsername()){
-            // let bombID = setInterval(explode(currentBombID),10000);
-            let bombID = 1;
-            bombTimer[currentBombID] = {timer:bombID,player:1};
-            gameboard.placeBomb(player1.getPos(),currentBombID);
-            currentBombID += 1;
+            // let bombID = 1;
+            let bomb = setInterval(explode,3000);
+            gameboard.placeBomb(player1.getPos(),1);
+            bombID.push(bomb);
+            playerPlaceBomb.push(1);
         } else if (socket.request.session.user?.username === player2.getUsername()){
-            // let bombID = setInterval(explode(currentBombID),10000);
-            let bombID = 2;
-            bombTimer[currentBombID] = {timer:bombID,player:2};
-            gameboard.placeBomb(player2.getPos(),currentBombID);
-            currentBombID += 1;
+            // let bombID = 2;
+            let bomb = setInterval(explode,3000);
+            gameboard.placeBomb(player2.getPos(),2);
+            bombID.push(bomb);
+            playerPlaceBomb.push(2);
         }
         io.emit("updateBoard",JSON.stringify({
             players:[player1.playerInfo(),player2.playerInfo()],

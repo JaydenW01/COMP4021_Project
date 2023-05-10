@@ -164,7 +164,7 @@ export default class Gameboard {
     }   
 
     placeBomb(pos,id) {
-        this.bombs.push({x:pos.x,y:pos.y,"bombID":id});
+        this.bombs.push({x:pos.x,y:pos.y,bombID:id});
         return this.gameboardInfo();
     }
 
@@ -173,9 +173,10 @@ export default class Gameboard {
         let bombX = null;
         let bombY = null;
         for (let i = 0;i<this.bombs.length;i++){
-            if (this.bombs[i].id === id){
+            if (this.bombs[i].bombID === id){
                 bombX = this.bombs[i].x;
                 bombY = this.bombs[i].y;
+                this.bombs.splice(i,0);
                 const up = this.findBlockByPos(bombX,bombY-1) !== "breakable" ? false : true;
                 const down = this.findBlockByPos(bombX,bombY+1) !== "breakable" ? false : true;
                 const left = this.findBlockByPos(bombX-1,bombY) !== "breakable" ? false : true;

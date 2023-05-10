@@ -100,23 +100,23 @@ export default class Player {
     }
 
     checkExplosion(explosion){
-        if (this.x === explosion.up.x && this.y ===  this.explosion.up.y){
+        if (this.x === explosion.up.x && this.y ===  explosion.up.y){
             if (!this.reduceHealth()){
                 return false;
             }
-        } else if (this.x === explosion.down.x && this.y ===  this.explosion.down.y){
+        } else if (this.x === explosion.down.x && this.y ===  explosion.down.y){
             if (!this.reduceHealth()){
                 return false;
             }
-        } else if (this.x === explosion.left.x && this.y ===  this.explosion.left.y){
+        } else if (this.x === explosion.left.x && this.y ===  explosion.left.y){
             if (!this.reduceHealth()){
                 return false;
             }
-        } else if (this.x === explosion.right.x && this.y ===  this.explosion.right.y){
+        } else if (this.x === explosion.right.x && this.y ===  explosion.right.y){
             if (!this.reduceHealth()){
                 return false;
             }
-        } else if (this.x === explosion.center.x && this.y ===  this.explosion.center.y){
+        } else if (this.x === explosion.center.x && this.y ===  explosion.center.y){
             if (!this.reduceHealth()){
                 return false;
             }
