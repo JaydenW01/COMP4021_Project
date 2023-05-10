@@ -223,11 +223,19 @@
             Game Over!!
             <h1 style="font-size: 30px;">You are winner!</h2>  
             </div>
-            <div class="button-container">
+          </div>
+          <div class="button-container">
             <button id="back-button-gameover">Back to Menu</button>   
             <button id="restart">Restart</button>   
-            </div>  
+          </div>  
+          <div class="chatbox">
+            <div class="messages"></div>
+            <div class="input">
+                <input type="text" placeholder="Type your message...">
+                <button>Send</button>
           </div>
+        </div>
+        
         </div>
         <!-- <div id="clock" style="display: none;">
           <div id="clock-title"> Time left: </div>
@@ -288,6 +296,11 @@
       const player2Ready = document.getElementById('ready-button-player2');
       const player1CancelReady = document.getElementById('cancel-button-player1');
       const player2CancelReady = document.getElementById('cancel-button-player2');
+      //chat box
+      const chatbox = document.querySelector('.chatbox');
+      const messages = chatbox.querySelector('.messages');
+      const input = chatbox.querySelector('input[type="text"]');
+      const button = chatbox.querySelector('button');
 
       player1Ready.addEventListener('click',()=>{
         socket.emit('onReady',1);
