@@ -9,6 +9,7 @@ const Timer = function() {
             if (time_remaining < 0) {
               clearInterval(countdown);
               $("#timer").text(`Time's UP!`);
+              socket.emit("Time's Up");
             }
           }, 1000);
     }
