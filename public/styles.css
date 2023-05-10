@@ -11,7 +11,7 @@ body {
     font-family: 'Bruno Ace SC', cursive;
   }
   canvas {
-    background-image: url("./assets/jayden/game_background.jpg");
+    background-image: url("./assets/game_background.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: right;
@@ -27,7 +27,7 @@ body {
     justify-content: center;
     height: 100vh;
   
-    background-image: url("./assets/charlie/web_background.jpg");
+    background-image: url("./assets/web_background.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: right;
@@ -67,7 +67,7 @@ body {
     color: rgb(100, 87, 87);
   }
   .overlay .content {
-    background-image: url("./assets/jayden/register_background.jpg");
+    background-image: url("./assets/register_background.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: right;
@@ -146,6 +146,12 @@ body {
   #register-form {
     align-self: stretch;
     background: rgba(199, 189, 189, 0.6);
+  }
+
+  #timer {
+    font-weight: bold;
+    font-size: large;
+    color: #ff0000;
   }
   
   #menu {

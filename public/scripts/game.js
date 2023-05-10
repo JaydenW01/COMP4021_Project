@@ -1,10 +1,11 @@
-const Game = function (backgroundIMG,breakableIMG,bluePlayerIMG,blackPlayerIMG,yellowPlayerIMG,redPlayerIMG) {
+const Game = function (backgroundIMG,breakableIMG,bluePlayerIMG,blackPlayerIMG,yellowPlayerIMG,redPlayerIMG,spritesheetIMG) {
     const bgIMG = backgroundIMG;
     const bkIMG = breakableIMG;
     const blueIMG = bluePlayerIMG;
     const redIMG = redPlayerIMG;
     const yellowIMG = yellowPlayerIMG;
     const blackIMG = blackPlayerIMG;
+    const spritesheet = spritesheetIMG;
     const canvas = $('#canvas').get(0);
     canvas.width = 272; // 20 * 20 block. each block is 16px, so 16 * 20 = 320
     canvas.height = 208;
@@ -162,10 +163,11 @@ const Game = function (backgroundIMG,breakableIMG,bluePlayerIMG,blackPlayerIMG,y
             }
         }
 
-        for (let key in players) {
-            players[key].draw();
-            console.log("player "+key+" drawn");
-          }
+        for (const bomb of gameBoard.bombs){
+            const loc = {x:(bomb.x+2)*blockWidth,y:(bomb.y+1)*blockHeight};
+            context.drawImage(spritesheet,128,48,16,16,loc.x,loc.y,16,16);
+        }
+
     };
 
     return { setInputEnabled, updateBoard };

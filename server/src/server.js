@@ -477,18 +477,20 @@ io.on("connection",(socket)=>{
 
     socket.on("placeBomb",()=>{
         if (socket.request.session.user?.username === player1.getUsername()){
-            let bombID = setInterval(explode(currentBombID));
+            // let bombID = setInterval(explode(currentBombID),10000);
+            let bombID = 1;
             bombTimer[currentBombID] = {timer:bombID,player:1};
             gameboard.placeBomb(player1.getPos(),currentBombID);
             currentBombID += 1;
         } else if (socket.request.session.user?.username === player2.getUsername()){
-            let bombID = setInterval(explode(currentBombID));
+            // let bombID = setInterval(explode(currentBombID),10000);
+            let bombID = 2;
             bombTimer[currentBombID] = {timer:bombID,player:2};
             gameboard.placeBomb(player2.getPos(),currentBombID);
             currentBombID += 1;
         }
         io.emit("updateBoard",JSON.stringify({
-            players:[player1.playerInfo,player2.playerInfo],
+            players:[player1.playerInfo(),player2.playerInfo()],
             breakables:gameboard.gameboardInfo().breakables,
             bombs: gameboard.gameboardInfo().bombs
         }))

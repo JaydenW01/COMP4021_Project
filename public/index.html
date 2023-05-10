@@ -18,6 +18,7 @@
   </head>
   <body>
     <div class="canvas-container">
+      <p id="timer" style="display:none"></p>
       <canvas id="canvas"></canvas>
       <div id="signin-overlay" class="overlay row">
         <div class="content shadow row">
@@ -276,6 +277,7 @@
     <script src="scripts/boundingBox.js"></script>
     <script src="scripts/breakable.js"></script>
     <script src="scripts/game.js"></script>
+    <script src="scripts/timer.js"></script>
     <script>
       const bgIMG = new Image();
       bgIMG.src = "./assets/gameboard.png";
@@ -289,9 +291,12 @@
       yellowIMG.src = "./assets/yellow_player.png";
       const blackIMG = new Image();
       blackIMG.src = "./assets/black_player.png";
+      const spritesheet = new Image();
+      spritesheet.src = './assets/object_sprites.png';
 
+      const timer = Timer();
       const socket = io();
-      const game = Game(bgIMG,breakableIMG,blueIMG,blackIMG,yellowIMG,redIMG);
+      const game = Game(bgIMG,breakableIMG,blueIMG,blackIMG,yellowIMG,redIMG,spritesheet);
       const menuPage = document.getElementById('menu');
       const characterPage = document.getElementById('character-lobby');
       const gameStartButton = document.getElementById('game-start');
@@ -669,6 +674,8 @@
         $('#game-lobby').hide();
         game.setInputEnabled(true);
         game.updateBoard(gameboardInfo);
+        $('#timer').show();
+        timer.startCountDown();
       })
 
       socket.on("updateBoard",(gameboardString)=>{
