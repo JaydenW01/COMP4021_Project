@@ -179,7 +179,7 @@
               </tr>
             </tbody>
           </table>
-          <button id="back-button-ranking">Back</button>          
+          <div class="back-button" onclick="gameStat.backToMenu()">Back</div>       
         </div>
         <!-- game info page  -->
         <div id="game-info" style="display: none;">
@@ -213,20 +213,46 @@
               </div>
             </div>
           </div>
-          <button id="back-button-gameinfo">Back</button>        
+          <div id="back-button-gameinfo" onclick="gameInfo.backToMenu()">Back</div>       
         </div>
         <!-- game over page -->
         <div id="game-over" style="display: none;">
           <div id="game-over-content">
             Game Over!!
+            <!-- <div id="game-result">
+              You Win!
             </div>
-            <div id="winner">
-              You are winner!
+            <div id="game-over-stat">
+              <div id="game-over-player1">
+                <div class="game-over-username">
+                  Player 1
+                </div>
+                <div class="game-over-stat-row">
+                  Health: 100
+                </div>
+                <div class="game-over-stat-row">
+                  Bomb: 3
+                </div>
+                <div class="game-over-stat-row">
+                  Range: 2
+                </div>
               </div>
-            <div class="button-container">
-              <button id="back-button-gameover">Back to Menu</button>
-              <button id="restart">Restart</button>  
-            </div>       
+              <div id="game-over-player2">
+                <div class="game-over-username">
+                  Player 2
+                </div>
+                <div class="game-over-stat-row">
+                  Health: 60
+                </div>
+                <div class="game-over-stat-row">
+                  Bomb: 2
+                </div>
+                <div class="game-over-stat-row">
+                  Range: 4
+                </div>
+              </div> -->
+            </div>
+            <div id="back-button-gameover" onclick="gameOver.backToMenu()">Back To Menu</div>       
           </div>
         </div>
         <div id="clock" style="display: none;">
@@ -251,21 +277,27 @@
     <script src="scripts/breakable.js"></script>
     <script src="scripts/game.js"></script>
     <script>
+      const bgIMG = new Image();
+      bgIMG.src = "./assets/gameboard.png";
+      const breakableIMG = new Image();
+      breakableIMG.src = "./assets/breakable.png";
+      const blueIMG = new Image();
+      blueIMG.src = "./assets/blue_player.png";
+      const redIMG = new Image();
+      redIMG.src = "./assets/red_player.png";
+      const yellowIMG = new Image();
+      yellowIMG.src = "./assets/yellow_player.png";
+      const blackIMG = new Image();
+      blackIMG.src = "./assets/black_player.png";
+
       const socket = io();
-      const game = Game();
+      const game = Game(bgIMG,breakableIMG,blueIMG,blackIMG,yellowIMG,redIMG);
       const menuPage = document.getElementById('menu');
       const characterPage = document.getElementById('character-lobby');
       const gameStartButton = document.getElementById('game-start');
       const backButton = document.getElementById('back-button');
       const backButtonGamelobby = document.getElementById('back-button-gamelobby');
-      const backButtonGameinfo = document.getElementById('back-button-gameinfo');
-      const backButtonRanking = document.getElementById('back-button-ranking');
-      const backButtonGameover = document.getElementById('back-button-gameover');
-      const restartButton = document.getElementById('restart');
       const gameLobbyPage = document.getElementById('game-lobby');
-      const rankingPage = document.getElementById('ranking');
-      const gameInfoPage = document.getElementById('game-info');
-      const gameOverPage = document.getElementById('game-over');
       const playerNameElements = document.querySelectorAll('.player-name');
       const playerAvatarElements = document.querySelectorAll('.avatar img');
       const player1Ready = document.getElementById('ready-button-player1');
@@ -374,34 +406,11 @@
         menuPage.style.display = 'block';
         characterPage.style.display = 'none';
       });
-      backButtonRanking.addEventListener('click', () => {
-        menuPage.style.display = 'block';
-        rankingPage.style.display = 'none';
-      });
-      backButtonGameinfo.addEventListener('click', () => {
-        menuPage.style.display = 'block';
-        gameInfoPage.style.display = 'none';
-      });
-      backButtonGameover.addEventListener('click', () => {
-        menuPage.style.display = 'block';
-        gameOverPage.style.display = 'none';
-        $('#canvas').css('background-image', "url('./assets/jayden/game_background.jpg')").css('background-color', 'none');
-        const canvas = $('canvas').get(0);
-        const context = canvas.getContext('2d');
-        context.clearRect(0, 0, canvas.width, canvas.height);
-      });
       backButtonGamelobby.addEventListener('click', () => {
         socket.emit('leaveLobby',JSON.parse(sessionStorage.user).username);
         gameLobbyPage.style.display = 'none';
         characterPage.style.display = 'block';
-      });
-      restartButton.addEventListener('click', () => {
-        gameOverPage.style.display = 'none';
-        characterPage.style.display = 'block';
-        $('#canvas').css('background-image', "url('./assets/jayden/game_background.jpg')").css('background-color', 'none');
-        const canvas = $('canvas').get(0);
-        const context = canvas.getContext('2d');
-        context.clearRect(0, 0, canvas.width, canvas.height);
+
       });
       gameStartButton.addEventListener('click', () => {
         menuPage.style.display = 'none';
@@ -652,17 +661,21 @@
         else {
           console.log("Please select a character");
         }
-
-
       });
 
       socket.on("StartGame",(gameboardString)=>{
         const gameboardInfo = JSON.parse(gameboardString);
         console.log(gameboardInfo);
-        $("#game-lobby").hide();
+        $('#game-lobby').hide();
         game.setInputEnabled(true);
         game.updateBoard(gameboardInfo);
-      });
+      })
+
+      socket.on("updateBoard",(gameboardString)=>{
+        const gameboardInfo = JSON.parse(gameboardString);
+        console.log(gameboardInfo);
+        game.updateBoard(gameboardInfo);
+      })
 
     </script>
 

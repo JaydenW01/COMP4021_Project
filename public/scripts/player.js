@@ -3,11 +3,12 @@
 // - `x` - The initial x position of the player
 // - `y` - The initial y position of the player
 // - `gameArea` - The bounding box of the game area
-const Player = function(ctx, x, y, color) {
+const Player = function(ctx, x, y, color,blueIMG) {
 
     // This is the sprite sequences of the player facing different directions.
     // It contains the idling sprite sequences `idleLeft`, `idleUp`, `idleRight` and `idleDown`,
     // and the moving sprite sequences `moveLeft`, `moveUp`, `moveRight` and `moveDown`.
+    const playerIMG = null;
     const sequences = {
         /* Idling sprite sequences for facing different directions */
         idleLeft:  { x: 16, y: 24, width: 16, height: 24, count: 1, timing: 2000, loop: false },
@@ -34,7 +35,7 @@ const Player = function(ctx, x, y, color) {
     
     switch(color) {
         case("blue"):
-            sprite.useSheet("../assets/blue_sprite.png");
+            img = blueIMG;
             break;
         case("red"):
             sprite.useSheet("../assets/red_sprite.png");
@@ -99,12 +100,16 @@ const Player = function(ctx, x, y, color) {
         sprite.update(time);
     };
 
+    const draw = ()=>{
+        ctx.drawImage(playerIMG,position.x,position.y)
+    }
+
     // The methods are returned as an object here.
     return {
         setFacing: setFacing,
         setPosition: setPosition,
         getBoundingBox: sprite.getBoundingBox,
-        draw: sprite.draw,
+        draw: draw,
         update: update
     };
 };

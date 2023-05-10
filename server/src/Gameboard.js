@@ -101,50 +101,50 @@ export default class Gameboard {
     checkWalkable(currentpos,direction){
         const currentX = currentpos.x;
         const currentY = currentpos.y;
-        switch (direction){
-            case "up":
-                if (currentY === 0){ // already at the top
+        console.log(direction);
+        if (direction === "up"){
+            if (currentY === 0){ // already at the top
+                return false;
+            } else {
+                if (this.findBlockByPos(currentX,currentY-1) === "wall" || this.findBlockByPos(currentX,currentY-1) === "breakable" || this.findBlockByPos(currentX,currentY-1) === "out of bound"){
                     return false;
                 } else {
-                    if (this.checkWalkable(currentX,currentY-1) === "wall" || this.checkWalkable(currentX,currentY-1) === "breakable" || this.checkWalkable(currentX,currentY-1) === "out of bound"){
-                        return false;
-                    } else {
-                        return true;
-                    }
+                    return true;
                 }
-            case "down":
-                if (currentY === 10){ // already at the bottom
+            }
+        } else if (direction === "down"){
+            if (currentY === 10){ // already at the bottom
+                return false;
+            } else {
+                if (this.findBlockByPos(currentX,currentY+1) === "wall" || this.findBlockByPos(currentX,currentY+1) === "breakable" || this.findBlockByPos(currentX,currentY+1) === "out of bound"){
                     return false;
                 } else {
-                    if (this.checkWalkable(currentX,currentY+1) === "wall" || this.checkWalkable(currentX,currentY+1) === "breakable" || this.checkWalkable(currentX,currentY+1) === "out of bound"){
-                        return false;
-                    } else {
-                        return true;
-                    }
+                    return true;
                 }
-            case "left":
-                if (currentX === 0){ // already at the left-most
+            }
+        } else if (direction === "left"){
+            if (currentX === 0){ // already at the left-most
+                return false;
+            } else {
+                if (this.findBlockByPos(currentX-1,currentY) === "wall" || this.findBlockByPos(currentX-1,currentY) === "breakable" || this.findBlockByPos(currentX-1,currentY) === "out of bound"){
                     return false;
                 } else {
-                    if (this.checkWalkable(currentX-1,currentY) === "wall" || this.checkWalkable(currentX-1,currentY) === "breakable" || this.checkWalkable(currentX-1,currentY) === "out of bound"){
-                        return false;
-                    } else {
-                        return true;
-                    }
+                    return true;
                 }
-            case "right":
-                if (currentX === 12){ // already at the right-most
+            }
+        } else if (direction === "right"){
+            if (currentX === 12){ // already at the right-most
+                return false;
+            } else {
+                if (this.findBlockByPos(currentX+1,currentY) === "wall" || this.findBlockByPos(currentX+1,currentY) === "breakable" || this.findBlockByPos(currentX+1,currentY) === "out of bound"){
                     return false;
                 } else {
-                    if (this.checkWalkable(currentX+1,currentY) === "wall" || this.checkWalkable(currentX+1,currentY) === "breakable" || this.checkWalkable(currentX+1,currentY) === "out of bound"){
-                        return false;
-                    } else {
-                        return true;
-                    }
+                    return true;
                 }
-            default: console.log("Wrong Input")
+            }
         }
     }
+    
 
     removeBlockByPos(x,y){
         for (let i = 0; i < this.breakables.length;i++){

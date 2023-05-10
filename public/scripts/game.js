@@ -1,4 +1,10 @@
-const Game = function () {
+const Game = function (backgroundIMG,breakableIMG,bluePlayerIMG,blackPlayerIMG,yellowPlayerIMG,redPlayerIMG) {
+    const bgIMG = backgroundIMG;
+    const bkIMG = breakableIMG;
+    const blueIMG = bluePlayerIMG;
+    const redIMG = redPlayerIMG;
+    const yellowIMG = yellowPlayerIMG;
+    const blackIMG = blackPlayerIMG;
     const canvas = $('#canvas').get(0);
     canvas.width = 272; // 20 * 20 block. each block is 16px, so 16 * 20 = 320
     canvas.height = 208;
@@ -23,7 +29,7 @@ const Game = function () {
     let num_breakables_init= 0;
     for (let i = 0; i < 11; i++) {
         for (let j = 0; j < 13; j++) {
-            breakables[{x:i, y:j}] = new Breakable(context, j*blockWidth, i*blockHeight);
+            breakables[{x:i, y:j}] = new Breakable(context, j*blockWidth, i*blockHeight,bkIMG);
             num_breakables_init++;
         }
     }
@@ -36,23 +42,23 @@ const Game = function () {
                 /* Handle the key down */
                 switch (event.keyCode) {
                     case 37:
-                    case 65:
-                        Socket.moveLeft();
+                    case 65: // left
+                        socket.emit("moveLeft");
                         break;
                     case 38:
-                    case 87:
-                        Socket.moveUp();
+                    case 87: // up
+                        socket.emit("moveUp");
                         break;
                     case 39:
-                    case 68:
-                        Socket.moveRight();
+                    case 68: // right
+                        socket.emit("moveRight");  
                         break;
                     case 40:
-                    case 83:
-                        Socket.moveDowwn();
+                    case 83: // down
+                        socket.emit("moveDown");  
                         break;
-                    case 32:
-                        Socket.placeBomb();
+                    case 32: // bomb
+                        socket.emit("placeBomb");  
                         break;
                     // c - cheat mode
                     case 67:
@@ -72,40 +78,86 @@ const Game = function () {
 
     updateBoard = function (gameBoard) {
         const now = new Date().getTime();
-
+        console.log(breakables);
         // Clear the screen
         context.clearRect(0, 0, canvas.width, canvas.height);
         const gameArea = BoundingBox(context, 32, 48, canvas.height - 32, canvas.width - 48);
-        
         // draw map
-        let img = new Image();
-        img.onload = () => {
-            context.drawImage(img, 0, 0);
-        }
-        img.src = "../assets/gameboard.png";
+        // let img = new Image();
+        // img.onload = () => {
+        //     context.drawImage(img, 0, 0);
+        // }
+        // img.src = "../assets/gameboard.png";
+        context.drawImage(bgIMG, 0, 0)
 
         // draw breakables
         let num_breakables_drawn = 0;
         for (const breakable of gameBoard.breakables) {
-            breakables[breakable].draw();
+            const b = new Breakable(context, (breakable.x+2)*blockWidth, (breakable.y+1)*blockHeight,bkIMG)
+            b.draw();
             num_breakables_drawn++;
         }
         console.log("num breakables draw: ", num_breakables_drawn);
 
-        for (const player of gameBoard.players) {
-            if (player in players) {
-                players[player.playerNo].update(
-                    {x : player.location.y * blockWidth, y : player.location.x * blockHeight},
-                    player.facing,
-                    now);
-            } else {
-                players[player.playerNo] = new Player(
-                    context,
-                    player.location.y * blockWidth,
-                    player.location.x * blockHeight,
-                    player.colour
-                )
-                players[player.playerNo].update(player.location, player.facing, now);
+        // for (const player of gameBoard.players) {
+        //     if (player in players) {
+        //         players[player.playerNo].update(
+        //             {x : player.location.y * blockWidth, y : player.location.x * blockHeight},
+        //             player.facing,
+        //             now);
+        //     } else {
+        //         players[player.playerNo] = new Player(
+        //             context,
+        //             player.location.y * blockWidth,
+        //             player.location.x * blockHeight,
+        //             player.colour
+        //         )
+        //         players[player.playerNo].update(player.location, player.facing, now);
+        //     }
+        // }
+
+        for (const player of gameBoard.players){
+            const loc = {x:(player.location.x+2)*blockWidth,y:(player.location.y+1)*blockHeight};
+            if (player.colour === "blue"){
+                if (player.facing === "up"){
+                    context.drawImage(blueIMG,loc.x,loc.y);
+                } else if (player.facing === "down"){
+                    context.drawImage(blueIMG,loc.x,loc.y);
+                } else if (player.facing === "left"){
+                    context.drawImage(blueIMG,loc.x,loc.y);
+                } else if (player.facing === "right"){
+                    context.drawImage(blueIMG,loc.x,loc.y);
+                }
+            } else if (player.colour === "red"){
+                if (player.facing === "up"){
+                    context.drawImage(redIMG,loc.x,loc.y);
+                } else if (player.facing === "down"){
+                    context.drawImage(redIMG,loc.x,loc.y);
+                } else if (player.facing === "left"){
+                    context.drawImage(redIMG,loc.x,loc.y);
+                } else if (player.facing === "right"){
+                    context.drawImage(redIMG,loc.x,loc.y);
+                }
+            } else if (player.colour === "yellow"){
+                if (player.facing === "up"){
+                    context.drawImage(yellowIMG,loc.x,loc.y);
+                } else if (player.facing === "down"){
+                    context.drawImage(yellowIMG,loc.x,loc.y);
+                } else if (player.facing === "left"){
+                    context.drawImage(yellowIMG,loc.x,loc.y);
+                } else if (player.facing === "right"){
+                    context.drawImage(yellowIMG,loc.x,loc.y);
+                }
+            } else if (player.colour === "black"){
+                if (player.facing === "up"){
+                    context.drawImage(blackIMG,loc.x,loc.y);
+                } else if (player.facing === "down"){
+                    context.drawImage(blackIMG,loc.x,loc.y);
+                } else if (player.facing === "left"){
+                    context.drawImage(blackIMG,loc.x,loc.y);
+                } else if (player.facing === "right"){
+                    context.drawImage(blackIMG,loc.x,loc.y);
+                }
             }
         }
 

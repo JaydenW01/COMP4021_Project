@@ -260,15 +260,16 @@ io.on("connection",(socket)=>{
                 } else if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "heart"){
                     player1.increaseHealth(player1.getPos().x,player1.getPos().y);
                 }
+                player1.playerInfo();
                 io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo,player2.playerInfo],
+                    players:[player1.playerInfo(),player2.playerInfo()],
                     breakables:gameboard.gameboardInfo().breakables,
                     bombs: gameboard.gameboardInfo().bombs
                 }))
             } else {
                 player1.faceUp();
                 io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo,player2.playerInfo],
+                    players:[player1.playerInfo(),player2.playerInfo()],
                     breakables:gameboard.gameboardInfo().breakables,
                     bombs: gameboard.gameboardInfo().bombs
                 }))
@@ -283,14 +284,14 @@ io.on("connection",(socket)=>{
                     player2.increaseHealth(player2.getPos().x,player2.getPos().y);
                 }
                 io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo,player2.playerInfo],
+                    players:[player1.playerInfo(),player2.playerInfo()],
                     breakables:gameboard.gameboardInfo().breakables,
                     bombs: gameboard.gameboardInfo().bombs
                 }))
             } else {
                 player2.faceUp();
                 io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo,player2.playerInfo],
+                    players:[player1.playerInfo(),player2.playerInfo()],
                     breakables:gameboard.gameboardInfo().breakables,
                     bombs: gameboard.gameboardInfo().bombs
                 }))
@@ -309,14 +310,14 @@ io.on("connection",(socket)=>{
                     player1.increaseHealth(player1.getPos().x,player1.getPos().y);
                 }
                 io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo,player2.playerInfo],
+                    players:[player1.playerInfo(),player2.playerInfo()],
                     breakables:gameboard.gameboardInfo().breakables,
                     bombs: gameboard.gameboardInfo().bombs
                 }))
             } else {
                 player1.faceDown();
                 io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo,player2.playerInfo],
+                    players:[player1.playerInfo(),player2.playerInfo()],
                     breakables:gameboard.gameboardInfo().breakables,
                     bombs: gameboard.gameboardInfo().bombs
                 }))
@@ -331,14 +332,14 @@ io.on("connection",(socket)=>{
                     player2.increaseHealth(player2.getPos().x,player2.getPos().y);
                 }
                 io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo,player2.playerInfo],
+                    players:[player1.playerInfo(),player2.playerInfo()],
                     breakables:gameboard.gameboardInfo().breakables,
                     bombs: gameboard.gameboardInfo().bombs
                 }))
             } else {
                 player2.faceDown();
                 io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo,player2.playerInfo],
+                    players:[player1.playerInfo(),player2.playerInfo()],
                     breakables:gameboard.gameboardInfo().breakables,
                     bombs: gameboard.gameboardInfo().bombs
                 }))
@@ -357,14 +358,14 @@ io.on("connection",(socket)=>{
                     player1.increaseHealth(player1.getPos().x,player1.getPos().y);
                 }
                 io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo,player2.playerInfo],
+                    players:[player1.playerInfo(),player2.playerInfo()],
                     breakables:gameboard.gameboardInfo().breakables,
                     bombs: gameboard.gameboardInfo().bombs
                 }))
             } else {
                 player1.faceLeft();
                 io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo,player2.playerInfo],
+                    players:[player1.playerInfo(),player2.playerInfo()],
                     breakables:gameboard.gameboardInfo().breakables,
                     bombs: gameboard.gameboardInfo().bombs
                 }))
@@ -379,14 +380,14 @@ io.on("connection",(socket)=>{
                     player2.increaseHealth(player2.getPos().x,player2.getPos().y);
                 }
                 io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo,player2.playerInfo],
+                    players:[player1.playerInfo(),player2.playerInfo()],
                     breakables:gameboard.gameboardInfo().breakables,
                     bombs: gameboard.gameboardInfo().bombs
                 }))
             } else {
                 player2.faceLeft();
                 io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo,player2.playerInfo],
+                    players:[player1.playerInfo(),player2.playerInfo()],
                     breakables:gameboard.gameboardInfo().breakables,
                     bombs: gameboard.gameboardInfo().bombs
                 }))
@@ -405,14 +406,14 @@ io.on("connection",(socket)=>{
                     player1.increaseHealth(player1.getPos().x,player1.getPos().y);
                 }
                 io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo,player2.playerInfo],
+                    players:[player1.playerInfo(),player2.playerInfo()],
                     breakables:gameboard.gameboardInfo().breakables,
                     bombs: gameboard.gameboardInfo().bombs
                 }))
             } else {
                 player1.faceRight();
                 io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo,player2.playerInfo],
+                    players:[player1.playerInfo(),player2.playerInfo()],
                     breakables:gameboard.gameboardInfo().breakables,
                     bombs: gameboard.gameboardInfo().bombs
                 }))
@@ -427,14 +428,14 @@ io.on("connection",(socket)=>{
                     player2.increaseHealth(player2.getPos().x,player2.getPos().y);
                 }
                 io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo,player2.playerInfo],
+                    players:[player1.playerInfo(),player2.playerInfo()],
                     breakables:gameboard.gameboardInfo().breakables,
                     bombs: gameboard.gameboardInfo().bombs
                 }))
             } else {
                 player2.faceRight();
                 io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo,player2.playerInfo],
+                    players:[player1.playerInfo(),player2.playerInfo()],
                     breakables:gameboard.gameboardInfo().breakables,
                     bombs: gameboard.gameboardInfo().bombs
                 }))

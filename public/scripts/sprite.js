@@ -2,10 +2,11 @@
 // - `ctx` - A canvas context for drawing
 // - `x` - The initial x position of the sprite
 // - `y` - The initial y position of the sprite
-const Sprite = function(ctx, x, y) {
+const Sprite = function(ctx, x, y, img) {
 
     // This is the image object for the sprite sheet.
     const sheet = new Image();
+    const spriteimg = img;
 
     // This is an object containing the sprite sequence information used by the sprite containing:
     // - `x` - The starting x position of the sprite sequence in the sprite sheet
@@ -146,9 +147,7 @@ const Sprite = function(ctx, x, y) {
 		
 		ctx.imageSmoothingEnabled = false;
 		ctx.drawImage(
-			sheet,
-			sequence.x + index * sequence.width, sequence.y,
-			sequence.width, sequence.height,
+			spriteimg,
 			parseInt(x - size.width / 2), parseInt(y - size.height / 2),
 			size.width, size.height
 		)
@@ -160,7 +159,7 @@ const Sprite = function(ctx, x, y) {
     // This function draws the shadow and the sprite.
     const draw = function() {
         if (isReady()) {
-            drawShadow();
+            // drawShadow();
             drawSprite();
         }
         return this;
