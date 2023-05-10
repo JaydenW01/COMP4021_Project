@@ -219,29 +219,20 @@
 
         <!-- game over page -->
         <div id="game-over" style="display: none;">
-          <div id="game-over-content">
-            Game Over!!
-            <h1 style="font-size: 30px;" id="winner">You are winner!</h2>  
-            </div>
-          <div class="chatbox">
+          <div id="game-over-content">Game Over!!</div>
+          <div style="font-size: 30px;" id="winner">You are winner!</div>  
+          <!-- <div class="chatbox">
             <div id="messages"></div>
             <div class="input">
                 <input type="text" placeholder="Type your message...">
                 <button>Send</button>
             </div>
-          </div>
-          <div class="button-container">
+          </div> -->
+          <div class="button-container-gameover">
             <button id="back-button-gameover">Back to Menu</button>   
             <button id="restart">Restart</button>   
           </div>  
         </div>
-        <!-- <div id="clock" style="display: none;">
-          <div id="clock-title"> Time left: </div>
-          <div id="clock-content">
-            <div id="minute">0</div>: <div id="seconds">0</div>
-          </div>
-        </div> -->
-    </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <!-- <script src="scripts/socket.js"></script> -->
@@ -295,10 +286,10 @@
       const player1CancelReady = document.getElementById('cancel-button-player1');
       const player2CancelReady = document.getElementById('cancel-button-player2');
       //chat box
-      const chatbox = document.querySelector('.chatbox');
-      const messages = chatbox.querySelector('.messages');
-      const input = chatbox.querySelector('input[type="text"]');
-      const button = chatbox.querySelector('button');
+      // const chatbox = document.querySelector('.chatbox');
+      // const messages = chatbox.querySelector('.messages');
+      // const input = chatbox.querySelector('input[type="text"]');
+      // const button = chatbox.querySelector('button');
 
       player1Ready.addEventListener('click',()=>{
         socket.emit('onReady',1);
@@ -434,6 +425,7 @@
       });
       backButtonGamelobby.addEventListener('click', () => {
         socket.emit('leaveLobby',JSON.parse(sessionStorage.user).username);
+        console.log(JSON.parse(sessionStorage.user).username);
         gameLobbyPage.style.display = 'none';
         characterPage.style.display = 'block';
       });
@@ -678,10 +670,7 @@
         
         const selectedImage = document.querySelector('.player-image.selected');
         const selectedColor = selectedImage ? selectedImage.dataset.color : null;
-        console.log(selectedColor);
         if (selectedColor) {
-          console.log(selectedColor);
-          console.log("OK button clicked");
           const userobject = JSON.parse(sessionStorage.getItem("user"));
           socket.emit('joinLobby', JSON.stringify({username:userobject.username,displayName:userobject.displayName,colour:selectedColor}));
           gameLobbyPage.style.display = 'block';
@@ -709,18 +698,23 @@
       })
 
       socket.on("GameOver",(info)=>{
-        const {message,player1Points,player2Points,player1Name,player2Name} = JSON.parse(info);
+        const {message,player1Points,player2Points,player1Name,player2Name,player1Username,player2Username} = JSON.parse(info);
         console.log(message);
         $('#game-over').show();
         if (player1Points > player2Points){
-          $('#winner').text(`${player1Name} wins!`);
+          
         } else if (player1Points < player2Points){
           $('#winner').text(`${player2Name} wins!`);
         } else {
-          $('#winner').text(`It's a draw!`);
+          $('#winner').text(`${player1Name} wins!`);
+          // $('#winner').text(`It's a draw!`);
         }
         BGM.pause();
         GG.play();
+        console.log(player1Username);
+        console.log(player2Username);
+        // socket.emit('leaveLobby',player1Username);
+        // socket.emit('leaveLobby',player2Username);
       })
 
     </script>

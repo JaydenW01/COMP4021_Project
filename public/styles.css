@@ -296,6 +296,13 @@ body {
     margin-top: auto;
     margin: 10px 50px;
   }
+  .button-container-gameover {
+    left: 0;
+    right: 0;
+    top: 415px;
+    margin: 10px 50px;
+    position: absolute;
+  }
   .selected {
     border: 3px solid red;
   }
@@ -632,9 +639,10 @@ body {
     top: 0;
     bottom: 0;
     margin: auto;
+    margin-top: 210px;
   
-    width: 500px;
-    height: 500px;
+    width: 505px;
+    height: 505px;
     background: rgba(0, 0, 0, 0.8);
     z-index: 900;
     text-align: center;
@@ -685,7 +693,7 @@ body {
     padding: 5px 0px;
   }
   
-  #back-button-gameover {
+  /* #back-button-gameover {
     color: white;
     z-index: 999;
     font-size: 30px;
@@ -695,7 +703,7 @@ body {
   #back-button-gameover:hover {
     cursor: pointer;
     color: red;
-  }
+  } */
   
   #clock{
     color: white;

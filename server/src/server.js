@@ -505,7 +505,8 @@ io.on("connection",(socket)=>{
     })
 
     socket.on("Time's Up",()=>{
-        io.emit("GameOver",JSON.stringify({message:"Time's up!",player1Points:player1.getPoints(),player2Points:player2.getPoints(),player1Name:player1.getDisplayName(),player2Name:player2.getDisplayName()}));
+        io.emit("GameOver",JSON.stringify({message:"Time's up!",player1Points:player1.getPoints(),player2Points:player2.getPoints(),player1Name:player1.getDisplayName()
+        ,player2Name:player2.getDisplayName(),player1Username:player1.getUsername(),player2Username:player2.getUsername()}));
         gameboard.reset();
         player1.reset();
         player2.reset();
