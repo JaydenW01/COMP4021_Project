@@ -79,7 +79,7 @@ export default class Player {
     }
 
     playerInfo(){
-        return {playerNo:this.playerNo,facing:this.facing,colour:this.colour,health:this.health,ability:this.ability,cheat:this.cheat,location:this.getPos()};
+        return {username:this.username,playerNo:this.playerNo,facing:this.facing,colour:this.colour,health:this.health,ability:this.ability,cheat:this.cheat,location:this.getPos()};
     }
 
     getAbility(newAbility){
