@@ -180,7 +180,7 @@
               </tr>
             </tbody>
           </table>
-          <div class="back-button" onclick="gameStat.backToMenu()">Back</div>       
+          <button id="back-button-ranking">Back</button>       
         </div>
         <!-- game info page  -->
         <div id="game-info" style="display: none;">
@@ -214,54 +214,35 @@
               </div>
             </div>
           </div>
-          <div id="back-button-gameinfo" onclick="gameInfo.backToMenu()">Back</div>       
+          <button id="back-button-gameinfo">Back</button>        
         </div>
+
         <!-- game over page -->
         <div id="game-over" style="display: none;">
           <div id="game-over-content">
             Game Over!!
-            <!-- <div id="game-result">
-              You Win!
+            <h1 style="font-size: 30px;">You are winner!</h2>  
             </div>
-            <div id="game-over-stat">
-              <div id="game-over-player1">
-                <div class="game-over-username">
-                  Player 1
-                </div>
-                <div class="game-over-stat-row">
-                  Health: 100
-                </div>
-                <div class="game-over-stat-row">
-                  Bomb: 3
-                </div>
-                <div class="game-over-stat-row">
-                  Range: 2
-                </div>
-              </div>
-              <div id="game-over-player2">
-                <div class="game-over-username">
-                  Player 2
-                </div>
-                <div class="game-over-stat-row">
-                  Health: 60
-                </div>
-                <div class="game-over-stat-row">
-                  Bomb: 2
-                </div>
-                <div class="game-over-stat-row">
-                  Range: 4
-                </div>
-              </div> -->
-            </div>
-            <div id="back-button-gameover" onclick="gameOver.backToMenu()">Back To Menu</div>       
+          </div>
+          <div class="button-container">
+            <button id="back-button-gameover">Back to Menu</button>   
+            <button id="restart">Restart</button>   
+          </div>  
+          <div class="chatbox">
+            <div class="messages"></div>
+            <div class="input">
+                <input type="text" placeholder="Type your message...">
+                <button>Send</button>
           </div>
         </div>
-        <div id="clock" style="display: none;">
+        
+        </div>
+        <!-- <div id="clock" style="display: none;">
           <div id="clock-title"> Time left: </div>
           <div id="clock-content">
             <div id="minute">0</div>: <div id="seconds">0</div>
           </div>
-        </div>
+        </div> -->
     </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
@@ -302,13 +283,24 @@
       const gameStartButton = document.getElementById('game-start');
       const backButton = document.getElementById('back-button');
       const backButtonGamelobby = document.getElementById('back-button-gamelobby');
+      const backButtonRanking = document.getElementById('back-button-ranking');
+      const backButtonGameinfo = document.getElementById('back-button-gameinfo');
+      const backButtonGameover = document.getElementById('back-button-gameover');
+      const restartButton = document.getElementById('restart');
       const gameLobbyPage = document.getElementById('game-lobby');
+      const rankingPage = document.getElementById('ranking');
+      const gameInfoPage = document.getElementById('game-info');
       const playerNameElements = document.querySelectorAll('.player-name');
       const playerAvatarElements = document.querySelectorAll('.avatar img');
       const player1Ready = document.getElementById('ready-button-player1');
       const player2Ready = document.getElementById('ready-button-player2');
       const player1CancelReady = document.getElementById('cancel-button-player1');
       const player2CancelReady = document.getElementById('cancel-button-player2');
+      //chat box
+      const chatbox = document.querySelector('.chatbox');
+      const messages = chatbox.querySelector('.messages');
+      const input = chatbox.querySelector('input[type="text"]');
+      const button = chatbox.querySelector('button');
 
       player1Ready.addEventListener('click',()=>{
         socket.emit('onReady',1);
@@ -411,11 +403,36 @@
         menuPage.style.display = 'block';
         characterPage.style.display = 'none';
       });
+      backButtonRanking.addEventListener('click', () => {
+        menuPage.style.display = 'block';
+        rankingPage.style.display = 'none';
+      });
+      backButtonGameinfo.addEventListener('click', () => {
+        menuPage.style.display = 'block';
+        gameInfoPage.style.display = 'none';
+      });
+      backButtonGameover.addEventListener('click', () => {
+        menuPage.style.display = 'block';
+        GG.pause();
+        $('#game-over').hide();
+        $('#canvas').css('background-image', "url('./assets/jayden/game_background.jpg')").css('background-color', 'none');
+        const canvas = $('canvas').get(0);
+        const context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+      });
+      restartButton.addEventListener('click', () => {
+        characterPage.style.display = 'block';
+        GG.pause();
+        $('#game-over').hide();
+        $('#canvas').css('background-image', "url('./assets/jayden/game_background.jpg')").css('background-color', 'none');
+        const canvas = $('canvas').get(0);
+        const context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+      });
       backButtonGamelobby.addEventListener('click', () => {
         socket.emit('leaveLobby',JSON.parse(sessionStorage.user).username);
         gameLobbyPage.style.display = 'none';
         characterPage.style.display = 'block';
-
       });
       gameStartButton.addEventListener('click', () => {
         menuPage.style.display = 'none';
@@ -438,9 +455,13 @@
           if (lobbyInfo.players[0].ready === true){
             $("#cancel-button-player1").show();
             $("#ready-button-player1").hide();
+            $("#ready-button-player2").hide();
+            $("#cancel-button-player2").hide();
           } else {
             $("#cancel-button-player1").hide();
             $("#ready-button-player1").show();
+            $("#ready-button-player2").hide();
+            $("#cancel-button-player2").hide();
           }    
         // Update player 1 name and avatar image
           $('#lobby-player1 .player-name').text(`You: ${lobbyInfo.players[0].displayName}`);
@@ -466,8 +487,8 @@
           if (lobbyInfo.players[0].username === JSON.parse(sessionStorage.getItem("user")).username){
             $('#lobby-player1 .player-name').text(`You: ${lobbyInfo.players[0].displayName}`);
             $('#lobby-player2 .player-name').text(lobbyInfo.players[1].displayName);
-            $("#ready-button-player2").hide()
-            $("#cancel-button-player2").hide()
+            $("#ready-button-player2").hide();
+            $("#cancel-button-player2").hide();
             if (lobbyInfo.players[0].ready === true){
               $("#cancel-button-player1").show();
               $("#ready-button-player1").hide();
@@ -522,9 +543,9 @@
           console.log(lobbyInfo.players.length);
           console.log(lobbyInfo.players[0].colour);
           $('#lobby-player2 .player-name').hide();
-          $('#avatar-image2').hide()
-          $("#ready-button-player2").hide()
-          $("#cancel-button-player2").hide()
+          $('#avatar-image2').hide();
+          $("#ready-button-player2").hide();
+          $("#cancel-button-player2").hide();
         // Update player 1 name and avatar image
           $('#lobby-player1 .player-name').text(`You: ${lobbyInfo.players[0].displayName}`);
           if(lobbyInfo.players[0].colour === 'blue'){

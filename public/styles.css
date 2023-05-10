@@ -579,6 +579,49 @@ body {
     cursor: pointer;
     color: red;
   }
+  .chatbox {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 300px;
+    height: 400px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.chatbox .messages {
+    height: 80%;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.chatbox .input {
+    display: flex;
+    align-items: center;
+    height: 20%;
+    padding: 10px;
+    background-color: #f8f8f8;
+}
+
+.chatbox input[type="text"] {
+    flex-grow: 1;
+    margin-right: 10px;
+    border: none;
+    border-radius: 20px;
+    padding: 10px;
+    outline: none;
+}
+
+.chatbox button {
+    background-color: #4CAF50;
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+}
   
   /* game over page */
   #game-over {
