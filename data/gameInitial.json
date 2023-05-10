@@ -28,6 +28,6 @@
     "bomb":[
         {"x":9,"y":9,"bombID":"1"}
     ],
-    "hearts":[],
-    "fires":[]
+    "hearts":[{"x":6,"y":8}],
+    "coins":[{"x":6,"y":7}]
 }
