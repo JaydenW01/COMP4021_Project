@@ -93,8 +93,9 @@ const Game = function (backgroundIMG,breakableIMG,bluePlayerIMG,blackPlayerIMG,y
         // draw breakables
         let num_breakables_drawn = 0;
         for (const breakable of gameBoard.breakables) {
-            const b = new Breakable(context, (breakable.x+2)*blockWidth, (breakable.y+1)*blockHeight,bkIMG)
-            b.draw();
+            // const b = new Breakable(context, (breakable.x+2)*blockWidth, (breakable.y+1)*blockHeight,bkIMG)
+            // b.draw();
+            context.drawImage(bkIMG,(breakable.x+2)*blockWidth,(breakable.y+1)*blockHeight);
             num_breakables_drawn++;
         }
         console.log("num breakables draw: ", num_breakables_drawn);
