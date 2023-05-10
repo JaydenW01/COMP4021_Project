@@ -410,19 +410,24 @@
         gameInfoPage.style.display = 'none';
       });
       backButtonGameover.addEventListener('click', () => {
-        menuPage.style.display = 'block';
         GG.pause();
+        $('#timer').hide();
         $('#game-over').hide();
+        menuPage.style.display = 'block';
         $('#canvas').css('background-image', "url('./assets/jayden/game_background.jpg')").css('background-color', 'none');
+
         const canvas = $('canvas').get(0);
         const context = canvas.getContext('2d');
         context.clearRect(0, 0, canvas.width, canvas.height);
+        
       });
       restartButton.addEventListener('click', () => {
-        characterPage.style.display = 'block';
         GG.pause();
+        $('#timer').hide();
         $('#game-over').hide();
+        characterPage.style.display = 'block';
         $('#canvas').css('background-image', "url('./assets/jayden/game_background.jpg')").css('background-color', 'none');
+
         const canvas = $('canvas').get(0);
         const context = canvas.getContext('2d');
         context.clearRect(0, 0, canvas.width, canvas.height);
@@ -707,6 +712,13 @@
         const {message,player1Points,player2Points,player1Name,player2Name} = JSON.parse(info);
         console.log(message);
         $('#game-over').show();
+        if (player1Points > player2Points){
+          $('#winner').text(`${player1Name} wins!`);
+        } else if (player1Points < player2Points){
+          $('#winner').text(`${player2Name} wins!`);
+        } else {
+          $('#winner').text(`It's a draw!`);
+        }
         BGM.pause();
         GG.play();
       })
