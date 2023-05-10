@@ -1,5 +1,5 @@
-const Timer = function() {
-    let time_remaining = 180;
+const Timer = function(time) {
+    let time_remaining = time;
 
     const startCountDown = ()=>{
         $("#timer").text(`There are ${time_remaining} seconds left!`);

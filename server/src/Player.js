@@ -15,11 +15,10 @@ export default class Player {
 
     reset() {
         this.colour = null;
-        this.playerNo = playerNo;
         this.username = null;
         this.displayName = null;
-        this.x = playerNo == 0 ? 0 : 12;
-        this.y = playerNo == 0 ? 0 : 10;
+        this.x = this.playerNo == 0 ? 0 : 12;
+        this.y = this.playerNo == 0 ? 0 : 10;
         this.facing = "down";
         this.health = 3;
         this.cheat = false;
