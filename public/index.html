@@ -264,7 +264,7 @@
       const spritesheet = new Image();
       spritesheet.src = './assets/object_sprites.png';
 
-      const timer = Timer();
+      const timer = Timer(180);
       const socket = io();
       const game = Game(bgIMG,breakableIMG,blueIMG,blackIMG,yellowIMG,redIMG,spritesheet);
       const menuPage = document.getElementById('menu');
@@ -667,6 +667,11 @@
         const gameboardInfo = JSON.parse(gameboardString);
         console.log(gameboardInfo);
         game.updateBoard(gameboardInfo);
+      })
+
+      socket.on("GameOver",(info)=>{
+        const {message,player1Points,player2Points,player1Name,player2Name} = JSON.parse(info);
+        console.log(message);
       })
 
     </script>
