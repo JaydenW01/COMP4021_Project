@@ -21,20 +21,20 @@ const Game = function (backgroundIMG,breakableIMG,bluePlayerIMG,blackPlayerIMG,y
     const blockWidth = 16;
     const blockHeight = 16;
 
-    const breakables = {}
-    const players = {}
+    // const breakables = {}
+    // const players = {}
 
     /* Size of Game Board:
      *  11 (height) x 13 (width)
      */
-    let num_breakables_init= 0;
-    for (let i = 0; i < 11; i++) {
-        for (let j = 0; j < 13; j++) {
-            breakables[{x:i, y:j}] = new Breakable(context, j*blockWidth, i*blockHeight,bkIMG);
-            num_breakables_init++;
-        }
-    }
-    console.log("num breakables init: ", num_breakables_init);
+    // let num_breakables_init= 0;
+    // for (let i = 0; i < 11; i++) {
+    //     for (let j = 0; j < 13; j++) {
+    //         breakables[{x:i, y:j}] = new Breakable(context, j*blockWidth, i*blockHeight,bkIMG);
+    //         num_breakables_init++;
+    //     }
+    // }
+    // console.log("num breakables init: ", num_breakables_init);
 
     setInputEnabled = function (inputEnabled) {
         if (inputEnabled) {
@@ -79,10 +79,9 @@ const Game = function (backgroundIMG,breakableIMG,bluePlayerIMG,blackPlayerIMG,y
 
     updateBoard = function (gameBoard) {
         const now = new Date().getTime();
-        console.log(breakables);
+        // console.log(breakables);
         // Clear the screen
         context.clearRect(0, 0, canvas.width, canvas.height);
-        const gameArea = BoundingBox(context, 32, 48, canvas.height - 32, canvas.width - 48);
         // draw map
         // let img = new Image();
         // img.onload = () => {
@@ -117,6 +116,8 @@ const Game = function (backgroundIMG,breakableIMG,bluePlayerIMG,blackPlayerIMG,y
         //         players[player.playerNo].update(player.location, player.facing, now);
         //     }
         // }
+
+        // context.drawImage(spriteSheet,sheet.x,sheet.y,sheet width (px),sheet.height, canvas.x, canvas.y, canvas.width, canvas.height)
 
         for (const player of gameBoard.players){
             const loc = {x:(player.location.x+2)*blockWidth,y:(player.location.y+1)*blockHeight};
