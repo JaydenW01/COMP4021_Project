@@ -269,7 +269,7 @@ const Game = function (sprites) {
         }
 
         
-        fires = fires.filter(obj => (now - obj.startTime) <= 2400);
+        fires = fires.filter(obj => (now - obj.startTime) <= 1000);
 
 
         console.log("fires list: "+JSON.stringify(fires));
