@@ -406,5 +406,13 @@
  {
   "displayName": "brian",
   "points": 0
+ },
+ {
+  "displayName": "bob",
+  "points": 1
+ },
+ {
+  "displayName": "brian",
+  "points": 0
  }
 ]
