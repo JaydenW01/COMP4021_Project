@@ -53,6 +53,7 @@ const Player = function(ctx, loc, colour, spriteSheet) {
     }*/
 
     const setPosition = function(newPosition) {
+        /*
         if (position == newPosition) {
             if (facing != oldFacing) {
                 switch(facing) {
@@ -69,10 +70,30 @@ const Player = function(ctx, loc, colour, spriteSheet) {
                         sprite.setSequence(sequences.idleDown);
                         break;
                     default:
-                        /* */
+
                 }
             }
         } else {
+            if (facing != oldFacing) {
+                switch(facing) {
+                    case "left":
+                        sprite.setSequence(sequences.moveLeft);
+                        break;
+                    case "up":
+                        sprite.setSequence(sequences.moveUp);
+                        break;
+                    case "right":
+                        sprite.setSequence(sequences.moveRight);
+                        break;
+                    case "down":
+                        sprite.setSequence(sequences.moveDown);
+                        break;
+                    default:
+
+                }
+            }
+        }*/
+        if (facing != oldFacing) {
             switch(facing) {
                 case "left":
                     sprite.setSequence(sequences.moveLeft);
@@ -87,9 +108,10 @@ const Player = function(ctx, loc, colour, spriteSheet) {
                     sprite.setSequence(sequences.moveDown);
                     break;
                 default:
-                        /* */
+
             }
         }
+
         position = newPosition;
         sprite.setXY(position.x, position.y);
     }

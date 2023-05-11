@@ -8,7 +8,7 @@ const Fire = function(ctx, loc, spriteSheet) {
     // This is the sprite sequences of the gem of four colours
     // `green`, `red`, `yellow` and `purple`.
     const sequences = {
-        fire:  { x: 0, y:  160, width: 16, height: 16, count: 8, timing: 300, loop: false },
+        fire:  { x: 0, y:  160, width: 16, height: 16, count: 8, timing: 140, loop: false },
     };
 
     // This is the sprite object of the gem created from the Sprite module.

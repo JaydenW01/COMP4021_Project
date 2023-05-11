@@ -92,7 +92,7 @@ const Game = function (sprites) {
         }
     };
 
-    updateBoard = function (gameBoard) {
+    updateBoard = function (gameBoard, repeat = true) {
         const now = new Date().getTime();
         lastGameBoard = JSON.parse(JSON.stringify(gameBoard));
         // console.log(breakables);
@@ -269,6 +269,9 @@ const Game = function (sprites) {
 
         console.log("fires list: "+JSON.stringify(fires));
 
+        if(repeat == true) {
+            setTimeout(updateBoard(lastGameBoard, false), 150);
+        }
     };
 
     explodeBomb = function (points) {
