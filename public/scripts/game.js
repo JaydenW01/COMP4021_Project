@@ -73,11 +73,17 @@ const Game = function (sprites) {
                     case 67:
                         // TODO
                         socket.emit("enable cheat");
+                        gameBGM.pause();
+                        supermario.pause();
+                        supermario.currentTime = 0;
+                        supermario.play();
                         break;
                     // v - cheat mode off
                     case 86:
                         // TODO
                         socket.emit("disable cheat");
+                        supermario.pause();
+                        gameBGM.play();
                         break;
                 }
             });

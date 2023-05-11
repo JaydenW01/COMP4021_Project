@@ -1,7 +1,3 @@
-const GG = new Audio('assets/audio/gameover.mp3');
-const BGM = new Audio('assets/audio/menu.mp3');
-BGM.volume = 0.6;
-
 const SignInForm = (function () {
     // This function initializes the UI
     const initialize = function () {
@@ -155,7 +151,7 @@ const gameOver = (function (win) {
         GG.pause();
         $('#game-over').hide();
         $('#menu').show();
-        $('#canvas').css('background-image', "url('./assets/jayden/game_background.jpg')").css('background-color', 'none');
+        $('#canvas').css('background-image', "url('./assets/game_background.jpg')").css('background-color', 'none');
         // remember to clear screen!
         const canvas = $('canvas').get(0);
         const context = canvas.getContext('2d');

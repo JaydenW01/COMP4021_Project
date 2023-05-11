@@ -147,10 +147,10 @@ export default class Gameboard {
         if (playerNo === 1){
             bombX = this.player1Bomb.x;
             bombY = this.player1Bomb.y
-            const up = this.findBlockByPos(bombX,bombY-1) !== "breakable" ? false : true;
-            const down = this.findBlockByPos(bombX,bombY+1) !== "breakable" ? false : true;
-            const left = this.findBlockByPos(bombX-1,bombY) !== "breakable" ? false : true;
-            const right = this.findBlockByPos(bombX+1,bombY) !== "breakable" ? false : true;
+            const up = this.findBlockByPos(bombX,bombY-1) === "wall" ? false : this.findBlockByPos(bombX,bombY-1) === "out of bound" ? false : true;
+            const down = this.findBlockByPos(bombX,bombY+1) === "wall" ? false : this.findBlockByPos(bombX,bombY+1) === "out of bound" ? false : true;
+            const left = this.findBlockByPos(bombX-1,bombY) === "wall" ? false : this.findBlockByPos(bombX-1,bombY) === "out of bound" ? false : true;
+            const right = this.findBlockByPos(bombX+1,bombY) === "wall" ? false : this.findBlockByPos(bombX+1,bombY) === "out of bound" ? false : true;
             if (up){
                 this.removeBlockByPos(bombX,bombY-1);
                 fires.push({x:bombX,y:bombY-1});

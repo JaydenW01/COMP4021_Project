@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="./assets/charlie/icon.jpg" />
+    <link rel="icon" href="./assets/icon.jpg" />
     <link
       href="https://fonts.googleapis.com/css?family=Audiowide"
       rel="stylesheet"
@@ -90,10 +90,10 @@
       <div id="character-lobby" style="display: none;">
           <h1 style="font-size: 30px;">Choose one character</h2>
           <div class="character-container">
-            <img src="assets/charlie/player1.png" class="player-image" data-color="blue">
-            <img src="assets/charlie/player2.png" class="player-image" data-color="red">
-            <img src="assets/charlie/player3.png" class="player-image" data-color="yellow">
-            <img src="assets/charlie/player4.png" class="player-image" data-color="black">
+            <img src="assets/player1.png" class="player-image" data-color="blue">
+            <img src="assets/player2.png" class="player-image" data-color="red">
+            <img src="assets/player3.png" class="player-image" data-color="yellow">
+            <img src="assets/player4.png" class="player-image" data-color="black">
           </div>
           <div class="button-container">
             <button id="back-button">Back</button>   
@@ -112,7 +112,7 @@
                 <div class="player-name"></div>
               </div>
               <div class="avatar" id="config-skin">
-                <img id="avatar-image1" src="assets/charlie/player1.png">
+                <img id="avatar-image1" src="assets/player1.png">
               </div>
 
 
@@ -136,7 +136,7 @@
                   <div class="player-name"></div>
                 </div>
                 <div class="avatar" id="config-skin">
-                  <img id="avatar-image2" src="assets/charlie/player1.png">
+                  <img id="avatar-image2" src="assets/player1.png">
                 </div>
 
                 <div id="ready-button-player2" >Ready</div>
@@ -257,6 +257,11 @@
     <script>
       const collect_sound =  new Audio('assets/audio/collect_item.mp3');
       const explode_sound = new Audio('assets/audio/explosion.mp3');
+      const supermario = new Audio('assets/audio/supermario.mp3');
+      const GG = new Audio('assets/audio/gameover.mp3');
+      const BGM = new Audio('assets/audio/menu.mp3');
+      BGM.volume = 0.5;
+      GG.volume = 0.8;
 
       const gameBGM = new Audio("./assets/audio/game_bgm.mp3");
       const bgIMG = new Image();
@@ -368,16 +373,16 @@
         // Update player 1 name and avatar image
           $('#lobby-player1 .player-name').text(`You: ${lobbyInfo.players[0].displayName}`);
           if(lobbyInfo.players[0].colour === 'blue'){
-            $('#avatar-image1').attr('src', `assets/charlie/player1.png`);
+            $('#avatar-image1').attr('src', `assets/player1.png`);
           }
           if(lobbyInfo.players[0].colour === 'red'){
-            $('#avatar-image1').attr('src', `assets/charlie/player2.png`);
+            $('#avatar-image1').attr('src', `assets/player2.png`);
           }
           if(lobbyInfo.players[0].colour === 'yellow'){
-            $('#avatar-image1').attr('src', `assets/charlie/player3.png`);
+            $('#avatar-image1').attr('src', `assets/player3.png`);
           }
           if(lobbyInfo.players[0].colour === 'black'){
-            $('#avatar-image1').attr('src', `assets/charlie/player4.png`);
+            $('#avatar-image1').attr('src', `assets/player4.png`);
           }
           $('#lobby-player2 .player-name').hide();
           $('#avatar-image2').hide()
@@ -412,29 +417,29 @@
             }
           }
           if(lobbyInfo.players[0].colour === 'blue'){
-            $('#avatar-image1').attr('src', `assets/charlie/player1.png`);
+            $('#avatar-image1').attr('src', `assets/player1.png`);
           }
           if(lobbyInfo.players[0].colour === 'red'){
-            $('#avatar-image1').attr('src', `assets/charlie/player2.png`);
+            $('#avatar-image1').attr('src', `assets/player2.png`);
           }
           if(lobbyInfo.players[0].colour === 'yellow'){
-            $('#avatar-image1').attr('src', `assets/charlie/player3.png`);
+            $('#avatar-image1').attr('src', `assets/player3.png`);
           }
           if(lobbyInfo.players[0].colour === 'black'){
-            $('#avatar-image1').attr('src', `assets/charlie/player4.png`);
+            $('#avatar-image1').attr('src', `assets/player4.png`);
           }
         // Update player 2 name and avatar image
           if(lobbyInfo.players[1].colour === 'blue'){
-            $('#avatar-image2').attr('src', `assets/charlie/player1.png`);
+            $('#avatar-image2').attr('src', `assets/player1.png`);
           }
           if(lobbyInfo.players[1].colour === 'red'){
-            $('#avatar-image2').attr('src', `assets/charlie/player2.png`);
+            $('#avatar-image2').attr('src', `assets/player2.png`);
           }
           if(lobbyInfo.players[1].colour === 'yellow'){
-            $('#avatar-image2').attr('src', `assets/charlie/player3.png`);
+            $('#avatar-image2').attr('src', `assets/player3.png`);
           }
           if(lobbyInfo.players[1].colour === 'black'){
-            $('#avatar-image2').attr('src', `assets/charlie/player4.png`);
+            $('#avatar-image2').attr('src', `assets/player4.png`);
           }
         }
       })
@@ -460,7 +465,7 @@
         $("#chat-area").show();
         $('#game-over').hide();
         menuPage.style.display = 'block';
-        $('#canvas').css('background-image', "url('./assets/jayden/game_background.jpg')").css('background-color', 'none');
+        $('#canvas').css('background-image', "url('./assets/game_background.jpg')").css('background-color', 'none');
 
         const canvas = $('canvas').get(0);
         const context = canvas.getContext('2d');
@@ -476,7 +481,7 @@
         $("#chat-area").show();
         $('#game-over').hide();
         characterPage.style.display = 'block';
-        $('#canvas').css('background-image', "url('./assets/jayden/game_background.jpg')").css('background-color', 'none');
+        $('#canvas').css('background-image', "url('./assets/game_background.jpg')").css('background-color', 'none');
 
         const canvas = $('canvas').get(0);
         const context = canvas.getContext('2d');
@@ -520,16 +525,16 @@
         // Update player 1 name and avatar image
           $('#lobby-player1 .player-name').text(`You: ${lobbyInfo.players[0].displayName}`);
           if(lobbyInfo.players[0].colour === 'blue'){
-            $('#avatar-image1').attr('src', `assets/charlie/player1.png`);
+            $('#avatar-image1').attr('src', `assets/player1.png`);
           }
           if(lobbyInfo.players[0].colour === 'red'){
-            $('#avatar-image1').attr('src', `assets/charlie/player2.png`);
+            $('#avatar-image1').attr('src', `assets/player2.png`);
           }
           if(lobbyInfo.players[0].colour === 'yellow'){
-            $('#avatar-image1').attr('src', `assets/charlie/player3.png`);
+            $('#avatar-image1').attr('src', `assets/player3.png`);
           }
           if(lobbyInfo.players[0].colour === 'black'){
-            $('#avatar-image1').attr('src', `assets/charlie/player4.png`);
+            $('#avatar-image1').attr('src', `assets/player4.png`);
           }
           $('#lobby-player2 .player-name').hide();
           $('#avatar-image2').hide()
@@ -564,29 +569,29 @@
             }
           }
           if(lobbyInfo.players[0].colour === 'blue'){
-            $('#avatar-image1').attr('src', `assets/charlie/player1.png`);
+            $('#avatar-image1').attr('src', `assets/player1.png`);
           }
           if(lobbyInfo.players[0].colour === 'red'){
-            $('#avatar-image1').attr('src', `assets/charlie/player2.png`);
+            $('#avatar-image1').attr('src', `assets/player2.png`);
           }
           if(lobbyInfo.players[0].colour === 'yellow'){
-            $('#avatar-image1').attr('src', `assets/charlie/player3.png`);
+            $('#avatar-image1').attr('src', `assets/player3.png`);
           }
           if(lobbyInfo.players[0].colour === 'black'){
-            $('#avatar-image1').attr('src', `assets/charlie/player4.png`);
+            $('#avatar-image1').attr('src', `assets/player4.png`);
           }
         // Update player 2 name and avatar image
           if(lobbyInfo.players[1].colour === 'blue'){
-            $('#avatar-image2').attr('src', `assets/charlie/player1.png`);
+            $('#avatar-image2').attr('src', `assets/player1.png`);
           }
           if(lobbyInfo.players[1].colour === 'red'){
-            $('#avatar-image2').attr('src', `assets/charlie/player2.png`);
+            $('#avatar-image2').attr('src', `assets/player2.png`);
           }
           if(lobbyInfo.players[1].colour === 'yellow'){
-            $('#avatar-image2').attr('src', `assets/charlie/player3.png`);
+            $('#avatar-image2').attr('src', `assets/player3.png`);
           }
           if(lobbyInfo.players[1].colour === 'black'){
-            $('#avatar-image2').attr('src', `assets/charlie/player4.png`);
+            $('#avatar-image2').attr('src', `assets/player4.png`);
           }
         }
       });
@@ -603,16 +608,16 @@
         // Update player 1 name and avatar image
           $('#lobby-player1 .player-name').text(`You: ${lobbyInfo.players[0].displayName}`);
           if(lobbyInfo.players[0].colour === 'blue'){
-            $('#avatar-image1').attr('src', `assets/charlie/player1.png`);
+            $('#avatar-image1').attr('src', `assets/player1.png`);
           }
           if(lobbyInfo.players[0].colour === 'red'){
-            $('#avatar-image1').attr('src', `assets/charlie/player2.png`);
+            $('#avatar-image1').attr('src', `assets/player2.png`);
           }
           if(lobbyInfo.players[0].colour === 'yellow'){
-            $('#avatar-image1').attr('src', `assets/charlie/player3.png`);
+            $('#avatar-image1').attr('src', `assets/player3.png`);
           }
           if(lobbyInfo.players[0].colour === 'black'){
-            $('#avatar-image1').attr('src', `assets/charlie/player4.png`);
+            $('#avatar-image1').attr('src', `assets/player4.png`);
           }
         }
 
@@ -631,29 +636,29 @@
             $("#cancel-button-player1").hide()
           }
           if(lobbyInfo.players[0].colour === 'blue'){
-            $('#avatar-image1').attr('src', `assets/charlie/player1.png`);
+            $('#avatar-image1').attr('src', `assets/player1.png`);
           }
           if(lobbyInfo.players[0].colour === 'red'){
-            $('#avatar-image1').attr('src', `assets/charlie/player2.png`);
+            $('#avatar-image1').attr('src', `assets/player2.png`);
           }
           if(lobbyInfo.players[0].colour === 'yellow'){
-            $('#avatar-image1').attr('src', `assets/charlie/player3.png`);
+            $('#avatar-image1').attr('src', `assets/player3.png`);
           }
           if(lobbyInfo.players[0].colour === 'black'){
-            $('#avatar-image1').attr('src', `assets/charlie/player4.png`);
+            $('#avatar-image1').attr('src', `assets/player4.png`);
           }
         // Update player 2 name and avatar image
           if(lobbyInfo.players[1].colour === 'blue'){
-            $('#avatar-image2').attr('src', `assets/charlie/player1.png`);
+            $('#avatar-image2').attr('src', `assets/player1.png`);
           }
           if(lobbyInfo.players[1].colour === 'red'){
-            $('#avatar-image2').attr('src', `assets/charlie/player2.png`);
+            $('#avatar-image2').attr('src', `assets/player2.png`);
           }
           if(lobbyInfo.players[1].colour === 'yellow'){
-            $('#avatar-image2').attr('src', `assets/charlie/player3.png`);
+            $('#avatar-image2').attr('src', `assets/player3.png`);
           }
           if(lobbyInfo.players[1].colour === 'black'){
-            $('#avatar-image2').attr('src', `assets/charlie/player4.png`);
+            $('#avatar-image2').attr('src', `assets/player4.png`);
           }
         }
       })
@@ -670,16 +675,16 @@
         // Update player 1 name and avatar image
           $('#lobby-player1 .player-name').text(`You: ${lobbyInfo.players[0].displayName}`);
           if(lobbyInfo.players[0].colour === 'blue'){
-            $('#avatar-image1').attr('src', `assets/charlie/player1.png`);
+            $('#avatar-image1').attr('src', `assets/player1.png`);
           }
           if(lobbyInfo.players[0].colour === 'red'){
-            $('#avatar-image1').attr('src', `assets/charlie/player2.png`);
+            $('#avatar-image1').attr('src', `assets/player2.png`);
           }
           if(lobbyInfo.players[0].colour === 'yellow'){
-            $('#avatar-image1').attr('src', `assets/charlie/player3.png`);
+            $('#avatar-image1').attr('src', `assets/player3.png`);
           }
           if(lobbyInfo.players[0].colour === 'black'){
-            $('#avatar-image1').attr('src', `assets/charlie/player4.png`);
+            $('#avatar-image1').attr('src', `assets/player4.png`);
           }
         }
 
@@ -698,29 +703,29 @@
             $("#cancel-button-player1").hide()
           }
           if(lobbyInfo.players[0].colour === 'blue'){
-            $('#avatar-image1').attr('src', `assets/charlie/player1.png`);
+            $('#avatar-image1').attr('src', `assets/player1.png`);
           }
           if(lobbyInfo.players[0].colour === 'red'){
-            $('#avatar-image1').attr('src', `assets/charlie/player2.png`);
+            $('#avatar-image1').attr('src', `assets/player2.png`);
           }
           if(lobbyInfo.players[0].colour === 'yellow'){
-            $('#avatar-image1').attr('src', `assets/charlie/player3.png`);
+            $('#avatar-image1').attr('src', `assets/player3.png`);
           }
           if(lobbyInfo.players[0].colour === 'black'){
-            $('#avatar-image1').attr('src', `assets/charlie/player4.png`);
+            $('#avatar-image1').attr('src', `assets/player4.png`);
           }
         // Update player 2 name and avatar image
           if(lobbyInfo.players[1].colour === 'blue'){
-            $('#avatar-image2').attr('src', `assets/charlie/player1.png`);
+            $('#avatar-image2').attr('src', `assets/player1.png`);
           }
           if(lobbyInfo.players[1].colour === 'red'){
-            $('#avatar-image2').attr('src', `assets/charlie/player2.png`);
+            $('#avatar-image2').attr('src', `assets/player2.png`);
           }
           if(lobbyInfo.players[1].colour === 'yellow'){
-            $('#avatar-image2').attr('src', `assets/charlie/player3.png`);
+            $('#avatar-image2').attr('src', `assets/player3.png`);
           }
           if(lobbyInfo.players[1].colour === 'black'){
-            $('#avatar-image2').attr('src', `assets/charlie/player4.png`);
+            $('#avatar-image2').attr('src', `assets/player4.png`);
           }
         }
       })
@@ -776,6 +781,7 @@
 
       socket.on("GameOver",(info)=>{
         gameBGM.pause();
+        supermario.pause();
         $("#game-info-display1").hide();
         $("#game-info-display2").hide();
         const obj = JSON.parse(info);
