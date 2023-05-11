@@ -536,21 +536,22 @@ io.on("connection",(socket)=>{
     })
 
     socket.on("Time's Up",()=>{
-        console.log(initialBreakables)
-        gameboard.setBreakables(initialBreakables);
-        timesup -= 1;
-        if (timesup === 0){
-            timesup = 1;
-            console.log("time's up")
-            clearInterval(autoupdate);
-            io.emit("GameOver",JSON.stringify({message:"Time's up!",player1Points:player1.getPoints(),player2Points:player2.getPoints(),player1Name:player1.getDisplayName(),player2Name:player2.getDisplayName()}));
-            const ranking = JSON.parse(fs.readFileSync('data/ranking.json'));
-            if (player1.getDisplayName() && player2.getDisplayName()){
-                ranking.push({displayName:player1.getDisplayName(),points:player1.getPoints()});
-                ranking.push({displayName:player2.getDisplayName(),points:player2.getPoints()});
+        if (socket.request.session.user?.username === player1.getUsername()){
+            gameboard.setBreakables(initialBreakables);
+            timesup -= 1;
+            if (timesup === 0){
+                timesup = 1;
+                console.log("time's up")
+                clearInterval(autoupdate);
+                io.emit("GameOver",JSON.stringify({message:"Time's up!",player1Points:player1.getPoints(),player2Points:player2.getPoints(),player1Name:player1.getDisplayName(),player2Name:player2.getDisplayName()}));
+                const ranking = JSON.parse(fs.readFileSync('data/ranking.json'));
+                if (player1.getDisplayName() && player2.getDisplayName()){
+                    ranking.push({displayName:player1.getDisplayName(),points:player1.getPoints()});
+                    ranking.push({displayName:player2.getDisplayName(),points:player2.getPoints()});
+                }
+                fs.writeFileSync('data/ranking.json', JSON.stringify(ranking, null, ' '));
+                autoupdate = null;
             }
-            fs.writeFileSync('data/ranking.json', JSON.stringify(ranking, null, ' '));
-            autoupdate = null;
         }
     })
 
