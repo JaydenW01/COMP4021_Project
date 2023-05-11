@@ -44,66 +44,85 @@ const Game = function (sprites) {
     // }
     // console.log("num breakables init: ", num_breakables_init);
 
-    chill = function() {
-        setInputEnabled(false);
-        setTimeout(setInputEnabled(true), 1200)
-    }
-
     setInputEnabled = function (inputEnabled) {
+        let delay = 600;
+
+        const debounce = (func, delay) => {
+          let timeoutId;
+          return (...args) => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+              func.apply(this, args);
+            }, delay);
+          };
+        };
+      
+        let timeoutIds = {};
+      
         if (inputEnabled) {
-            console.log("enabling input");
-            $(document).on('keydown', function (event) {
-                /* Handle the key down */
-                switch (event.keyCode) {
-                    case 37:
-                    case 65: // left
-                        socket.emit("moveLeft");
-                        chill();
-                        break;
-                    case 38:
-                    case 87: // up
-                        socket.emit("moveUp");
-                        chill();
-                        break;
-                    case 39:
-                    case 68: // right
-                        socket.emit("moveRight"); 
-                        chill();
-                        break;
-                    case 40:
-                    case 83: // down
-                        socket.emit("moveDown");
-                        chill();  
-                        break;
-                    case 32: // bomb
-                        socket.emit("placeBomb");  
-                        chill();
-                        break;
-                    // c - cheat mode
-                    case 67:
-                        // TODO
-                        socket.emit("enable cheat");
-                        chill();
-                        gameBGM.pause();
-                        supermario.pause();
-                        supermario.currentTime = 0;
-                        supermario.play();
-                        break;
-                    // v - cheat mode off
-                    case 86:
-                        // TODO
-                        socket.emit("disable cheat");
-                        chill();
-                        supermario.pause();
-                        gameBGM.play();
-                        break;
-                }
-            });
+          console.log("enabling input");
+          $(document).on('keydown', function (event) {
+            /* Handle the key down */
+            const key = event.keyCode;
+            if (timeoutIds[key]) {
+              return;
+            }
+            switch (key) {
+              case 37:
+              case 65: // left
+                socket.emit("moveLeft");
+                break;
+              case 38:
+              case 87: // up
+                socket.emit("moveUp");
+                break;
+              case 39:
+              case 68: // right
+                socket.emit("moveRight"); 
+                break;
+              case 40:
+              case 83: // down
+                socket.emit("moveDown");
+                break;
+              case 32: // bomb
+                socket.emit("placeBomb");  
+                break;
+              // c - cheat mode
+              case 67:
+                // TODO
+                socket.emit("enable cheat");
+                delay = 300;
+                gameBGM.pause();
+                supermario.pause();
+                supermario.currentTime = 0;
+                supermario.play();
+                break;
+              // v - cheat mode off
+              case 86:
+                // TODO
+                socket.emit("disable cheat");
+                delay = 600;
+                supermario.pause();
+                gameBGM.play();
+                break;
+            }
+            timeoutIds[key] = setTimeout(debounce(() => {
+              socket.emit(`stop${event.key}`);
+              delete timeoutIds[key];
+            }, delay), event);
+          }).on('keyup', function (event) {
+            /* Handle the key up */
+            const key = event.keyCode;
+            clearTimeout(timeoutIds[key]);
+            delete timeoutIds[key];
+            socket.emit(`stop${event.key}`);
+          });
         } else {
-            console.log("disable input");
-            $(document).off('keydown');
+          console.log("disable input");
+          $(document).off('keydown keyup');
+          timeoutIds = {};
         }
-    };
+      };
 
     updateBoard = function (gameBoard, repeat = true) {
         const now = new Date().getTime();
@@ -269,7 +288,7 @@ const Game = function (sprites) {
         }
 
         
-        fires = fires.filter(obj => (now - obj.startTime) <= 1000);
+        fires = fires.filter(obj => (now - obj.startTime) <= 1200);
 
 
         console.log("fires list: "+JSON.stringify(fires));
@@ -283,7 +302,9 @@ const Game = function (sprites) {
         console.log("fires list: "+JSON.stringify(fires));
 
         if(repeat == true) {
-            setTimeout(updateBoard(lastGameBoard, false), 150);
+            setTimeout(
+                this.updateBoard(lastGameBoard, false)
+                , 150);
         }
     };
 
@@ -301,5 +322,5 @@ const Game = function (sprites) {
           }
     };
 
-    return { setInputEnabled, updateBoard, explodeBomb, chill};
+    return { setInputEnabled, updateBoard, explodeBomb};
 };
