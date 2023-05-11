@@ -453,7 +453,7 @@ io.on("connection",(socket)=>{
             player2.addPoints(explosion.points);
             player2Bomb -=1
         }
-        io.emit("explode",JSON.stringify({fires:explosion.fires}));
+        io.emit("explode",JSON.stringify({loc:explosion.center,fires:explosion.fires}));
         // io.emit("updateBoard",JSON.stringify({
         //     players:[player1.playerInfo(),player2.playerInfo()],
         //     breakables:gameboard.gameboardInfo().breakables,
