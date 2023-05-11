@@ -72,10 +72,12 @@ const Game = function (sprites) {
                     // c - cheat mode
                     case 67:
                         // TODO
+                        socket.emit("enable cheat");
                         break;
                     // v - cheat mode off
                     case 86:
                         // TODO
+                        socket.emit("disable cheat");
                         break;
                 }
             });
@@ -116,7 +118,6 @@ const Game = function (sprites) {
         }
         console.log("num breakables draw: ", num_breakables_drawn);
 
-<<<<<<< HEAD
         for (const player of gameBoard.players) {
             const loc = {x: (player.location.x+2)*blockWidth, y: (player.location.y+1)*blockHeight};
             if (player in players) {
@@ -150,46 +151,11 @@ const Game = function (sprites) {
                 )
                 console.log("updating player "+player.playerNo);
                 players[player.playerNo].update(loc, player.facing, now);
-=======
-        // for (const player of gameBoard.players) {
-        //     const loc = {x: (player.location.x+2)*blockWidth, y: (player.location.y+1)*blockHeight};
-        //     if (player in players) {
-        //         console.log("updating player "+player.playerNo+" location: ("+loc.x+", "+loc.y+")");
-        //         players[player.playerNo].update(
-        //             loc,
-        //             player.facing,
-        //             now);
-        //     } else {
-        //         let spriteSheet;
-        //         switch(player.colour) {
-        //             case("blue"):
-        //                 spriteSheet = blueSprite;
-        //                 break;
-        //             case("red"):
-        //                 spriteSheet = redSprite;
-        //                 break;
-        //             case("yellow"):
-        //                 spriteSheet = yellowSprite;
-        //                 break;
-        //             case("black"):
-        //                 spriteSheet = blackSprite;
-        //                 break;
-        //         }
-        //         console.log("creating player "+player.playerNo+" location: ("+loc.x+", "+loc.y+")");
-        //         players[player.playerNo] = new Player(
-        //             context,
-        //             loc.x,
-        //             loc.y,
-        //             player.colour,
-        //             spriteSheet,                    
-        //         )
-        //         console.log("updating player "+player.playerNo);
-        //         players[player.playerNo].update(loc, player.facing, now);
-        //     }
-        //     console.log("drawing player "+player.playerNo+" location: ("+loc.x+", "+loc.y+")");
-        //     players[player.playerNo].draw();
-        // }
+            }
+            players[player.playerNo].draw();
+        }
 
+            /*
         for (const player of gameBoard.players){
             let sheet = null;
             const loc = {x:(player.location.x+2)*blockWidth,y:(player.location.y+1)*blockHeight};
@@ -211,9 +177,8 @@ const Game = function (sprites) {
                 context.drawImage(sheet,32,16,16,16,loc.x,loc.y,16,16);
             } else if (player.facing === "right"){
                 context.drawImage(sheet,48,16,16,16,loc.x,loc.y,16,16);
->>>>>>> f2de65fb518bb7e4513b7de6e2b2346726635f24
             }
-        }
+        }*/
 
 
         //context.drawImage(spriteSheet,sheet.x,sheet.y,sheet width (px),sheet.height, canvas.x, canvas.y, canvas.width, canvas.height)
@@ -285,24 +250,34 @@ const Game = function (sprites) {
             }
         }
 
+        
         fires = fires.filter(obj => (now - obj.startTime) <= 2400);
 
-        for(let fire in fires) {
-            fire.draw();
+
+        console.log("fires list: "+JSON.stringify(fires));
+
+        for(let i = 0; i < fires.length; i++) {
+            console.log(fires[i]);
+            fires[i].fire.update();
+            fires[i].fire.draw();
         }
 
-        console.log("fires list: "+fires);
+        console.log("fires list: "+JSON.stringify(fires));
 
     };
 
-    explodeBomb = function (bombID) {
-        console.log("Exploding bomb")
+    explodeBomb = function (points) {
+        console.log("Exploding bomb");
+        console.log("points:", points);
         const now = new Date().getTime();
-        console.log("last game board: "+lastGameBoard);
-        bomb = lastGameBoard.bombs.filter(bomb => bomb.x == )[0];
-        const loc = {x:(bomb.x+2)*blockWidth,y:(bomb.y+1)*blockHeight};
 
+        const loc = {x:(points.loc.x+2)*blockWidth,y:(points.loc.y+1)*blockHeight};
         fires.push({fire: new Fire(context, loc, spritesheet), startTime: now})
+
+        for (const fire of points.fires) {
+            const loc = {x: (fire.x + 2) * blockWidth, y: (fire.y + 1) * blockHeight};
+            fires.push({fire: new Fire(context, loc, spritesheet), startTime: now});
+          }
     };
 
     return { setInputEnabled, updateBoard, explodeBomb};

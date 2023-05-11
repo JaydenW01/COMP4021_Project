@@ -756,9 +756,10 @@
         game.updateBoard(gameboardInfo);
       })
 
-      socket.on('explode', (bombID) => {
-            game.explodeBomb(bombID);
-        });
+      socket.on('explode', (points) => {
+          const _points = JSON.parse(points);
+          game.explodeBomb(_points);
+      });
 
       socket.on("GameOver",(info)=>{
         $("#game-info-display1").hide();
