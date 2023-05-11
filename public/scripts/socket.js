@@ -7,6 +7,8 @@ const Socket = (function () {
         return socket;
     };
 
+    const lastGameBoard = null;
+
     // This function connects to the server and initializes the socket.
     const connect = function () {
         socket = io();
@@ -40,6 +42,7 @@ const Socket = (function () {
 
         socket.on('updateBoard', (gameBoard) => {
             gameBoard = JSON.parse(gameBoard);
+            lastGameBoard = gameBoard;
             requestAnimationFrame(() => {
                 game.updateBoard(gameBoard);
             });
@@ -47,6 +50,9 @@ const Socket = (function () {
 
         socket.on('explode', (bombID) => {
             game.explodeBomb(bombID);
+            requestAnimationFrame(() => {
+                game.explodeBomb(bombID);
+            });
         });
 
         socket.on('gameOver', () => {

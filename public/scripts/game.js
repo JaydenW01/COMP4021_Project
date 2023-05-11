@@ -1,11 +1,15 @@
-const Game = function (backgroundIMG,breakableIMG,bluePlayerIMG,blackPlayerIMG,yellowPlayerIMG,redPlayerIMG,spritesheetIMG) {
-    const bgIMG = backgroundIMG;
-    const bkIMG = breakableIMG;
-    const blueIMG = bluePlayerIMG;
-    const redIMG = redPlayerIMG;
-    const yellowIMG = yellowPlayerIMG;
-    const blackIMG = blackPlayerIMG;
-    const spritesheet = spritesheetIMG;
+const Game = function (sprites) {
+    const bgIMG = sprites.bgIMG;
+    const bkIMG = sprites.breakableIMG;
+    const blueIMG = sprites.blueIMG;
+    const redIMG = sprites.redIMG;
+    const yellowIMG = sprites.yellowIMG;
+    const blackIMG = sprites.blackIMG;
+    const spritesheet = sprites.spritesheet;
+    const redSprite = sprites.redSprite;
+    const blueSprite = sprites.redSprite;
+    const blackSprite = sprites.redSprite;
+    const yellowSprite = sprites.yellowSprite;
     const canvas = $('#canvas').get(0);
     canvas.width = 272; // 20 * 20 block. each block is 16px, so 16 * 20 = 320
     canvas.height = 208;
@@ -22,7 +26,7 @@ const Game = function (backgroundIMG,breakableIMG,bluePlayerIMG,blackPlayerIMG,y
     const blockHeight = 16;
 
     // const breakables = {}
-    // const players = {}
+    const players = {}
 
     /* Size of Game Board:
      *  11 (height) x 13 (width)
@@ -82,6 +86,13 @@ const Game = function (backgroundIMG,breakableIMG,bluePlayerIMG,blackPlayerIMG,y
         // console.log(breakables);
         // Clear the screen
         context.clearRect(0, 0, canvas.width, canvas.height);
+        const player1info = gameBoard.players[0];
+        const player2info = gameBoard.players[1];
+
+        $("#player1-points").text(`Player 1 Points: ${player1info.points}`);
+        $("#player2-points").text(`Player 2 Points: ${player2info.points}`);
+        $("#player1-health").text(`Player 1 Remaining Life: ${player1info.health}/3`);
+        $("#player2-health").text(`Player 2 Remaining Life: ${player2info.health}/3`);
         // draw map
         // let img = new Image();
         // img.onload = () => {
@@ -100,25 +111,49 @@ const Game = function (backgroundIMG,breakableIMG,bluePlayerIMG,blackPlayerIMG,y
         }
         console.log("num breakables draw: ", num_breakables_drawn);
 
-        // for (const player of gameBoard.players) {
-        //     if (player in players) {
-        //         players[player.playerNo].update(
-        //             {x : player.location.y * blockWidth, y : player.location.x * blockHeight},
-        //             player.facing,
-        //             now);
-        //     } else {
-        //         players[player.playerNo] = new Player(
-        //             context,
-        //             player.location.y * blockWidth,
-        //             player.location.x * blockHeight,
-        //             player.colour
-        //         )
-        //         players[player.playerNo].update(player.location, player.facing, now);
-        //     }
-        // }
+        for (const player of gameBoard.players) {
+            const loc = {x: (player.location.x+2)*blockWidth, y: (player.location.y+1)*blockHeight};
+            if (player in players) {
+                console.log("updating player "+player.playerNo+" location: ("+loc.x+", "+loc.y+")");
+                players[player.playerNo].update(
+                    loc,
+                    player.facing,
+                    now);
+            } else {
+                let spriteSheet;
+                switch(player.colour) {
+                    case("blue"):
+                        spriteSheet = blueSprite;
+                        break;
+                    case("red"):
+                        spriteSheet = redSprite;
+                        break;
+                    case("yellow"):
+                        spriteSheet = yellowSprite;
+                        break;
+                    case("black"):
+                        spriteSheet = blackSprite;
+                        break;
+                }
+                console.log("creating player "+player.playerNo+" location: ("+loc.x+", "+loc.y+")");
+                players[player.playerNo] = new Player(
+                    context,
+                    loc.x,
+                    loc.y,
+                    player.colour,
+                    spriteSheet,                    
+                )
+                console.log("updating player "+player.playerNo);
+                players[player.playerNo].update(loc, player.facing, now);
+            }
+            console.log("drawing player "+player.playerNo+" location: ("+loc.x+", "+loc.y+")");
+            players[player.playerNo].draw();
+        }
 
-        // context.drawImage(spriteSheet,sheet.x,sheet.y,sheet width (px),sheet.height, canvas.x, canvas.y, canvas.width, canvas.height)
 
+        //context.drawImage(spriteSheet,sheet.x,sheet.y,sheet width (px),sheet.height, canvas.x, canvas.y, canvas.width, canvas.height)
+
+        /*
         for (const player of gameBoard.players){
             const loc = {x:(player.location.x+2)*blockWidth,y:(player.location.y+1)*blockHeight};
             if (player.colour === "blue"){
@@ -162,7 +197,7 @@ const Game = function (backgroundIMG,breakableIMG,bluePlayerIMG,blackPlayerIMG,y
                     context.drawImage(blackIMG,loc.x,loc.y);
                 }
             }
-        }
+        }*/
 
         for (const bomb of gameBoard.bombs){
             if (bomb){
@@ -171,7 +206,27 @@ const Game = function (backgroundIMG,breakableIMG,bluePlayerIMG,blackPlayerIMG,y
             }
         }
 
+        if (gameBoard.coins){
+            for (const coin of gameBoard.coins){
+                const loc = {x:(coin.x+2)*blockWidth,y:(coin.y+1)*blockHeight};
+                context.drawImage(spritesheet,12*16,32,16,16,loc.x,loc.y,16,16);
+            }
+        }
+
+        if (gameBoard.hearts){
+            for (const heart of gameBoard.hearts){
+                const loc = {x:(heart.x+2)*blockWidth,y:(heart.y+1)*blockHeight};
+                context.drawImage(spritesheet,0,16,16,16,loc.x,loc.y,16,16);
+            }
+        }
+
     };
 
-    return { setInputEnabled, updateBoard };
+    explodeBomb = function (bombID) {
+        const now = new Date().getTime();
+        
+
+    };
+
+    return { setInputEnabled, updateBoard, explodeBomb};
 };

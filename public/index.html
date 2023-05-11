@@ -19,6 +19,8 @@
   <body>
     <div class="canvas-container">
       <p id="timer" style="display:none"></p>
+      <div id="game-info-display1"><p id="player1-points"></p><p id="player1-health"></p></div>
+      <div id="game-info-display2"><p id="player2-points"></p><p id="player2-health"></p></div>
       <canvas id="canvas"></canvas>
       <div id="signin-overlay" class="overlay row">
         <div class="content shadow row">
@@ -253,6 +255,10 @@
     <script src="/socket.io/socket.io.min.js"></script>
     <script src="scripts/game.js"></script>
     <script src="scripts/timer.js"></script>
+    <script src="scripts/sprite.js"></script>
+    <script src="scripts/player.js"></script>
+    <script src="scripts/fire.js"></script>
+    <script src="scripts/boundingBox.js"></script>
     <script>
       const bgIMG = new Image();
       bgIMG.src = "./assets/gameboard.png";
@@ -268,10 +274,33 @@
       blackIMG.src = "./assets/black_player.png";
       const spritesheet = new Image();
       spritesheet.src = './assets/object_sprites.png';
+      const redSprite = new Image();
+      redSprite.src = './assets/red_sprite_16x16.png'
+      const blueSprite = new Image();
+      blueSprite.src = './assets/blue_sprite_16x16.png'
+      const blackSprite = new Image();
+      blackSprite.src = './assets/black_sprite_16x16.png'
+      const yellowSprite = new Image();
+      yellowSprite.src = './assets/yellow_sprite_16x16.png'
+
+      const sprites = {
+        bgIMG: bgIMG,
+        breakableIMG: breakableIMG,
+        spritesheet: spritesheet,
+        breakableIMG: breakableIMG,
+        blueIMG: blueIMG,
+        redIMG: redIMG,
+        yellowIMG: yellowIMG,
+        blackIMG: blackIMG,
+        redSprite: redSprite,
+        blueSprite: blueSprite,
+        blackSprite: blackSprite,
+        yellowSprite: yellowSprite,
+      }
 
       const timer = Timer(20);
       const socket = io();
-      const game = Game(bgIMG,breakableIMG,blueIMG,blackIMG,yellowIMG,redIMG,spritesheet);
+      const game = Game(sprites);
       const menuPage = document.getElementById('menu');
       const characterPage = document.getElementById('character-lobby');
       const gameStartButton = document.getElementById('game-start');
@@ -291,6 +320,9 @@
       const player1CancelReady = document.getElementById('cancel-button-player1');
       const player2CancelReady = document.getElementById('cancel-button-player2');
       const postGameMsgButton = document.getElementById('send-button');
+
+      $("#game-info-display1").hide();
+      $("#game-info-display2").hide();
       //chat box
       // const chatbox = document.querySelector('.chatbox');
       // const messages = chatbox.querySelector('.messages');
@@ -706,6 +738,8 @@
       });
 
       socket.on("StartGame",(gameboardString)=>{
+        $("#game-info-display1").show();
+        $("#game-info-display2").show();
         const gameboardInfo = JSON.parse(gameboardString);
         console.log(gameboardInfo);
         $('#game-lobby').hide();
@@ -722,23 +756,29 @@
       })
 
       socket.on("GameOver",(info)=>{
-        const {message,player1Points,player2Points,player1Name,player2Name,player1Username,player2Username} = JSON.parse(info);
+        $("#game-info-display1").hide();
+        $("#game-info-display2").hide();
+        const obj = JSON.parse(info);
         socket.emit("reset");
+        socket.emit("stopRender");
         timer.timerreset();
         game.setInputEnabled(false);
-        console.log(message);
-        if (player1Points > player2Points){
-          $('#winner').text(`${player1Name} wins!`)
-        } else if (player1Points < player2Points){
-          $('#winner').text(`${player2Name} wins!`);
-        } else {
-          $('#winner').text("It's a TIE!!! WOW!!!");
-          // $('#winner').text(`It's a draw!`);
-        }
+        console.log(obj);
         BGM.pause();
         GG.play();
-        
-        $('#game-over').show();
+        $('#game-over').show(()=>{
+          $("#game-over-content").text(obj.message);
+          console.log(obj.player1Points);
+          if (obj.player1Points > obj.player2Points){
+            $('#winner').text(`${obj.player1Name} wins!`)
+          } else if (obj.player1Points < obj.player2Points){
+            $('#winner').text(`${obj.player2Name} wins!`);
+          } else {
+            $('#winner').text("It's a TIE!!! WOW!!!");
+            // $('#winner').text(`It's a draw!`);
+          }
+
+        });
       })
 
     </script>

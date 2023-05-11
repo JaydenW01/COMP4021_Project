@@ -152,6 +152,16 @@ body {
     font-size: large;
     color: #ff0000;
   }
+
+  #game-info-display1 {
+    font-size: large;
+    color: #04ff00;
+  }
+
+  #game-info-display2 {
+    font-size: large;
+    color: #04ff00;
+  }
   
   #menu {
     z-index: 2;

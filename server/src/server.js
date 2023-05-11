@@ -212,6 +212,7 @@ app.post("/post_score",(req,res)=>{
 // WebSocket codes ...
 const httpServer = createServer(app);
 const io = new Server(httpServer);
+let timesup = 1;
 
 io.on("connection",(socket)=>{
     // print out who has connected 
@@ -317,55 +318,29 @@ io.on("connection",(socket)=>{
         if (socket.request.session.user?.username === player1.getUsername()){
             if (gameboard.checkWalkable(player1.getPos(),"up")){ // can walk there
                 player1.moveUp();
-                if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "fire"){
-                    player1.getAbility("fire");
-                    gameboard.deleteItem()
+                if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "coin"){
+                    player1.addPoints(10);
+                    gameboard.deleteItem(player1.getPos().x,player1.getPos().y)
                 } else if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "heart"){
                     player1.increaseHealth(player1.getPos().x,player1.getPos().y);
+                    gameboard.deleteItem(player1.getPos().x,player1.getPos().y)
                 }
                 player1.playerInfo();
-                // io.emit("updateBoard",JSON.stringify({
-                //     players:[player1.playerInfo(),player2.playerInfo()],
-                //     breakables:gameboard.gameboardInfo().breakables,
-                //     bombs: gameboard.gameboardInfo().bombs,
-                //     hearts:gameboard.gameboardInfo().hearts,
-                //     coins:gameboard.gameboardInfo().coins
-                // }))
             } else {
                 player1.faceUp();
-                // io.emit("updateBoard",JSON.stringify({
-                //     players:[player1.playerInfo(),player2.playerInfo()],
-                //     breakables:gameboard.gameboardInfo().breakables,
-                //     bombs: gameboard.gameboardInfo().bombs,
-                //     hearts:gameboard.gameboardInfo().hearts,
-                //     coins:gameboard.gameboardInfo().coins
-                // }))
             }
         } else if (socket.request.session.user?.username === player2.getUsername()){
             if (gameboard.checkWalkable(player2.getPos(),"up")){ // can walk there
                 player2.moveUp();
-                if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "fire"){
-                    player2.getAbility("fire");
-                    gameboard.deleteItem()
+                if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "coin"){
+                    player2.addPoints(10);
+                    gameboard.deleteItem(player2.getPos().x,player2.getPos().y);
                 } else if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "heart"){
                     player2.increaseHealth(player2.getPos().x,player2.getPos().y);
+                    gameboard.deleteItem(player2.getPos().x,player2.getPos().y);
                 }
-                // io.emit("updateBoard",JSON.stringify({
-                //     players:[player1.playerInfo(),player2.playerInfo()],
-                //     breakables:gameboard.gameboardInfo().breakables,
-                //     bombs: gameboard.gameboardInfo().bombs,
-                //     hearts:gameboard.gameboardInfo().hearts,
-                //     coins:gameboard.gameboardInfo().coins
-                // }))
             } else {
                 player2.faceUp();
-                // io.emit("updateBoard",JSON.stringify({
-                //     players:[player1.playerInfo(),player2.playerInfo()],
-                //     breakables:gameboard.gameboardInfo().breakables,
-                //     bombs: gameboard.gameboardInfo().bombs,
-                //     hearts:gameboard.gameboardInfo().hearts,
-                //     coins:gameboard.gameboardInfo().coins
-                // }))
             }
         }
     })
@@ -374,54 +349,29 @@ io.on("connection",(socket)=>{
         if (socket.request.session.user?.username === player1.getUsername()){
             if (gameboard.checkWalkable(player1.getPos(),"down")){ // can walk there
                 player1.moveDown();
-                if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "fire"){
-                    player1.getAbility("fire");
-                    gameboard.deleteItem()
+                if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "coin"){
+                    player1.addPoints(10);
+                    gameboard.deleteItem(player1.getPos().x,player1.getPos().y)
                 } else if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "heart"){
                     player1.increaseHealth(player1.getPos().x,player1.getPos().y);
+                    gameboard.deleteItem(player1.getPos().x,player1.getPos().y)
                 }
-                // io.emit("updateBoard",JSON.stringify({
-                //     players:[player1.playerInfo(),player2.playerInfo()],
-                //     breakables:gameboard.gameboardInfo().breakables,
-                //     bombs: gameboard.gameboardInfo().bombs,
-                //     hearts:gameboard.gameboardInfo().hearts,
-                //     coins:gameboard.gameboardInfo().coins
-                // }))
+                player1.playerInfo();
             } else {
                 player1.faceDown();
-                // io.emit("updateBoard",JSON.stringify({
-                //     players:[player1.playerInfo(),player2.playerInfo()],
-                //     breakables:gameboard.gameboardInfo().breakables,
-                //     bombs: gameboard.gameboardInfo().bombs,
-                //     hearts:gameboard.gameboardInfo().hearts,
-                //     coins:gameboard.gameboardInfo().coins
-                // }))
             }
         } else if (socket.request.session.user?.username === player2.getUsername()){
             if (gameboard.checkWalkable(player2.getPos(),"down")){ // can walk there
                 player2.moveDown();
-                if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "fire"){
-                    player2.getAbility("fire");
-                    gameboard.deleteItem()
+                if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "coin"){
+                    player2.addPoints(10);
+                    gameboard.deleteItem(player2.getPos().x,player2.getPos().y);
                 } else if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "heart"){
                     player2.increaseHealth(player2.getPos().x,player2.getPos().y);
+                    gameboard.deleteItem(player2.getPos().x,player2.getPos().y);
                 }
-                // io.emit("updateBoard",JSON.stringify({
-                //     players:[player1.playerInfo(),player2.playerInfo()],
-                //     breakables:gameboard.gameboardInfo().breakables,
-                //     bombs: gameboard.gameboardInfo().bombs,
-                //     hearts:gameboard.gameboardInfo().hearts,
-                //     coins:gameboard.gameboardInfo().coins
-                // }))
             } else {
                 player2.faceDown();
-                // io.emit("updateBoard",JSON.stringify({
-                //     players:[player1.playerInfo(),player2.playerInfo()],
-                //     breakables:gameboard.gameboardInfo().breakables,
-                //     bombs: gameboard.gameboardInfo().bombs,
-                //     hearts:gameboard.gameboardInfo().hearts,
-                //     coins:gameboard.gameboardInfo().coins
-                // }))
             }
         }
     })
@@ -430,54 +380,29 @@ io.on("connection",(socket)=>{
         if (socket.request.session.user?.username === player1.getUsername()){
             if (gameboard.checkWalkable(player1.getPos(),"left")){ // can walk there
                 player1.moveLeft();
-                if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "fire"){
-                    player1.getAbility("fire");
-                    gameboard.deleteItem()
+                if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "coin"){
+                    player1.addPoints(10);
+                    gameboard.deleteItem(player1.getPos().x,player1.getPos().y)
                 } else if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "heart"){
                     player1.increaseHealth(player1.getPos().x,player1.getPos().y);
+                    gameboard.deleteItem(player1.getPos().x,player1.getPos().y)
                 }
-                // io.emit("updateBoard",JSON.stringify({
-                //     players:[player1.playerInfo(),player2.playerInfo()],
-                //     breakables:gameboard.gameboardInfo().breakables,
-                //     bombs: gameboard.gameboardInfo().bombs,
-                //     hearts:gameboard.gameboardInfo().hearts,
-                //     coins:gameboard.gameboardInfo().coins
-                // }))
+                player1.playerInfo();
             } else {
                 player1.faceLeft();
-                // io.emit("updateBoard",JSON.stringify({
-                //     players:[player1.playerInfo(),player2.playerInfo()],
-                //     breakables:gameboard.gameboardInfo().breakables,
-                //     bombs: gameboard.gameboardInfo().bombs,
-                //     hearts:gameboard.gameboardInfo().hearts,
-                //     coins:gameboard.gameboardInfo().coins
-                // }))
             }
         } else if (socket.request.session.user?.username === player2.getUsername()){
             if (gameboard.checkWalkable(player2.getPos(),"left")){ // can walk there
                 player2.moveLeft();
-                if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "fire"){
-                    player2.getAbility("fire");
-                    gameboard.deleteItem()
+                if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "coin"){
+                    player2.addPoints(10);
+                    gameboard.deleteItem(player2.getPos().x,player2.getPos().y);
                 } else if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "heart"){
                     player2.increaseHealth(player2.getPos().x,player2.getPos().y);
+                    gameboard.deleteItem(player2.getPos().x,player2.getPos().y);
                 }
-                // io.emit("updateBoard",JSON.stringify({
-                //     players:[player1.playerInfo(),player2.playerInfo()],
-                //     breakables:gameboard.gameboardInfo().breakables,
-                //     bombs: gameboard.gameboardInfo().bombs,
-                //     hearts:gameboard.gameboardInfo().hearts,
-                //     coins:gameboard.gameboardInfo().coins
-                // }))
             } else {
                 player2.faceLeft();
-                io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo(),player2.playerInfo()],
-                    breakables:gameboard.gameboardInfo().breakables,
-                    bombs: gameboard.gameboardInfo().bombs,
-                    hearts:gameboard.gameboardInfo().hearts,
-                    coins:gameboard.gameboardInfo().coins
-                }))
             }
         }
     })
@@ -486,61 +411,36 @@ io.on("connection",(socket)=>{
         if (socket.request.session.user?.username === player1.getUsername()){
             if (gameboard.checkWalkable(player1.getPos(),"right")){ // can walk there
                 player1.moveRight();
-                if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "fire"){
-                    player1.getAbility("fire");
-                    gameboard.deleteItem()
+                if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "coin"){
+                    player1.addPoints(10);
+                    gameboard.deleteItem(player1.getPos().x,player1.getPos().y)
                 } else if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "heart"){
                     player1.increaseHealth(player1.getPos().x,player1.getPos().y);
+                    gameboard.deleteItem(player1.getPos().x,player1.getPos().y)
                 }
-                // io.emit("updateBoard",JSON.stringify({
-                //     players:[player1.playerInfo(),player2.playerInfo()],
-                //     breakables:gameboard.gameboardInfo().breakables,
-                //     bombs: gameboard.gameboardInfo().bombs,
-                //     hearts:gameboard.gameboardInfo().hearts,
-                //     coins:gameboard.gameboardInfo().coins
-                // }))
+                player1.playerInfo();
             } else {
                 player1.faceRight();
-                // io.emit("updateBoard",JSON.stringify({
-                //     players:[player1.playerInfo(),player2.playerInfo()],
-                //     breakables:gameboard.gameboardInfo().breakables,
-                //     bombs: gameboard.gameboardInfo().bombs,
-                //     hearts:gameboard.gameboardInfo().hearts,
-                //     coins:gameboard.gameboardInfo().coins
-                // }))
             }
         } else if (socket.request.session.user?.username === player2.getUsername()){
             if (gameboard.checkWalkable(player2.getPos(),"right")){ // can walk there
                 player2.moveRight();
-                if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "fire"){
-                    player2.getAbility("fire");
-                    gameboard.deleteItem()
+                if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "coin"){
+                    player2.addPoints(10);
+                    gameboard.deleteItem(player2.getPos().x,player2.getPos().y);
                 } else if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "heart"){
                     player2.increaseHealth(player2.getPos().x,player2.getPos().y);
+                    gameboard.deleteItem(player2.getPos().x,player2.getPos().y);
                 }
-                // io.emit("updateBoard",JSON.stringify({
-                //     players:[player1.playerInfo(),player2.playerInfo()],
-                //     breakables:gameboard.gameboardInfo().breakables,
-                //     bombs: gameboard.gameboardInfo().bombs,
-                //     hearts:gameboard.gameboardInfo().hearts,
-                //     coins:gameboard.gameboardInfo().coins
-                // }))
             } else {
                 player2.faceRight();
-                // io.emit("updateBoard",JSON.stringify({
-                //     players:[player1.playerInfo(),player2.playerInfo()],
-                //     breakables:gameboard.gameboardInfo().breakables,
-                //     bombs: gameboard.gameboardInfo().bombs,
-                //     hearts:gameboard.gameboardInfo().hearts,
-                //     coins:gameboard.gameboardInfo().coins
-                // }))
             }
         }
     })
 
     let player1Bomb = 0;
     let player2Bomb = 0;
-    let timesup = 1;
+    
 
     const explode = (playerNo)=>{
         const explosion = gameboard.setOffBomb(playerNo);
@@ -563,6 +463,7 @@ io.on("connection",(socket)=>{
         // }))
         if (!player1AfterExplosion){ // does not survive after explosion
             clearInterval(autoupdate);
+            gameboard.setBreakables(initialBreakables);
             io.emit("GameOver",JSON.stringify({message:"Player1 died!",player1Points:player1.getPoints(),player2Points:player2.getPoints(),player1Name:player1.getDisplayName(),player2Name:player2.getDisplayName()}));
             const ranking = JSON.parse(fs.readFileSync('data/ranking.json'));
             if (player1.getDisplayName() && player2.getDisplayName()){
@@ -575,6 +476,7 @@ io.on("connection",(socket)=>{
         }
         if (!player2AfterExplosion){ // does not survive after explosion
             clearInterval(autoupdate);
+            gameboard.setBreakables(initialBreakables);
             io.emit("GameOver",JSON.stringify({message:"Player2 died!",player1Points:player1.getPoints(),player2Points:player2.getPoints(),player1Name:player1.getDisplayName(),player2Name:player2.getDisplayName()}));
             const ranking = JSON.parse(fs.readFileSync('data/ranking.json'));
             if (player1.getDisplayName() && player2.getDisplayName()){
@@ -617,8 +519,11 @@ io.on("connection",(socket)=>{
     })
 
     socket.on("Time's Up",()=>{
+        gameboard.setBreakables(initialBreakables);
         timesup -= 1;
         if (timesup === 0){
+            timesup = 1;
+            console.log("time's up")
             clearInterval(autoupdate);
             io.emit("GameOver",JSON.stringify({message:"Time's up!",player1Points:player1.getPoints(),player2Points:player2.getPoints(),player1Name:player1.getDisplayName(),player2Name:player2.getDisplayName()}));
             const ranking = JSON.parse(fs.readFileSync('data/ranking.json'));
@@ -632,17 +537,16 @@ io.on("connection",(socket)=>{
     })
 
     socket.on("reset",()=>{
-        timesup = 1;
         player1.reset();
         player2.reset();
         lobby.reset();
         gameboard.reset(initialWalls,initialBreakables);
-        gameboard.setBreakables(initialBreakables);
     })
 
-    socket.on("debug",()=>{
-        console.log(socket.request.session.user);
+    socket.on("stopRender",()=>{
+        clearInterval(autoupdate);
     })
+
 
 
 })
