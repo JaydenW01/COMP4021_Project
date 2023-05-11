@@ -7,52 +7,7 @@ import { Server } from 'socket.io';
 import Lobby from './Lobby.js';
 import Gameboard from './Gameboard.js';
 import Player from './Player.js';
-const initialWalls = [
-    {x:1,y:1},
-    {x:3,y:1},
-    {x:5,y:1},
-    {x:7,y:1},
-    {x:9,y:1},
-    {x:11,y:1},
-    {x:1,y:3},
-    {x:3,y:3},
-    {x:5,y:3},
-    {x:7,y:3},
-    {x:9,y:3},
-    {x:11,y:3},
-    {x:1,y:5},
-    {x:3,y:5},
-    {x:5,y:5},
-    {x:7,y:5},
-    {x:9,y:5},
-    {x:11,y:5},
-    {x:1,y:7},
-    {x:3,y:7},
-    {x:5,y:7},
-    {x:7,y:7},
-    {x:9,y:7},
-    {x:11,y:7},
-    {x:1,y:9},
-    {x:3,y:9},
-    {x:5,y:9},
-    {x:7,y:9},
-    {x:9,y:9},
-    {x:11,y:9}
-];
-
-const initialBreakables = [
-    {x:2,y:0},{x:3,y:0},{x:4,y:0},{x:5,y:0},{x:6,y:0},{x:7,y:0},{x:8,y:0},{x:9,y:0},{x:10,y:0},{x:11,y:0},{x:12,y:0},
-    {x:2,y:1},{x:4,y:1},{x:6,y:1},{x:8,y:1},{x:10,y:1},{x:12,y:1},
-    {x:0,y:2},{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:7,y:2},{x:8,y:2},{x:9,y:2},{x:10,y:2},{x:11,y:2},{x:12,y:2},
-    {x:0,y:3},{x:2,y:3},{x:4,y:3},{x:6,y:3},{x:8,y:3},{x:10,y:3},{x:12,y:3},
-    {x:0,y:4},{x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},{x:7,y:4},{x:8,y:4},{x:9,y:4},{x:10,y:4},{x:11,y:4},{x:12,y:4},
-    {x:0,y:5},{x:2,y:5},{x:4,y:5},{x:6,y:5},{x:8,y:5},{x:10,y:5},{x:12,y:5},
-    {x:0,y:6},{x:1,y:6},{x:2,y:6},{x:3,y:6},{x:4,y:6},{x:5,y:6},{x:6,y:6},{x:7,y:6},{x:8,y:6},{x:9,y:6},{x:10,y:6},{x:11,y:6},{x:12,y:6},
-    {x:0,y:7},{x:2,y:7},{x:4,y:7},{x:6,y:7},{x:8,y:7},{x:10,y:7},{x:12,y:7},
-    {x:0,y:8},{x:1,y:8},{x:2,y:8},{x:3,y:8},{x:4,y:8},{x:5,y:8},{x:6,y:8},{x:7,y:8},{x:8,y:8},{x:9,y:8},{x:10,y:8},{x:11,y:8},{x:12,y:8},
-    {x:0,y:9},{x:2,y:9},{x:4,y:9},{x:6,y:9},{x:8,y:9},{x:10,y:9},
-    {x:0,y:10},{x:1,y:10},{x:2,y:10},{x:3,y:10},{x:4,y:10},{x:5,y:10},{x:6,y:10},{x:7,y:10},{x:8,y:10},{x:9,y:10},{x:10,y:10}
-];
+const {initialWalls,initialBreakables} = JSON.parse(fs.readFileSync("data/initial_gameboard.json"));
 
 
 const lobby = new Lobby();
@@ -268,6 +223,7 @@ io.on("connection",(socket)=>{
         const username = lobby.getLobbyInfo().players[playerNo-1].username;
         const result = lobby.onReady(username);
         if (result.result === "StartGame"){
+            gameboard.setBreakables(initialBreakables);
             autoupdate = setInterval(()=>{
             io.emit("updateBoard",JSON.stringify({
                 players:[player1.playerInfo(),player2.playerInfo()],
@@ -316,6 +272,11 @@ io.on("connection",(socket)=>{
     // in game sockets
     socket.on("moveUp",()=>{
         if (socket.request.session.user?.username === player1.getUsername()){
+            if (player1.cheat){
+                if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y-1) !== "wall" || gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y-1) !== "out of bound"){
+                    gameboard.removeBlockByPos(player1.getPos().x,player1.getPos().y-1);
+                }
+            }
             if (gameboard.checkWalkable(player1.getPos(),"up")){ // can walk there
                 player1.moveUp();
                 if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "coin"){
@@ -330,6 +291,11 @@ io.on("connection",(socket)=>{
                 player1.faceUp();
             }
         } else if (socket.request.session.user?.username === player2.getUsername()){
+            if (player2.cheat){
+                if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y-1) !== "wall" || gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y-1) !== "out of bound"){
+                    gameboard.removeBlockByPos(player2.getPos().x,player2.getPos().y-1);
+                }
+            }
             if (gameboard.checkWalkable(player2.getPos(),"up")){ // can walk there
                 player2.moveUp();
                 if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "coin"){
@@ -347,6 +313,11 @@ io.on("connection",(socket)=>{
 
     socket.on("moveDown",()=>{
         if (socket.request.session.user?.username === player1.getUsername()){
+            if (player1.cheat){
+                if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y+1) !== "wall" || gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y+1) !== "out of bound"){
+                    gameboard.removeBlockByPos(player1.getPos().x,player1.getPos().y+1);
+                }
+            }
             if (gameboard.checkWalkable(player1.getPos(),"down")){ // can walk there
                 player1.moveDown();
                 if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "coin"){
@@ -361,7 +332,17 @@ io.on("connection",(socket)=>{
                 player1.faceDown();
             }
         } else if (socket.request.session.user?.username === player2.getUsername()){
+            if (player2.cheat){
+                if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y+1) !== "wall" || gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y+1) !== "out of bound"){
+                    gameboard.removeBlockByPos(player2.getPos().x,player2.getPos().y+1);
+                }
+            }
             if (gameboard.checkWalkable(player2.getPos(),"down")){ // can walk there
+                if (player2.cheat){
+                    if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y+1) !== "wall" || gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y+1) !== "out of bound"){
+                        gameboard.removeBlockByPos(player2.getPos().x,player2.getPos().y+1);
+                    }
+                }
                 player2.moveDown();
                 if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "coin"){
                     player2.addPoints(10);
@@ -378,6 +359,11 @@ io.on("connection",(socket)=>{
 
     socket.on("moveLeft",()=>{
         if (socket.request.session.user?.username === player1.getUsername()){
+            if (player1.cheat){
+                if (gameboard.findBlockByPos(player1.getPos().x-1,player1.getPos().y) !== "wall" || gameboard.findBlockByPos(player1.getPos().x-1,player1.getPos().y) !== "out of bound"){
+                    gameboard.removeBlockByPos(player1.getPos().x-1,player1.getPos().y);
+                }
+            }
             if (gameboard.checkWalkable(player1.getPos(),"left")){ // can walk there
                 player1.moveLeft();
                 if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "coin"){
@@ -392,6 +378,11 @@ io.on("connection",(socket)=>{
                 player1.faceLeft();
             }
         } else if (socket.request.session.user?.username === player2.getUsername()){
+            if (player2.cheat){
+                if (gameboard.findBlockByPos(player2.getPos().x-1,player2.getPos().y) !== "wall" || gameboard.findBlockByPos(player1.getPos().x-1,player1.getPos().y) !== "out of bound"){
+                    gameboard.removeBlockByPos(player2.getPos().x-1,player2.getPos().y);
+                }
+            }
             if (gameboard.checkWalkable(player2.getPos(),"left")){ // can walk there
                 player2.moveLeft();
                 if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "coin"){
@@ -409,6 +400,11 @@ io.on("connection",(socket)=>{
 
     socket.on("moveRight",()=>{
         if (socket.request.session.user?.username === player1.getUsername()){
+            if (player1.cheat){
+                if (gameboard.findBlockByPos(player1.getPos().x+1,player1.getPos().y) !== "wall" || gameboard.findBlockByPos(player1.getPos().x+1,player1.getPos().y) !== "out of bound"){
+                    gameboard.removeBlockByPos(player1.getPos().x+1,player1.getPos().y);
+                }
+            }
             if (gameboard.checkWalkable(player1.getPos(),"right")){ // can walk there
                 player1.moveRight();
                 if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "coin"){
@@ -423,6 +419,11 @@ io.on("connection",(socket)=>{
                 player1.faceRight();
             }
         } else if (socket.request.session.user?.username === player2.getUsername()){
+            if (player2.cheat){
+                if (gameboard.findBlockByPos(player2.getPos().x+1,player2.getPos().y) !== "wall" || gameboard.findBlockByPos(player2.getPos().x+1,player2.getPos().y) !== "out of bound"){
+                    gameboard.removeBlockByPos(player2.getPos().x+1,player2.getPos().y);
+                }
+            }
             if (gameboard.checkWalkable(player2.getPos(),"right")){ // can walk there
                 player2.moveRight();
                 if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "coin"){
@@ -435,6 +436,22 @@ io.on("connection",(socket)=>{
             } else {
                 player2.faceRight();
             }
+        }
+    })
+
+    socket.on("enable cheat",()=>{
+        if (socket.request.session.user?.username === player1.getUsername()){
+            player1.startCheating();
+        } else if (socket.request.session.user?.username === player2.getUsername()){
+            player2.startCheating();
+        }
+    })
+
+    socket.on("disable cheat",()=>{
+        if (socket.request.session.user?.username === player1.getUsername()){
+            player1.stopCheating();
+        } else if (socket.request.session.user?.username === player2.getUsername()){
+            player2.stopCheating();
         }
     })
 
@@ -453,7 +470,7 @@ io.on("connection",(socket)=>{
             player2.addPoints(explosion.points);
             player2Bomb -=1
         }
-        io.emit("explode",JSON.stringify({fires:explosion.fires}));
+        io.emit("explode",JSON.stringify({loc:explosion.center,fires:explosion.fires}));
         // io.emit("updateBoard",JSON.stringify({
         //     players:[player1.playerInfo(),player2.playerInfo()],
         //     breakables:gameboard.gameboardInfo().breakables,
@@ -519,20 +536,22 @@ io.on("connection",(socket)=>{
     })
 
     socket.on("Time's Up",()=>{
-        gameboard.setBreakables(initialBreakables);
-        timesup -= 1;
-        if (timesup === 0){
-            timesup = 1;
-            console.log("time's up")
-            clearInterval(autoupdate);
-            io.emit("GameOver",JSON.stringify({message:"Time's up!",player1Points:player1.getPoints(),player2Points:player2.getPoints(),player1Name:player1.getDisplayName(),player2Name:player2.getDisplayName()}));
-            const ranking = JSON.parse(fs.readFileSync('data/ranking.json'));
-            if (player1.getDisplayName() && player2.getDisplayName()){
-                ranking.push({displayName:player1.getDisplayName(),points:player1.getPoints()});
-                ranking.push({displayName:player2.getDisplayName(),points:player2.getPoints()});
+        if (socket.request.session.user?.username === player1.getUsername()){
+            gameboard.setBreakables(initialBreakables);
+            timesup -= 1;
+            if (timesup === 0){
+                timesup = 1;
+                console.log("time's up")
+                clearInterval(autoupdate);
+                io.emit("GameOver",JSON.stringify({message:"Time's up!",player1Points:player1.getPoints(),player2Points:player2.getPoints(),player1Name:player1.getDisplayName(),player2Name:player2.getDisplayName()}));
+                const ranking = JSON.parse(fs.readFileSync('data/ranking.json'));
+                if (player1.getDisplayName() && player2.getDisplayName()){
+                    ranking.push({displayName:player1.getDisplayName(),points:player1.getPoints()});
+                    ranking.push({displayName:player2.getDisplayName(),points:player2.getPoints()});
+                }
+                fs.writeFileSync('data/ranking.json', JSON.stringify(ranking, null, ' '));
+                autoupdate = null;
             }
-            fs.writeFileSync('data/ranking.json', JSON.stringify(ranking, null, ' '));
-            autoupdate = null;
         }
     })
 
