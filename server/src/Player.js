@@ -17,8 +17,8 @@ export default class Player {
         this.colour = null;
         this.username = null;
         this.displayName = null;
-        this.x = this.playerNo == 0 ? 0 : 12;
-        this.y = this.playerNo == 0 ? 0 : 10;
+        this.x = this.playerNo == 1 ? 0 : 12;
+        this.y = this.playerNo == 1 ? 0 : 10;
         this.facing = "down";
         this.health = 3;
         this.cheat = false;
