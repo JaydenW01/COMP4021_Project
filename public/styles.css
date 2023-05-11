@@ -649,10 +649,10 @@ body {
     top: 0;
     bottom: 0;
     margin: auto;
-    margin-top: 210px;
+    margin-top: 245px;
   
     width: 505px;
-    height: 505px;
+    height: 510px;
     background: rgba(0, 0, 0, 0.8);
     z-index: 900;
     text-align: center;
