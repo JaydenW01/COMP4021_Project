@@ -281,8 +281,10 @@ io.on("connection",(socket)=>{
                 player1.moveUp();
                 if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "coin"){
                     player1.addPoints(10);
+                    socket.emit("get_item");
                     gameboard.deleteItem(player1.getPos().x,player1.getPos().y)
                 } else if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "heart"){
+                    socket.emit("get_item");
                     player1.increaseHealth(player1.getPos().x,player1.getPos().y);
                     gameboard.deleteItem(player1.getPos().x,player1.getPos().y)
                 }
@@ -299,9 +301,11 @@ io.on("connection",(socket)=>{
             if (gameboard.checkWalkable(player2.getPos(),"up")){ // can walk there
                 player2.moveUp();
                 if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "coin"){
+                    socket.emit("get_item");
                     player2.addPoints(10);
                     gameboard.deleteItem(player2.getPos().x,player2.getPos().y);
                 } else if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "heart"){
+                    socket.emit("get_item");
                     player2.increaseHealth(player2.getPos().x,player2.getPos().y);
                     gameboard.deleteItem(player2.getPos().x,player2.getPos().y);
                 }
@@ -321,9 +325,11 @@ io.on("connection",(socket)=>{
             if (gameboard.checkWalkable(player1.getPos(),"down")){ // can walk there
                 player1.moveDown();
                 if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "coin"){
+                    socket.emit("get_item");
                     player1.addPoints(10);
                     gameboard.deleteItem(player1.getPos().x,player1.getPos().y)
                 } else if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "heart"){
+                    socket.emit("get_item");
                     player1.increaseHealth(player1.getPos().x,player1.getPos().y);
                     gameboard.deleteItem(player1.getPos().x,player1.getPos().y)
                 }
@@ -345,9 +351,11 @@ io.on("connection",(socket)=>{
                 }
                 player2.moveDown();
                 if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "coin"){
+                    socket.emit("get_item");
                     player2.addPoints(10);
                     gameboard.deleteItem(player2.getPos().x,player2.getPos().y);
                 } else if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "heart"){
+                    socket.emit("get_item");
                     player2.increaseHealth(player2.getPos().x,player2.getPos().y);
                     gameboard.deleteItem(player2.getPos().x,player2.getPos().y);
                 }
@@ -367,9 +375,11 @@ io.on("connection",(socket)=>{
             if (gameboard.checkWalkable(player1.getPos(),"left")){ // can walk there
                 player1.moveLeft();
                 if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "coin"){
+                    socket.emit("get_item");
                     player1.addPoints(10);
                     gameboard.deleteItem(player1.getPos().x,player1.getPos().y)
                 } else if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "heart"){
+                    socket.emit("get_item");
                     player1.increaseHealth(player1.getPos().x,player1.getPos().y);
                     gameboard.deleteItem(player1.getPos().x,player1.getPos().y)
                 }
@@ -386,9 +396,11 @@ io.on("connection",(socket)=>{
             if (gameboard.checkWalkable(player2.getPos(),"left")){ // can walk there
                 player2.moveLeft();
                 if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "coin"){
+                    socket.emit("get_item");
                     player2.addPoints(10);
                     gameboard.deleteItem(player2.getPos().x,player2.getPos().y);
                 } else if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "heart"){
+                    socket.emit("get_item");
                     player2.increaseHealth(player2.getPos().x,player2.getPos().y);
                     gameboard.deleteItem(player2.getPos().x,player2.getPos().y);
                 }
@@ -408,9 +420,11 @@ io.on("connection",(socket)=>{
             if (gameboard.checkWalkable(player1.getPos(),"right")){ // can walk there
                 player1.moveRight();
                 if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "coin"){
+                    socket.emit("get_item");
                     player1.addPoints(10);
                     gameboard.deleteItem(player1.getPos().x,player1.getPos().y)
                 } else if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "heart"){
+                    socket.emit("get_item");
                     player1.increaseHealth(player1.getPos().x,player1.getPos().y);
                     gameboard.deleteItem(player1.getPos().x,player1.getPos().y)
                 }
@@ -427,9 +441,11 @@ io.on("connection",(socket)=>{
             if (gameboard.checkWalkable(player2.getPos(),"right")){ // can walk there
                 player2.moveRight();
                 if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "coin"){
+                    socket.emit("get_item");
                     player2.addPoints(10);
                     gameboard.deleteItem(player2.getPos().x,player2.getPos().y);
                 } else if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "heart"){
+                    socket.emit("get_item");
                     player2.increaseHealth(player2.getPos().x,player2.getPos().y);
                     gameboard.deleteItem(player2.getPos().x,player2.getPos().y);
                 }

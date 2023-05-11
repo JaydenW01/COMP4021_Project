@@ -255,6 +255,9 @@
     <script src="scripts/boundingBox.js"></script>
     <script src="scripts/socket.js"></script>
     <script>
+      const collect_sound =  new Audio('assets/audio/collect_item.mp3');
+      const explode_sound = new Audio('assets/audio/explosion.mp3');
+
       const gameBGM = new Audio("./assets/audio/game_bgm.mp3");
       const bgIMG = new Image();
       bgIMG.src = "./assets/gameboard.png";
@@ -754,13 +757,19 @@
 
       socket.on("updateBoard",(gameboardString)=>{
         const gameboardInfo = JSON.parse(gameboardString);
+        
         console.log(gameboardInfo);
         requestAnimationFrame(() => {
                 game.updateBoard(gameboardInfo);
         });
       })
 
+      socket.on('get_item',()=>{
+        collect_sound.play();
+      })
+
       socket.on('explode', (points) => {
+          explode_sound.play();
           const _points = JSON.parse(points);
           game.explodeBomb(_points);
       });
