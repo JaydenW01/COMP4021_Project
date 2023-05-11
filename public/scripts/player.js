@@ -3,7 +3,7 @@
 // - `x` - The initial x position of the player
 // - `y` - The initial y position of the player
 // - `gameArea` - The bounding box of the game area
-const Player = function(ctx, x, y, color, spriteSheet) {
+const Player = function(ctx, loc, colour, spriteSheet) {
 
     // This is the sprite sequences of the player facing different directions.
     // It contains the idling sprite sequences `idleLeft`, `idleUp`, `idleRight` and `idleDown`,
@@ -24,7 +24,7 @@ const Player = function(ctx, x, y, color, spriteSheet) {
     };
 
     // This is the sprite object of the player created from the Sprite module.
-    const sprite = Sprite(ctx, x, y);
+    const sprite = Sprite(ctx, loc.x, loc.y, spriteSheet);
     let position = {x:0, y:0};
     let facing = "down";
     let oldFacing = "down";

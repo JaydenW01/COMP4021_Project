@@ -255,6 +255,7 @@
     <script src="scripts/player.js"></script>
     <script src="scripts/fire.js"></script>
     <script src="scripts/boundingBox.js"></script>
+    <script src="scripts/socket.js"></script>
     <script>
       const bgIMG = new Image();
       bgIMG.src = "./assets/gameboard.png";
@@ -745,6 +746,10 @@
         console.log(gameboardInfo);
         game.updateBoard(gameboardInfo);
       })
+
+      socket.on('explode', (bombID) => {
+            game.explodeBomb(bombID);
+        });
 
       socket.on("GameOver",(info)=>{
         const {message,player1Points,player2Points,player1Name,player2Name,player1Username,player2Username} = JSON.parse(info);

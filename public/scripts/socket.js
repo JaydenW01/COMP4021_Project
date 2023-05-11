@@ -41,6 +41,7 @@ const Socket = (function () {
         });
 
         socket.on('updateBoard', (gameBoard) => {
+            console.log("received gameBoard update")
             gameBoard = JSON.parse(gameBoard);
             lastGameBoard = gameBoard;
             requestAnimationFrame(() => {
@@ -49,10 +50,8 @@ const Socket = (function () {
         });
 
         socket.on('explode', (bombID) => {
+            console.log("received explode bomb");
             game.explodeBomb(bombID);
-            requestAnimationFrame(() => {
-                game.explodeBomb(bombID);
-            });
         });
 
         socket.on('gameOver', () => {

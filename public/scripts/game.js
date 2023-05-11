@@ -7,8 +7,8 @@ const Game = function (sprites) {
     const blackIMG = sprites.blackIMG;
     const spritesheet = sprites.spritesheet;
     const redSprite = sprites.redSprite;
-    const blueSprite = sprites.redSprite;
-    const blackSprite = sprites.redSprite;
+    const blueSprite = sprites.blueSprite;
+    const blackSprite = sprites.blackSprite;
     const yellowSprite = sprites.yellowSprite;
     const canvas = $('#canvas').get(0);
     canvas.width = 272; // 20 * 20 block. each block is 16px, so 16 * 20 = 320
@@ -27,6 +27,10 @@ const Game = function (sprites) {
 
     // const breakables = {}
     const players = {}
+
+    let fires = []
+
+    let lastGameBoard = null;
 
     /* Size of Game Board:
      *  11 (height) x 13 (width)
@@ -83,6 +87,7 @@ const Game = function (sprites) {
 
     updateBoard = function (gameBoard) {
         const now = new Date().getTime();
+        lastGameBoard = JSON.parse(JSON.stringify(gameBoard));
         // console.log(breakables);
         // Clear the screen
         context.clearRect(0, 0, canvas.width, canvas.height);
@@ -131,8 +136,7 @@ const Game = function (sprites) {
                 console.log("creating player "+player.playerNo+" location: ("+loc.x+", "+loc.y+")");
                 players[player.playerNo] = new Player(
                     context,
-                    loc.x,
-                    loc.y,
+                    loc,
                     player.colour,
                     spriteSheet,                    
                 )
@@ -213,12 +217,24 @@ const Game = function (sprites) {
             }
         }
 
+        fires = fires.filter(obj => (now - obj.startTime) <= 2400);
+
+        for(let fire in fires) {
+            fire.draw();
+        }
+
+        console.log("fires list: "+fires);
+
     };
 
     explodeBomb = function (bombID) {
+        console.log("Exploding bomb")
         const now = new Date().getTime();
-        
+        console.log("last game board: "+lastGameBoard);
+        bomb = lastGameBoard.bombs.filter(bomb => bomb.x == )[0];
+        const loc = {x:(bomb.x+2)*blockWidth,y:(bomb.y+1)*blockHeight};
 
+        fires.push({fire: new Fire(context, loc, spritesheet), startTime: now})
     };
 
     return { setInputEnabled, updateBoard, explodeBomb};
