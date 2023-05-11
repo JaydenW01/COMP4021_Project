@@ -26,6 +26,14 @@ export default class Player {
         this.points = 0;
     }
 
+    startCheating(){
+        this.cheat = true;
+    }
+
+    stopCheating(){
+        this.cheat = false;
+    }
+
     setUser(username,colour,displayName){
         this.username = username;
         this.colour = colour;
