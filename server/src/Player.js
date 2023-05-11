@@ -99,6 +99,10 @@ export default class Player {
         return {x:this.x,y:this.y};
     }
 
+    setPoints(h){
+        this.points = h;
+    }
+
     getUsername(){
         return this.username;
     }

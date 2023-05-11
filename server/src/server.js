@@ -495,6 +495,11 @@ io.on("connection",(socket)=>{
         //     coins:gameboard.gameboardInfo().coins
         // }))
         if (!player1AfterExplosion){ // does not survive after explosion
+            if (playerNo === 2){
+                const pointsToLose = player1.getPoints();
+                player1.setPoints(0);
+                player2.addPoints(pointsToLose);
+            }
             clearInterval(autoupdate);
             gameboard.setBreakables(initialBreakables);
             io.emit("GameOver",JSON.stringify({message:"Player1 died!",player1Points:player1.getPoints(),player2Points:player2.getPoints(),player1Name:player1.getDisplayName(),player2Name:player2.getDisplayName()}));
@@ -508,6 +513,11 @@ io.on("connection",(socket)=>{
             return;
         }
         if (!player2AfterExplosion){ // does not survive after explosion
+            if (playerNo === 1){
+                const pointsToLose = player2.getPoints();
+                player2.setPoints(0);
+                player1.addPoints(pointsToLose);
+            }
             clearInterval(autoupdate);
             gameboard.setBreakables(initialBreakables);
             io.emit("GameOver",JSON.stringify({message:"Player2 died!",player1Points:player1.getPoints(),player2Points:player2.getPoints(),player1Name:player1.getDisplayName(),player2Name:player2.getDisplayName()}));
