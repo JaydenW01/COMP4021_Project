@@ -18,9 +18,9 @@
   </head>
   <body>
     <div class="canvas-container">
-      <p id="timer" style="display:none"></p>
-      <div id="game-info-display1"><p id="player1-points"></p><p id="player1-health"></p></div>
-      <div id="game-info-display2"><p id="player2-points"></p><p id="player2-health"></p></div>
+      <p id="timer" style="display:none;background-color: coral"></p>
+      <div id="game-info-display1" style="display:none;background-color: coral"><p id="player1-points"></p><p id="player1-health"></p></div>
+      <div id="game-info-display2" style="display:none;background-color: coral"><p id="player2-points"></p><p id="player2-health"></p></div>
       <canvas id="canvas"></canvas>
       <div id="signin-overlay" class="overlay row">
         <div class="content shadow row">
@@ -109,7 +109,7 @@
             <div class="player-joined">
               <div class="lobby-heading">
                 <div class="player-number"> Player 1</div>
-                <div class="player-name"> Tony Lam</div>
+                <div class="player-name"></div>
               </div>
               <div class="avatar" id="config-skin">
                 <img id="avatar-image1" src="assets/charlie/player1.png">
@@ -124,7 +124,7 @@
             <div id="config-time">
               <div>Game Time</div>
               <div class="config-num-block">
-                <div class="game-duration">3:00</div>             
+                <div class="game-duration">2:00</div>             
               </div>
             </div>
 
@@ -133,7 +133,7 @@
               <div class="player-joined">
                 <div class="lobby-heading">
                   <div class="player-number"> Player 2</div>
-                  <div class="player-name"> Tony Lam</div>
+                  <div class="player-name"></div>
                 </div>
                 <div class="avatar" id="config-skin">
                   <img id="avatar-image2" src="assets/charlie/player1.png">
@@ -146,9 +146,6 @@
           </div>   
           <button id="back-button-gamelobby">Back</button>        
         </div>
-
-        <!-- game start countdown -->
-        <div id="countdown" style="display: none;">0</div>
 
         <!-- ranking page -->
         <div id="ranking" style="display: none;">
@@ -201,19 +198,19 @@
                 <div class="game-info-header">Control</div>
                 <div class="game-info-text">
                   WASD: Player movement
-                  Space: Place bomb
-                  C: enable cheating mode
-                  V: disable cheating mode
+                  Space: Place bomb/ Detonate bomb
+                  C: enable hidden mode~
+                  V: disable hidden mode~
                 </div>            
               </div>
               <div class="info-block-minor">
                 <div class="game-info-header">Items</div>
                 <div class="game-info-text">
-                  <!-- <img src="assets/range potion.png"> : + Explosion Range
-                  <img src="assets/heart.png"> : + Extra Life
-                  <img src="assets/extra bomb.png"> : + Number of Bombs
-                  <img src="assets/unbreakable wall.png"> : Unbreakable Wall
-                  <img src="assets/breakable wall.png"> : Breakable Wall -->
+                  <img src="assets/coin.png"> : +10 points!
+                  <img src="assets/heart.png"> : +1 Life!
+                  <img src="assets/bomb.png"> : Just a simple bomb!
+                  <img src="assets/breakable.png"> : A breakable block!
+
                 </div>            
               </div>
             </div>
@@ -261,6 +258,7 @@
     <script src="scripts/boundingBox.js"></script>
     <script src="scripts/socket.js"></script>
     <script>
+      const gameBGM = new Audio("./assets/audio/game_bgm.mp3");
       const bgIMG = new Image();
       bgIMG.src = "./assets/gameboard.png";
       const breakableIMG = new Image();
@@ -455,6 +453,8 @@
       });
       backButtonGameover.addEventListener('click', () => {
         GG.pause();
+        BGM.currentTime = 0;
+        BGM.play();
         $("#message-player").empty();
         $('#timer').hide();
         $("#chat-area").show();
@@ -469,6 +469,8 @@
       });
       restartButton.addEventListener('click', () => {
         GG.pause();
+        BGM.currentTime = 0;
+        BGM.play();
         $("#message-player").empty();
         $('#timer').hide();
         $("#chat-area").show();
@@ -739,6 +741,9 @@
       });
 
       socket.on("StartGame",(gameboardString)=>{
+        BGM.pause();
+        gameBGM.currentTime = 0
+        gameBGM.play();
         $("#game-info-display1").show();
         $("#game-info-display2").show();
         const gameboardInfo = JSON.parse(gameboardString);
@@ -762,6 +767,7 @@
       });
 
       socket.on("GameOver",(info)=>{
+        gameBGM.pause();
         $("#game-info-display1").hide();
         $("#game-info-display2").hide();
         const obj = JSON.parse(info);
@@ -770,17 +776,16 @@
         timer.timerreset();
         game.setInputEnabled(false);
         console.log(obj);
-        BGM.pause();
         GG.play();
         $('#game-over').show(()=>{
           $("#game-over-content").text(obj.message);
           console.log(obj.player1Points);
           if (obj.player1Points > obj.player2Points){
-            $('#winner').text(`${obj.player1Name} wins!`)
+            $('#winner').text(`${obj.player1Name} wins! He has ${obj.player1Points} points!`)
           } else if (obj.player1Points < obj.player2Points){
-            $('#winner').text(`${obj.player2Name} wins!`);
+            $('#winner').text(`${obj.player2Name} wins! He has ${obj.player2Points} points!`);
           } else {
-            $('#winner').text("It's a TIE!!! WOW!!!");
+            $('#winner').text(`It's a TIE!!! WOW!!! You both have ${obj.player2Points} points!`);
             // $('#winner').text(`It's a draw!`);
           }
 

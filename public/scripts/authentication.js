@@ -93,6 +93,7 @@ const Authentication = (function () {
                     if (onSuccess) onSuccess();
                 }
             });
+        BGM.pause();
     };
 
     return { getUser, signin, validate, signout };
