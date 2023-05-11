@@ -16,7 +16,7 @@ const Game = function (sprites) {
     const context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
     const Music = {
-        background: new Audio('assets/audio/game_background.mp3'),
+        background: new Audio('assets/audio/game_bgm.mp3'),
         collect: new Audio('assets/audio/collect_item.mp3'),
         explode: new Audio('assets/audio/explosion.mp3'),
         gameover: new Audio('assets/audio/gameover.mp3')

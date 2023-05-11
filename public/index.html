@@ -201,7 +201,7 @@
                 <div class="game-info-header">Control</div>
                 <div class="game-info-text">
                   WASD: Player movement
-                  Space: Place bomb
+                  Space: Place bomb/ Detonate bomb
                   C: enable cheating mode
                   V: disable cheating mode
                 </div>            
@@ -260,6 +260,7 @@
     <script src="scripts/fire.js"></script>
     <script src="scripts/boundingBox.js"></script>
     <script>
+      const gameBGM = new Audio("./assets/audio/game_bgm.mp3");
       const bgIMG = new Image();
       bgIMG.src = "./assets/gameboard.png";
       const breakableIMG = new Image();
@@ -454,6 +455,8 @@
       });
       backButtonGameover.addEventListener('click', () => {
         GG.pause();
+        BGM.currentTime = 0;
+        BGM.play();
         $("#message-player").empty();
         $('#timer').hide();
         $("#chat-area").show();
@@ -468,6 +471,8 @@
       });
       restartButton.addEventListener('click', () => {
         GG.pause();
+        BGM.currentTime = 0;
+        BGM.play();
         $("#message-player").empty();
         $('#timer').hide();
         $("#chat-area").show();
@@ -738,6 +743,9 @@
       });
 
       socket.on("StartGame",(gameboardString)=>{
+        BGM.pause();
+        gameBGM.currentTime = 0
+        gameBGM.play();
         $("#game-info-display1").show();
         $("#game-info-display2").show();
         const gameboardInfo = JSON.parse(gameboardString);
@@ -756,6 +764,7 @@
       })
 
       socket.on("GameOver",(info)=>{
+        gameBGM.pause();
         $("#game-info-display1").hide();
         $("#game-info-display2").hide();
         const obj = JSON.parse(info);
@@ -764,17 +773,16 @@
         timer.timerreset();
         game.setInputEnabled(false);
         console.log(obj);
-        BGM.pause();
         GG.play();
         $('#game-over').show(()=>{
           $("#game-over-content").text(obj.message);
           console.log(obj.player1Points);
           if (obj.player1Points > obj.player2Points){
-            $('#winner').text(`${obj.player1Name} wins!`)
+            $('#winner').text(`${obj.player1Name} wins! He has ${obj.player1Points} points!`)
           } else if (obj.player1Points < obj.player2Points){
-            $('#winner').text(`${obj.player2Name} wins!`);
+            $('#winner').text(`${obj.player2Name} wins! He has ${obj.player2Points} points!`);
           } else {
-            $('#winner').text("It's a TIE!!! WOW!!!");
+            $('#winner').text(`It's a TIE!!! WOW!!! You both have ${obj.player2Points} points!`);
             // $('#winner').text(`It's a draw!`);
           }
 
