@@ -56,6 +56,7 @@ export default class Gameboard {
     }
 
     reset() {
+        console.log("reset gameboard");
         this.walls = initialWalls;
         this.breakables = initialBreakables;
         this.player1Bomb = null;

@@ -9,7 +9,7 @@ import Gameboard from './Gameboard.js';
 import Player from './Player.js';
 
 const lobby = new Lobby();
-const gameboard = new Gameboard();
+let gameboard = null;
 const player1 = new Player(1);
 const player2 = new Player(2);
 
@@ -199,7 +199,7 @@ io.on("connection",(socket)=>{
             socket.emit("failed to join lobby",result.message);
         }
     })
-
+    
     socket.on("leaveLobby",(username)=>{
         console.log(`${username} has left the lobby`);
         lobby.removePlayer(username);
@@ -215,10 +215,20 @@ io.on("connection",(socket)=>{
         }
     })
 
+    let autoupdate = null;
     socket.on("onReady",(playerNo)=>{
         const username = lobby.getLobbyInfo().players[playerNo-1].username;
         const result = lobby.onReady(username);
         if (result.result === "StartGame"){
+            autoupdate = setInterval(()=>{
+            io.emit("updateBoard",JSON.stringify({
+                players:[player1.playerInfo(),player2.playerInfo()],
+                breakables:gameboard.gameboardInfo().breakables,
+                bombs: gameboard.gameboardInfo().bombs,
+                hearts:gameboard.gameboardInfo().hearts,
+                coins:gameboard.gameboardInfo().coins
+            }))},300);
+            gameboard = new Gameboard();
             io.emit("StartGame",JSON.stringify({players:[player1.playerInfo(),player2.playerInfo()],breakables:gameboard.gameboardInfo().breakables,bombs:gameboard.gameboardInfo().bombs,hearts:gameboard.gameboardInfo().hearts,fires:gameboard.gameboardInfo().fires}));
         } else if (result.result === "failed") {
             socket.emit("failed to ready",result.message);
@@ -268,22 +278,22 @@ io.on("connection",(socket)=>{
                     player1.increaseHealth(player1.getPos().x,player1.getPos().y);
                 }
                 player1.playerInfo();
-                io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo(),player2.playerInfo()],
-                    breakables:gameboard.gameboardInfo().breakables,
-                    bombs: gameboard.gameboardInfo().bombs,
-                    hearts:gameboard.gameboardInfo().hearts,
-                    coins:gameboard.gameboardInfo().coins
-                }))
+                // io.emit("updateBoard",JSON.stringify({
+                //     players:[player1.playerInfo(),player2.playerInfo()],
+                //     breakables:gameboard.gameboardInfo().breakables,
+                //     bombs: gameboard.gameboardInfo().bombs,
+                //     hearts:gameboard.gameboardInfo().hearts,
+                //     coins:gameboard.gameboardInfo().coins
+                // }))
             } else {
                 player1.faceUp();
-                io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo(),player2.playerInfo()],
-                    breakables:gameboard.gameboardInfo().breakables,
-                    bombs: gameboard.gameboardInfo().bombs,
-                    hearts:gameboard.gameboardInfo().hearts,
-                    coins:gameboard.gameboardInfo().coins
-                }))
+                // io.emit("updateBoard",JSON.stringify({
+                //     players:[player1.playerInfo(),player2.playerInfo()],
+                //     breakables:gameboard.gameboardInfo().breakables,
+                //     bombs: gameboard.gameboardInfo().bombs,
+                //     hearts:gameboard.gameboardInfo().hearts,
+                //     coins:gameboard.gameboardInfo().coins
+                // }))
             }
         } else if (socket.request.session.user?.username === player2.getUsername()){
             if (gameboard.checkWalkable(player2.getPos(),"up")){ // can walk there
@@ -294,22 +304,22 @@ io.on("connection",(socket)=>{
                 } else if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "heart"){
                     player2.increaseHealth(player2.getPos().x,player2.getPos().y);
                 }
-                io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo(),player2.playerInfo()],
-                    breakables:gameboard.gameboardInfo().breakables,
-                    bombs: gameboard.gameboardInfo().bombs,
-                    hearts:gameboard.gameboardInfo().hearts,
-                    coins:gameboard.gameboardInfo().coins
-                }))
+                // io.emit("updateBoard",JSON.stringify({
+                //     players:[player1.playerInfo(),player2.playerInfo()],
+                //     breakables:gameboard.gameboardInfo().breakables,
+                //     bombs: gameboard.gameboardInfo().bombs,
+                //     hearts:gameboard.gameboardInfo().hearts,
+                //     coins:gameboard.gameboardInfo().coins
+                // }))
             } else {
                 player2.faceUp();
-                io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo(),player2.playerInfo()],
-                    breakables:gameboard.gameboardInfo().breakables,
-                    bombs: gameboard.gameboardInfo().bombs,
-                    hearts:gameboard.gameboardInfo().hearts,
-                    coins:gameboard.gameboardInfo().coins
-                }))
+                // io.emit("updateBoard",JSON.stringify({
+                //     players:[player1.playerInfo(),player2.playerInfo()],
+                //     breakables:gameboard.gameboardInfo().breakables,
+                //     bombs: gameboard.gameboardInfo().bombs,
+                //     hearts:gameboard.gameboardInfo().hearts,
+                //     coins:gameboard.gameboardInfo().coins
+                // }))
             }
         }
     })
@@ -324,22 +334,22 @@ io.on("connection",(socket)=>{
                 } else if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "heart"){
                     player1.increaseHealth(player1.getPos().x,player1.getPos().y);
                 }
-                io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo(),player2.playerInfo()],
-                    breakables:gameboard.gameboardInfo().breakables,
-                    bombs: gameboard.gameboardInfo().bombs,
-                    hearts:gameboard.gameboardInfo().hearts,
-                    coins:gameboard.gameboardInfo().coins
-                }))
+                // io.emit("updateBoard",JSON.stringify({
+                //     players:[player1.playerInfo(),player2.playerInfo()],
+                //     breakables:gameboard.gameboardInfo().breakables,
+                //     bombs: gameboard.gameboardInfo().bombs,
+                //     hearts:gameboard.gameboardInfo().hearts,
+                //     coins:gameboard.gameboardInfo().coins
+                // }))
             } else {
                 player1.faceDown();
-                io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo(),player2.playerInfo()],
-                    breakables:gameboard.gameboardInfo().breakables,
-                    bombs: gameboard.gameboardInfo().bombs,
-                    hearts:gameboard.gameboardInfo().hearts,
-                    coins:gameboard.gameboardInfo().coins
-                }))
+                // io.emit("updateBoard",JSON.stringify({
+                //     players:[player1.playerInfo(),player2.playerInfo()],
+                //     breakables:gameboard.gameboardInfo().breakables,
+                //     bombs: gameboard.gameboardInfo().bombs,
+                //     hearts:gameboard.gameboardInfo().hearts,
+                //     coins:gameboard.gameboardInfo().coins
+                // }))
             }
         } else if (socket.request.session.user?.username === player2.getUsername()){
             if (gameboard.checkWalkable(player2.getPos(),"down")){ // can walk there
@@ -350,22 +360,22 @@ io.on("connection",(socket)=>{
                 } else if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "heart"){
                     player2.increaseHealth(player2.getPos().x,player2.getPos().y);
                 }
-                io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo(),player2.playerInfo()],
-                    breakables:gameboard.gameboardInfo().breakables,
-                    bombs: gameboard.gameboardInfo().bombs,
-                    hearts:gameboard.gameboardInfo().hearts,
-                    coins:gameboard.gameboardInfo().coins
-                }))
+                // io.emit("updateBoard",JSON.stringify({
+                //     players:[player1.playerInfo(),player2.playerInfo()],
+                //     breakables:gameboard.gameboardInfo().breakables,
+                //     bombs: gameboard.gameboardInfo().bombs,
+                //     hearts:gameboard.gameboardInfo().hearts,
+                //     coins:gameboard.gameboardInfo().coins
+                // }))
             } else {
                 player2.faceDown();
-                io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo(),player2.playerInfo()],
-                    breakables:gameboard.gameboardInfo().breakables,
-                    bombs: gameboard.gameboardInfo().bombs,
-                    hearts:gameboard.gameboardInfo().hearts,
-                    coins:gameboard.gameboardInfo().coins
-                }))
+                // io.emit("updateBoard",JSON.stringify({
+                //     players:[player1.playerInfo(),player2.playerInfo()],
+                //     breakables:gameboard.gameboardInfo().breakables,
+                //     bombs: gameboard.gameboardInfo().bombs,
+                //     hearts:gameboard.gameboardInfo().hearts,
+                //     coins:gameboard.gameboardInfo().coins
+                // }))
             }
         }
     })
@@ -380,22 +390,22 @@ io.on("connection",(socket)=>{
                 } else if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "heart"){
                     player1.increaseHealth(player1.getPos().x,player1.getPos().y);
                 }
-                io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo(),player2.playerInfo()],
-                    breakables:gameboard.gameboardInfo().breakables,
-                    bombs: gameboard.gameboardInfo().bombs,
-                    hearts:gameboard.gameboardInfo().hearts,
-                    coins:gameboard.gameboardInfo().coins
-                }))
+                // io.emit("updateBoard",JSON.stringify({
+                //     players:[player1.playerInfo(),player2.playerInfo()],
+                //     breakables:gameboard.gameboardInfo().breakables,
+                //     bombs: gameboard.gameboardInfo().bombs,
+                //     hearts:gameboard.gameboardInfo().hearts,
+                //     coins:gameboard.gameboardInfo().coins
+                // }))
             } else {
                 player1.faceLeft();
-                io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo(),player2.playerInfo()],
-                    breakables:gameboard.gameboardInfo().breakables,
-                    bombs: gameboard.gameboardInfo().bombs,
-                    hearts:gameboard.gameboardInfo().hearts,
-                    coins:gameboard.gameboardInfo().coins
-                }))
+                // io.emit("updateBoard",JSON.stringify({
+                //     players:[player1.playerInfo(),player2.playerInfo()],
+                //     breakables:gameboard.gameboardInfo().breakables,
+                //     bombs: gameboard.gameboardInfo().bombs,
+                //     hearts:gameboard.gameboardInfo().hearts,
+                //     coins:gameboard.gameboardInfo().coins
+                // }))
             }
         } else if (socket.request.session.user?.username === player2.getUsername()){
             if (gameboard.checkWalkable(player2.getPos(),"left")){ // can walk there
@@ -406,13 +416,13 @@ io.on("connection",(socket)=>{
                 } else if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "heart"){
                     player2.increaseHealth(player2.getPos().x,player2.getPos().y);
                 }
-                io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo(),player2.playerInfo()],
-                    breakables:gameboard.gameboardInfo().breakables,
-                    bombs: gameboard.gameboardInfo().bombs,
-                    hearts:gameboard.gameboardInfo().hearts,
-                    coins:gameboard.gameboardInfo().coins
-                }))
+                // io.emit("updateBoard",JSON.stringify({
+                //     players:[player1.playerInfo(),player2.playerInfo()],
+                //     breakables:gameboard.gameboardInfo().breakables,
+                //     bombs: gameboard.gameboardInfo().bombs,
+                //     hearts:gameboard.gameboardInfo().hearts,
+                //     coins:gameboard.gameboardInfo().coins
+                // }))
             } else {
                 player2.faceLeft();
                 io.emit("updateBoard",JSON.stringify({
@@ -436,22 +446,22 @@ io.on("connection",(socket)=>{
                 } else if (gameboard.findBlockByPos(player1.getPos().x,player1.getPos().y) === "heart"){
                     player1.increaseHealth(player1.getPos().x,player1.getPos().y);
                 }
-                io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo(),player2.playerInfo()],
-                    breakables:gameboard.gameboardInfo().breakables,
-                    bombs: gameboard.gameboardInfo().bombs,
-                    hearts:gameboard.gameboardInfo().hearts,
-                    coins:gameboard.gameboardInfo().coins
-                }))
+                // io.emit("updateBoard",JSON.stringify({
+                //     players:[player1.playerInfo(),player2.playerInfo()],
+                //     breakables:gameboard.gameboardInfo().breakables,
+                //     bombs: gameboard.gameboardInfo().bombs,
+                //     hearts:gameboard.gameboardInfo().hearts,
+                //     coins:gameboard.gameboardInfo().coins
+                // }))
             } else {
                 player1.faceRight();
-                io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo(),player2.playerInfo()],
-                    breakables:gameboard.gameboardInfo().breakables,
-                    bombs: gameboard.gameboardInfo().bombs,
-                    hearts:gameboard.gameboardInfo().hearts,
-                    coins:gameboard.gameboardInfo().coins
-                }))
+                // io.emit("updateBoard",JSON.stringify({
+                //     players:[player1.playerInfo(),player2.playerInfo()],
+                //     breakables:gameboard.gameboardInfo().breakables,
+                //     bombs: gameboard.gameboardInfo().bombs,
+                //     hearts:gameboard.gameboardInfo().hearts,
+                //     coins:gameboard.gameboardInfo().coins
+                // }))
             }
         } else if (socket.request.session.user?.username === player2.getUsername()){
             if (gameboard.checkWalkable(player2.getPos(),"right")){ // can walk there
@@ -462,22 +472,22 @@ io.on("connection",(socket)=>{
                 } else if (gameboard.findBlockByPos(player2.getPos().x,player2.getPos().y) === "heart"){
                     player2.increaseHealth(player2.getPos().x,player2.getPos().y);
                 }
-                io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo(),player2.playerInfo()],
-                    breakables:gameboard.gameboardInfo().breakables,
-                    bombs: gameboard.gameboardInfo().bombs,
-                    hearts:gameboard.gameboardInfo().hearts,
-                    coins:gameboard.gameboardInfo().coins
-                }))
+                // io.emit("updateBoard",JSON.stringify({
+                //     players:[player1.playerInfo(),player2.playerInfo()],
+                //     breakables:gameboard.gameboardInfo().breakables,
+                //     bombs: gameboard.gameboardInfo().bombs,
+                //     hearts:gameboard.gameboardInfo().hearts,
+                //     coins:gameboard.gameboardInfo().coins
+                // }))
             } else {
                 player2.faceRight();
-                io.emit("updateBoard",JSON.stringify({
-                    players:[player1.playerInfo(),player2.playerInfo()],
-                    breakables:gameboard.gameboardInfo().breakables,
-                    bombs: gameboard.gameboardInfo().bombs,
-                    hearts:gameboard.gameboardInfo().hearts,
-                    coins:gameboard.gameboardInfo().coins
-                }))
+                // io.emit("updateBoard",JSON.stringify({
+                //     players:[player1.playerInfo(),player2.playerInfo()],
+                //     breakables:gameboard.gameboardInfo().breakables,
+                //     bombs: gameboard.gameboardInfo().bombs,
+                //     hearts:gameboard.gameboardInfo().hearts,
+                //     coins:gameboard.gameboardInfo().coins
+                // }))
             }
         }
     })
@@ -498,14 +508,15 @@ io.on("connection",(socket)=>{
             player2Bomb -=1
         }
         io.emit("explode",playerNo);
-        io.emit("updateBoard",JSON.stringify({
-            players:[player1.playerInfo(),player2.playerInfo()],
-            breakables:gameboard.gameboardInfo().breakables,
-            bombs: gameboard.gameboardInfo().bombs,
-            hearts:gameboard.gameboardInfo().hearts,
-            coins:gameboard.gameboardInfo().coins
-        }))
+        // io.emit("updateBoard",JSON.stringify({
+        //     players:[player1.playerInfo(),player2.playerInfo()],
+        //     breakables:gameboard.gameboardInfo().breakables,
+        //     bombs: gameboard.gameboardInfo().bombs,
+        //     hearts:gameboard.gameboardInfo().hearts,
+        //     coins:gameboard.gameboardInfo().coins
+        // }))
         if (!player1AfterExplosion){ // does not survive after explosion
+            clearInterval(autoupdate);
             io.emit("GameOver",JSON.stringify({message:"Player1 died!",player1Points:player1.getPoints(),player2Points:player2.getPoints(),player1Name:player1.getDisplayName(),player2Name:player2.getDisplayName()}));
             const ranking = JSON.parse(fs.readFileSync('data/ranking.json'));
             if (player1.getDisplayName() && player2.getDisplayName()){
@@ -513,9 +524,11 @@ io.on("connection",(socket)=>{
                 ranking.push({displayName:player2.getDisplayName(),points:player2.getPoints()});
             }
             fs.writeFileSync('data/ranking.json', JSON.stringify(ranking, null, ' '));
+            autoupdate = null;
             return;
         }
         if (!player2AfterExplosion){ // does not survive after explosion
+            clearInterval(autoupdate);
             io.emit("GameOver",JSON.stringify({message:"Player2 died!",player1Points:player1.getPoints(),player2Points:player2.getPoints(),player1Name:player1.getDisplayName(),player2Name:player2.getDisplayName()}));
             const ranking = JSON.parse(fs.readFileSync('data/ranking.json'));
             if (player1.getDisplayName() && player2.getDisplayName()){
@@ -523,6 +536,7 @@ io.on("connection",(socket)=>{
                 ranking.push({displayName:player2.getDisplayName(),points:player2.getPoints()});
             }
             fs.writeFileSync('data/ranking.json', JSON.stringify(ranking, null, ' '));
+            autoupdate = null;
             return;
         }
     }
@@ -547,18 +561,19 @@ io.on("connection",(socket)=>{
                 explode(2,2);
             }
         }
-        io.emit("updateBoard",JSON.stringify({
-            players:[player1.playerInfo(),player2.playerInfo()],
-            breakables:gameboard.gameboardInfo().breakables,
-            bombs: gameboard.gameboardInfo().bombs,
-            hearts:gameboard.gameboardInfo().hearts,
-            coins:gameboard.gameboardInfo().coins
-        }))
+        // io.emit("updateBoard",JSON.stringify({
+        //     players:[player1.playerInfo(),player2.playerInfo()],
+        //     breakables:gameboard.gameboardInfo().breakables,
+        //     bombs: gameboard.gameboardInfo().bombs,
+        //     hearts:gameboard.gameboardInfo().hearts,
+        //     coins:gameboard.gameboardInfo().coins
+        // }))
     })
 
     socket.on("Time's Up",()=>{
         timesup -= 1;
         if (timesup === 0){
+            clearInterval(autoupdate);
             io.emit("GameOver",JSON.stringify({message:"Time's up!",player1Points:player1.getPoints(),player2Points:player2.getPoints(),player1Name:player1.getDisplayName(),player2Name:player2.getDisplayName()}));
             const ranking = JSON.parse(fs.readFileSync('data/ranking.json'));
             if (player1.getDisplayName() && player2.getDisplayName()){
@@ -566,15 +581,16 @@ io.on("connection",(socket)=>{
                 ranking.push({displayName:player2.getDisplayName(),points:player2.getPoints()});
             }
             fs.writeFileSync('data/ranking.json', JSON.stringify(ranking, null, ' '));
+            autoupdate = null;
         }
     })
 
     socket.on("reset",()=>{
         timesup = 1;
-        gameboard.reset();
         player1.reset();
         player2.reset();
         lobby.reset();
+        gameboard = null;
     })
 
     socket.on("debug",()=>{

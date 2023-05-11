@@ -723,6 +723,7 @@
         const {message,player1Points,player2Points,player1Name,player2Name,player1Username,player2Username} = JSON.parse(info);
         socket.emit("reset");
         timer.timerreset();
+        game.setInputEnabled(false);
         console.log(message);
         if (player1Points > player2Points){
           $('#winner').text(`${player1Name} wins!`)
