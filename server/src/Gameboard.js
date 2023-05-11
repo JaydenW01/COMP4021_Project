@@ -27,7 +27,7 @@ export default class Gameboard {
     }
 
     findBlockByPos(x,y){
-        if (x < 0 || y < 0){
+        if (x < 0 || y < 0 || x > 12 || y > 10){
             return "out of bound";
         }
         for (const wall of this.walls){
@@ -174,10 +174,10 @@ export default class Gameboard {
         } else if (playerNo === 2){
             bombX = this.player2Bomb.x;
             bombY = this.player2Bomb.y
-            const up = this.findBlockByPos(bombX,bombY-1) !== "breakable" ? false : true;
-            const down = this.findBlockByPos(bombX,bombY+1) !== "breakable" ? false : true;
-            const left = this.findBlockByPos(bombX-1,bombY) !== "breakable" ? false : true;
-            const right = this.findBlockByPos(bombX+1,bombY) !== "breakable" ? false : true;
+            const up = this.findBlockByPos(bombX,bombY-1) === "wall" ? false : this.findBlockByPos(bombX,bombY-1) === "out of bound" ? false : true;
+            const down = this.findBlockByPos(bombX,bombY+1) === "wall" ? false : this.findBlockByPos(bombX,bombY+1) === "out of bound" ? false : true;
+            const left = this.findBlockByPos(bombX-1,bombY) === "wall" ? false : this.findBlockByPos(bombX-1,bombY) === "out of bound" ? false : true;
+            const right = this.findBlockByPos(bombX+1,bombY) === "wall" ? false : this.findBlockByPos(bombX+1,bombY) === "out of bound" ? false : true;
             if (up){
                 this.removeBlockByPos(bombX,bombY-1);
                 fires.push({x:bombX,y:bombY-1});
