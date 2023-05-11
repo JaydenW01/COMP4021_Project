@@ -212,6 +212,7 @@ app.post("/post_score",(req,res)=>{
 // WebSocket codes ...
 const httpServer = createServer(app);
 const io = new Server(httpServer);
+let timesup = 1;
 
 io.on("connection",(socket)=>{
     // print out who has connected 
@@ -439,7 +440,7 @@ io.on("connection",(socket)=>{
 
     let player1Bomb = 0;
     let player2Bomb = 0;
-    let timesup = 1;
+    
 
     const explode = (playerNo)=>{
         const explosion = gameboard.setOffBomb(playerNo);
@@ -462,6 +463,7 @@ io.on("connection",(socket)=>{
         // }))
         if (!player1AfterExplosion){ // does not survive after explosion
             clearInterval(autoupdate);
+            gameboard.setBreakables(initialBreakables);
             io.emit("GameOver",JSON.stringify({message:"Player1 died!",player1Points:player1.getPoints(),player2Points:player2.getPoints(),player1Name:player1.getDisplayName(),player2Name:player2.getDisplayName()}));
             const ranking = JSON.parse(fs.readFileSync('data/ranking.json'));
             if (player1.getDisplayName() && player2.getDisplayName()){
@@ -474,6 +476,7 @@ io.on("connection",(socket)=>{
         }
         if (!player2AfterExplosion){ // does not survive after explosion
             clearInterval(autoupdate);
+            gameboard.setBreakables(initialBreakables);
             io.emit("GameOver",JSON.stringify({message:"Player2 died!",player1Points:player1.getPoints(),player2Points:player2.getPoints(),player1Name:player1.getDisplayName(),player2Name:player2.getDisplayName()}));
             const ranking = JSON.parse(fs.readFileSync('data/ranking.json'));
             if (player1.getDisplayName() && player2.getDisplayName()){
@@ -516,8 +519,11 @@ io.on("connection",(socket)=>{
     })
 
     socket.on("Time's Up",()=>{
+        gameboard.setBreakables(initialBreakables);
         timesup -= 1;
         if (timesup === 0){
+            timesup = 1;
+            console.log("time's up")
             clearInterval(autoupdate);
             io.emit("GameOver",JSON.stringify({message:"Time's up!",player1Points:player1.getPoints(),player2Points:player2.getPoints(),player1Name:player1.getDisplayName(),player2Name:player2.getDisplayName()}));
             const ranking = JSON.parse(fs.readFileSync('data/ranking.json'));
@@ -531,17 +537,16 @@ io.on("connection",(socket)=>{
     })
 
     socket.on("reset",()=>{
-        timesup = 1;
         player1.reset();
         player2.reset();
         lobby.reset();
         gameboard.reset(initialWalls,initialBreakables);
-        gameboard.setBreakables(initialBreakables);
     })
 
-    socket.on("debug",()=>{
-        console.log(socket.request.session.user);
+    socket.on("stopRender",()=>{
+        clearInterval(autoupdate);
     })
+
 
 
 })

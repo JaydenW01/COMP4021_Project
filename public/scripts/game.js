@@ -82,6 +82,13 @@ const Game = function (backgroundIMG,breakableIMG,bluePlayerIMG,blackPlayerIMG,y
         // console.log(breakables);
         // Clear the screen
         context.clearRect(0, 0, canvas.width, canvas.height);
+        const player1info = gameBoard.players[0];
+        const player2info = gameBoard.players[1];
+
+        $("#player1-points").text(`Player 1 Points: ${player1info.points}`);
+        $("#player2-points").text(`Player 2 Points: ${player2info.points}`);
+        $("#player1-health").text(`Player 1 Remaining Life: ${player1info.health}/3`);
+        $("#player2-health").text(`Player 2 Remaining Life: ${player2info.health}/3`);
         // draw map
         // let img = new Image();
         // img.onload = () => {
