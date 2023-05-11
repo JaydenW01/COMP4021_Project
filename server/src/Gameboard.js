@@ -152,24 +152,32 @@ export default class Gameboard {
             const left = this.findBlockByPos(bombX-1,bombY) === "wall" ? false : this.findBlockByPos(bombX-1,bombY) === "out of bound" ? false : true;
             const right = this.findBlockByPos(bombX+1,bombY) === "wall" ? false : this.findBlockByPos(bombX+1,bombY) === "out of bound" ? false : true;
             if (up){
+                if (this.findBlockByPos(bombX,bombY-1) === "breakable"){
+                    points += 1;
+                }
                 this.removeBlockByPos(bombX,bombY-1);
                 fires.push({x:bombX,y:bombY-1});
-                points += 1;
             }
             if (down){
+                if (this.findBlockByPos(bombX,bombY+1) === "breakable"){
+                    points += 1;
+                }
                 this.removeBlockByPos(bombX,bombY+1);
                 fires.push({x:bombX,y:bombY+1});
-                points += 1;
             }
             if (left){
+                if (this.findBlockByPos(bombX-1,bombY) === "breakable"){
+                    points += 1;
+                }
                 this.removeBlockByPos(bombX-1,bombY);
                 fires.push({x:bombX-1,y:bombY});
-                points += 1;
             }
             if (right){
+                if (this.findBlockByPos(bombX+1,bombY) === "breakable"){
+                    points += 1;
+                }
                 this.removeBlockByPos(bombX+1,bombY);
                 fires.push({x:bombX+1,y:bombY});
-                points += 1;
             }
         } else if (playerNo === 2){
             bombX = this.player2Bomb.x;
@@ -179,24 +187,32 @@ export default class Gameboard {
             const left = this.findBlockByPos(bombX-1,bombY) === "wall" ? false : this.findBlockByPos(bombX-1,bombY) === "out of bound" ? false : true;
             const right = this.findBlockByPos(bombX+1,bombY) === "wall" ? false : this.findBlockByPos(bombX+1,bombY) === "out of bound" ? false : true;
             if (up){
+                if (this.findBlockByPos(bombX,bombY-1) === "breakable"){
+                    points += 1;
+                }
                 this.removeBlockByPos(bombX,bombY-1);
                 fires.push({x:bombX,y:bombY-1});
-                points += 1;
             }
             if (down){
+                if (this.findBlockByPos(bombX,bombY+1) === "breakable"){
+                    points += 1;
+                }
                 this.removeBlockByPos(bombX,bombY+1);
                 fires.push({x:bombX,y:bombY+1});
-                points += 1;
             }
             if (left){
+                if (this.findBlockByPos(bombX-1,bombY) === "breakable"){
+                    points += 1;
+                }
                 this.removeBlockByPos(bombX-1,bombY);
                 fires.push({x:bombX-1,y:bombY});
-                points += 1;
             }
             if (right){
+                if (this.findBlockByPos(bombX+1,bombY) === "breakable"){
+                    points += 1;
+                }
                 this.removeBlockByPos(bombX+1,bombY);
                 fires.push({x:bombX+1,y:bombY});
-                points += 1;
             }
         }
         if (playerNo === 1){
