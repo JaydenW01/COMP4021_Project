@@ -18,9 +18,9 @@
   </head>
   <body>
     <div class="canvas-container">
-      <p id="timer" style="display:none"></p>
-      <div id="game-info-display1"><p id="player1-points"></p><p id="player1-health"></p></div>
-      <div id="game-info-display2"><p id="player2-points"></p><p id="player2-health"></p></div>
+      <p id="timer" style="display:none;background-color: coral"></p>
+      <div id="game-info-display1" style="display:none;background-color: coral"><p id="player1-points"></p><p id="player1-health"></p></div>
+      <div id="game-info-display2" style="display:none;background-color: coral"><p id="player2-points"></p><p id="player2-health"></p></div>
       <canvas id="canvas"></canvas>
       <div id="signin-overlay" class="overlay row">
         <div class="content shadow row">
@@ -109,7 +109,7 @@
             <div class="player-joined">
               <div class="lobby-heading">
                 <div class="player-number"> Player 1</div>
-                <div class="player-name"> Tony Lam</div>
+                <div class="player-name"></div>
               </div>
               <div class="avatar" id="config-skin">
                 <img id="avatar-image1" src="assets/charlie/player1.png">
@@ -124,7 +124,7 @@
             <div id="config-time">
               <div>Game Time</div>
               <div class="config-num-block">
-                <div class="game-duration">3:00</div>             
+                <div class="game-duration">2:00</div>             
               </div>
             </div>
 
@@ -133,7 +133,7 @@
               <div class="player-joined">
                 <div class="lobby-heading">
                   <div class="player-number"> Player 2</div>
-                  <div class="player-name"> Tony Lam</div>
+                  <div class="player-name"></div>
                 </div>
                 <div class="avatar" id="config-skin">
                   <img id="avatar-image2" src="assets/charlie/player1.png">
@@ -146,9 +146,6 @@
           </div>   
           <button id="back-button-gamelobby">Back</button>        
         </div>
-
-        <!-- game start countdown -->
-        <div id="countdown" style="display: none;">0</div>
 
         <!-- ranking page -->
         <div id="ranking" style="display: none;">
