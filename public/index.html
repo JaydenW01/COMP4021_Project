@@ -722,10 +722,8 @@
       socket.on("GameOver",(info)=>{
         const {message,player1Points,player2Points,player1Name,player2Name,player1Username,player2Username} = JSON.parse(info);
         socket.emit("reset");
+        timer.timerreset();
         console.log(message);
-        console.log(player1Username);
-        console.log(player2Username);
-        timer.reset();
         if (player1Points > player2Points){
           $('#winner').text(`${player1Name} wins!`)
         } else if (player1Points < player2Points){
