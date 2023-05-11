@@ -474,7 +474,17 @@ body {
     top: 10%;
     width: 500px;
   }
-  
+
+  #table-container {
+    overflow-y: auto;
+    height: 395px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(50%, 0%);
+    width: 80%;
+  }
+
   @media screen and (min-height: 680px){
     #ranking {
       top: 20vh !important;
@@ -499,7 +509,7 @@ body {
     width: 90%;
     table-layout: fixed;
   }
-  
+
   table caption {
     font-size: 25px;
     margin: 20px;
