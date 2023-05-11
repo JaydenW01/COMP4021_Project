@@ -140,6 +140,7 @@ export default class Gameboard {
     }
 
     setOffBomb(playerNo) {
+        let fires = [];
         let points = 0;
         let bombX = null;
         let bombY = null;
@@ -152,20 +153,22 @@ export default class Gameboard {
             const right = this.findBlockByPos(bombX+1,bombY) !== "breakable" ? false : true;
             if (up){
                 this.removeBlockByPos(bombX,bombY-1);
+                fires.push({x:bombX,y:bombY-1});
                 points += 1;
             }
             if (down){
                 this.removeBlockByPos(bombX,bombY+1);
+                fires.push({x:bombX,y:bombY+1});
                 points += 1;
             }
             if (left){
-                console.log("bomb left")
                 this.removeBlockByPos(bombX-1,bombY);
+                fires.push({x:bombX-1,y:bombY});
                 points += 1;
             }
             if (right){
-                console.log("bomb left")
                 this.removeBlockByPos(bombX+1,bombY);
+                fires.push({x:bombX+1,y:bombY});
                 points += 1;
             }
         } else if (playerNo === 2){
@@ -177,18 +180,22 @@ export default class Gameboard {
             const right = this.findBlockByPos(bombX+1,bombY) !== "breakable" ? false : true;
             if (up){
                 this.removeBlockByPos(bombX,bombY-1);
+                fires.push({x:bombX,y:bombY-1});
                 points += 1;
             }
             if (down){
                 this.removeBlockByPos(bombX,bombY+1);
+                fires.push({x:bombX,y:bombY+1});
                 points += 1;
             }
             if (left){
                 this.removeBlockByPos(bombX-1,bombY);
+                fires.push({x:bombX-1,y:bombY});
                 points += 1;
             }
             if (right){
                 this.removeBlockByPos(bombX+1,bombY);
+                fires.push({x:bombX+1,y:bombY});
                 points += 1;
             }
         }
@@ -197,7 +204,7 @@ export default class Gameboard {
         } else if (playerNo === 2){
             this.player2Bomb = null;
         }
-        return {up:{x:bombX,y:bombY-1},down:{x:bombX,y:bombY+1},left:{x:bombX-1,y:bombY},right:{x:bombX+1,y:bombY},center:{x:bombX,y:bombY},points:points};
+        return {up:{x:bombX,y:bombY-1},down:{x:bombX,y:bombY+1},left:{x:bombX-1,y:bombY},right:{x:bombX+1,y:bombY},center:{x:bombX,y:bombY},points:points,fires:fires};
     }
 
     deleteItem(x,y){
