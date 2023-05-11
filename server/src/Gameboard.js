@@ -115,7 +115,8 @@ export default class Gameboard {
     removeBlockByPos(x,y){
         for (let i = 0; i < this.breakables.length;i++){
             if (this.breakables[i].x === x && this.breakables[i].y === y){
-                if (Math.random() < 0.3){ // there is a 0.3 chance to drop an item
+                if (Math.random() < 0.5){ // there is a 0.3 chance to drop an item
+                    console.log("item")
                     if (Math.random() > 0.5){
                         this.coins.push({x:this.breakables[i].x,y:this.breakables[i].y})
                     } else {
