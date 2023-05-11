@@ -258,7 +258,7 @@ const Game = function (sprites) {
 
         for(let i = 0; i < fires.length; i++) {
             console.log(fires[i]);
-            fires[i].fire.update();
+            fires[i].fire.update(now);
             fires[i].fire.draw();
         }
 

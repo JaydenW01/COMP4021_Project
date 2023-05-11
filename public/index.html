@@ -758,7 +758,9 @@
       socket.on("updateBoard",(gameboardString)=>{
         const gameboardInfo = JSON.parse(gameboardString);
         console.log(gameboardInfo);
-        game.updateBoard(gameboardInfo);
+        requestAnimationFrame(() => {
+                game.updateBoard(gameboardInfo);
+        });
       })
 
       socket.on('explode', (points) => {
