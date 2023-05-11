@@ -120,8 +120,8 @@ const Game = function (sprites) {
 
         for (const player of gameBoard.players) {
             const loc = {x: (player.location.x+2)*blockWidth, y: (player.location.y+1)*blockHeight};
-            if (player in players) {
-                console.log("updating player "+player.playerNo+" location: ("+loc.x+", "+loc.y+")");
+            if (player.playerNo in players) {
+                console.log("updating player "+player.playerNo+" location: ("+loc.x+", "+loc.y+")"+" facing: "+player.facing);
                 players[player.playerNo].update(
                     loc,
                     player.facing,
@@ -149,7 +149,7 @@ const Game = function (sprites) {
                     player.colour,
                     spriteSheet,                    
                 )
-                console.log("updating player "+player.playerNo);
+                console.log("updating player "+player.playerNo+" location: ("+loc.x+", "+loc.y+")"+" facing: "+player.facing);
                 players[player.playerNo].update(loc, player.facing, now);
             }
             players[player.playerNo].draw();
