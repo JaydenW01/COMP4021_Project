@@ -253,6 +253,10 @@
     <script src="/socket.io/socket.io.min.js"></script>
     <script src="scripts/game.js"></script>
     <script src="scripts/timer.js"></script>
+    <script src="scripts/sprite.js"></script>
+    <script src="scripts/player.js"></script>
+    <script src="scripts/fire.js"></script>
+    <script src="scripts/boundingBox.js"></script>
     <script>
       const bgIMG = new Image();
       bgIMG.src = "./assets/gameboard.png";
@@ -268,10 +272,33 @@
       blackIMG.src = "./assets/black_player.png";
       const spritesheet = new Image();
       spritesheet.src = './assets/object_sprites.png';
+      const redSprite = new Image();
+      redSprite.src = './assets/red_sprite_16x16.png'
+      const blueSprite = new Image();
+      blueSprite.src = './assets/blue_sprite_16x16.png'
+      const blackSprite = new Image();
+      blackSprite.src = './assets/black_sprite_16x16.png'
+      const yellowSprite = new Image();
+      yellowSprite.src = './assets/yellow_sprite_16x16.png'
+
+      const sprites = {
+        bgIMG: bgIMG,
+        breakableIMG: breakableIMG,
+        spritesheet: spritesheet,
+        breakableIMG: breakableIMG,
+        blueIMG: blueIMG,
+        redIMG: redIMG,
+        yellowIMG: yellowIMG,
+        blackIMG: blackIMG,
+        redSprite: redSprite,
+        blueSprite: blueSprite,
+        blackSprite: blackSprite,
+        yellowSprite: yellowSprite,
+      }
 
       const timer = Timer(20);
       const socket = io();
-      const game = Game(bgIMG,breakableIMG,blueIMG,blackIMG,yellowIMG,redIMG,spritesheet);
+      const game = Game(sprites);
       const menuPage = document.getElementById('menu');
       const characterPage = document.getElementById('character-lobby');
       const gameStartButton = document.getElementById('game-start');

@@ -3,7 +3,7 @@
 // - `x` - The initial x position of the player
 // - `y` - The initial y position of the player
 // - `gameArea` - The bounding box of the game area
-const Player = function(ctx, x, y, color,blueIMG) {
+const Player = function(ctx, x, y, color, spriteSheet) {
 
     // This is the sprite sequences of the player facing different directions.
     // It contains the idling sprite sequences `idleLeft`, `idleUp`, `idleRight` and `idleDown`,
@@ -11,28 +11,32 @@ const Player = function(ctx, x, y, color,blueIMG) {
     const playerIMG = null;
     const sequences = {
         /* Idling sprite sequences for facing different directions */
-        idleLeft:  { x: 16, y: 24, width: 16, height: 24, count: 1, timing: 2000, loop: false },
-        idleUp:    { x: 64, y: 0,  width: 16, height: 24, count: 1, timing: 2000, loop: false },
-        idleRight: { x: 64, y: 24, width: 16, height: 24, count: 1, timing: 2000, loop: false },
-        idleDown:  { x: 16, y: 0,  width: 16, height: 24, count: 1, timing: 2000, loop: false },
+        idleLeft:  { x: 16, y: 16, width: 16, height: 16, count: 1, timing: 2000, loop: false },
+        idleUp:    { x: 64, y: 0,  width: 16, height: 16, count: 1, timing: 2000, loop: false },
+        idleRight: { x: 64, y: 16, width: 16, height: 16, count: 1, timing: 2000, loop: false },
+        idleDown:  { x: 16, y: 0,  width: 16, height: 16, count: 1, timing: 2000, loop: false },
 
         /* Moving sprite sequences for facing different directions */
-        moveLeft:  { x: 0,  y: 24, width: 16, height: 24, count: 3, timing: 50, loop: true },
-        moveUp:    { x: 48, y: 0,  width: 16, height: 24, count: 3, timing: 50, loop: true },
-        moveRight: { x: 48, y: 24, width: 16, height: 24, count: 3, timing: 50, loop: true },
-        moveDown:  { x: 0,  y: 0,  width: 16, height: 24, count: 3, timing: 50, loop: true }
+        moveLeft:  { x: 0,  y: 16, width: 16, height: 16, count: 3, timing: 300, loop: true },
+        moveUp:    { x: 48, y: 0,  width: 16, height: 16, count: 3, timing: 300, loop: true },
+        moveRight: { x: 48, y: 16, width: 16, height: 16, count: 3, timing: 300, loop: true },
+        moveDown:  { x: 0,  y: 0,  width: 16, height: 16, count: 3, timing: 300, loop: true }
     };
 
     // This is the sprite object of the player created from the Sprite module.
     const sprite = Sprite(ctx, x, y);
     let position = {x:0, y:0};
     let facing = "down";
+    let oldFacing = "down";
 
     // The sprite object is configured for the player sprite here.
     sprite.setSequence(sequences.idleDown)
-          .setScale(0.5)
+          .setScale(1)
           .setShadowScale({ x: 0, y: 0 })
     
+    sprite.useSpriteImg(spriteSheet);
+
+    /*
     switch(color) {
         case("blue"):
             img = blueIMG;
@@ -46,25 +50,27 @@ const Player = function(ctx, x, y, color,blueIMG) {
         case("black"):
             sprite.useSheet("../assets/black_sprite.png");
             break;
-    }
+    }*/
 
     const setPosition = function(newPosition) {
         if (position == newPosition) {
-            switch(facing) {
-                case "left":
-                    sprite.setSequence(sequences.idleLeft);
-                    break;
-                case "up":
-                    sprite.setSequence(sequences.idleUp);
-                    break;
-                case "right":
-                    sprite.setSequence(sequences.idleRight);
-                    break;
-                case "down":
-                    sprite.setSequence(sequences.idleDown);
-                    break;
-                default:
-                    /* */
+            if (facing != oldFacing) {
+                switch(facing) {
+                    case "left":
+                        sprite.setSequence(sequences.idleLeft);
+                        break;
+                    case "up":
+                        sprite.setSequence(sequences.idleUp);
+                        break;
+                    case "right":
+                        sprite.setSequence(sequences.idleRight);
+                        break;
+                    case "down":
+                        sprite.setSequence(sequences.idleDown);
+                        break;
+                    default:
+                        /* */
+                }
             }
         } else {
             switch(facing) {
@@ -109,7 +115,7 @@ const Player = function(ctx, x, y, color,blueIMG) {
         setFacing: setFacing,
         setPosition: setPosition,
         getBoundingBox: sprite.getBoundingBox,
-        draw: draw,
+        draw: sprite.draw,
         update: update
     };
 };
