@@ -253,6 +253,7 @@
     <script src="scripts/player.js"></script>
     <script src="scripts/fire.js"></script>
     <script src="scripts/boundingBox.js"></script>
+    <script src="scripts/socket.js"></script>
     <script>
       const gameBGM = new Audio("./assets/audio/game_bgm.mp3");
       const bgIMG = new Image();
@@ -754,8 +755,15 @@
       socket.on("updateBoard",(gameboardString)=>{
         const gameboardInfo = JSON.parse(gameboardString);
         console.log(gameboardInfo);
-        game.updateBoard(gameboardInfo);
+        requestAnimationFrame(() => {
+                game.updateBoard(gameboardInfo);
+        });
       })
+
+      socket.on('explode', (points) => {
+          const _points = JSON.parse(points);
+          game.explodeBomb(_points);
+      });
 
       socket.on("GameOver",(info)=>{
         gameBGM.pause();
