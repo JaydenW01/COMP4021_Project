@@ -44,6 +44,11 @@ const Game = function (sprites) {
     // }
     // console.log("num breakables init: ", num_breakables_init);
 
+    chill = function() {
+        setInputEnabled(false);
+        setTimeout(setInputEnabled(true), 1200)
+    }
+
     setInputEnabled = function (inputEnabled) {
         if (inputEnabled) {
             console.log("enabling input");
@@ -53,26 +58,32 @@ const Game = function (sprites) {
                     case 37:
                     case 65: // left
                         socket.emit("moveLeft");
+                        chill();
                         break;
                     case 38:
                     case 87: // up
                         socket.emit("moveUp");
+                        chill();
                         break;
                     case 39:
                     case 68: // right
-                        socket.emit("moveRight");  
+                        socket.emit("moveRight"); 
+                        chill();
                         break;
                     case 40:
                     case 83: // down
-                        socket.emit("moveDown");  
+                        socket.emit("moveDown");
+                        chill();  
                         break;
                     case 32: // bomb
                         socket.emit("placeBomb");  
+                        chill();
                         break;
                     // c - cheat mode
                     case 67:
                         // TODO
                         socket.emit("enable cheat");
+                        chill();
                         gameBGM.pause();
                         supermario.pause();
                         supermario.currentTime = 0;
@@ -82,6 +93,7 @@ const Game = function (sprites) {
                     case 86:
                         // TODO
                         socket.emit("disable cheat");
+                        chill();
                         supermario.pause();
                         gameBGM.play();
                         break;
@@ -289,5 +301,5 @@ const Game = function (sprites) {
           }
     };
 
-    return { setInputEnabled, updateBoard, explodeBomb};
+    return { setInputEnabled, updateBoard, explodeBomb, chill};
 };
