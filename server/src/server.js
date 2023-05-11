@@ -486,16 +486,18 @@ io.on("connection",(socket)=>{
     let player2Bomb = 0;
     let timesup = 1;
 
-    const explode = (id,playerNo)=>{
-        const explosion = gameboard.setOffBomb(id);
+    const explode = (playerNo)=>{
+        const explosion = gameboard.setOffBomb(playerNo);
         const player1AfterExplosion = player1.checkExplosion(explosion);
         const player2AfterExplosion = player2.checkExplosion(explosion);
         if (playerNo === 1){
             player1.addPoints(explosion.points);
+            player1Bomb -=1;
         } else if (playerNo === 2){
             player2.addPoints(explosion.points);
+            player2Bomb -=1
         }
-        io.emit("explode",id);
+        io.emit("explode",playerNo);
         io.emit("updateBoard",JSON.stringify({
             players:[player1.playerInfo(),player2.playerInfo()],
             breakables:gameboard.gameboardInfo().breakables,
@@ -504,7 +506,7 @@ io.on("connection",(socket)=>{
             coins:gameboard.gameboardInfo().coins
         }))
         if (!player1AfterExplosion){ // does not survive after explosion
-            io.emit("GameOver",JSON.stringify({message:"Player1 died!",player1:player1.getPoints(),player2:player2.getPoints()}));
+            io.emit("GameOver",JSON.stringify({message:"Player1 died!",player1Points:player1.getPoints(),player2Points:player2.getPoints(),player1Name:player1.getDisplayName(),player2Name:player2.getDisplayName()}));
             const ranking = JSON.parse(fs.readFileSync('data/ranking.json'));
             if (player1.getDisplayName() && player2.getDisplayName()){
                 ranking.push({displayName:player1.getDisplayName(),points:player1.getPoints()});
@@ -514,7 +516,7 @@ io.on("connection",(socket)=>{
             return;
         }
         if (!player2AfterExplosion){ // does not survive after explosion
-            io.emit("GameOver",JSON.stringify({message:"Player2 died!",player1:player1.getPoints(),player2:player2.getPoints()}));
+            io.emit("GameOver",JSON.stringify({message:"Player2 died!",player1Points:player1.getPoints(),player2Points:player2.getPoints(),player1Name:player1.getDisplayName(),player2Name:player2.getDisplayName()}));
             const ranking = JSON.parse(fs.readFileSync('data/ranking.json'));
             if (player1.getDisplayName() && player2.getDisplayName()){
                 ranking.push({displayName:player1.getDisplayName(),points:player1.getPoints()});
@@ -530,7 +532,7 @@ io.on("connection",(socket)=>{
     socket.on("placeBomb",()=>{
         if (socket.request.session.user?.username === player1.getUsername()){ // find out who press spacebar
             if (player1Bomb === 0){
-                gameboard.placeBomb(player1.getPos(),1);
+                gameboard.placeBomb(player1.getPos(),1,1);
                 player1Bomb += 1;
             } else if (player1Bomb === 1){
                 explode(1,1);
@@ -539,7 +541,7 @@ io.on("connection",(socket)=>{
         } else if (socket.request.session.user?.username === player2.getUsername()){ // find out who press spacebar
             // let bombID = 2;
             if (player2Bomb === 0){
-                gameboard.placeBomb(player2.getPos(),2);
+                gameboard.placeBomb(player2.getPos(),2,2);
                 player2Bomb += 1;
             } else if (player2Bomb === 1){
                 explode(2,2);

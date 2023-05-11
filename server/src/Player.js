@@ -63,7 +63,7 @@ export default class Player {
 
     reduceHealth(){
         this.health -= 1;
-        if (this.health-1 == 0){
+        if (this.health == 0){
             return false;
         } else {
             return true;

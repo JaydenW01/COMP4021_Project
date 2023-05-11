@@ -49,16 +49,18 @@ export default class Gameboard {
     constructor() {
         this.walls = initialWalls;
         this.breakables = initialBreakables;
-        this.bombs = [];
-        this.conins = [];
+        this.player1Bomb = null;
+        this.player2Bomb = null;
+        this.coins = [];
         this.hearts = [];
     }
 
     reset() {
         this.walls = initialWalls;
         this.breakables = initialBreakables;
-        this.bombs = [];
-        this.conins = [];
+        this.player1Bomb = null;
+        this.player2Bomb = null;
+        this.coins = [];
         this.hearts = [];
     }
 
@@ -77,9 +79,9 @@ export default class Gameboard {
             }
         }
 
-        for (const fire of this.fires){
-            if (fire.x === x && fire.y === y){
-                return "fire";
+        for (const coin of this.coins){
+            if (coin.x === x && coin.y === y){
+                return "coin";
             }
         }
 
@@ -92,7 +94,7 @@ export default class Gameboard {
     }
 
     gameboardInfo() {
-        return {breakables:this.breakables,bombs:this.bombs,hearts:this.hearts,coins:this.coins};
+        return {breakables:this.breakables,bombs:[this.player1Bomb,this.player2Bomb],hearts:this.hearts,coins:this.coins};
     }
 
     // up : x,y-1
@@ -153,71 +155,98 @@ export default class Gameboard {
             if (this.breakables[i].x === x && this.breakables[i].y === y){
                 if (Math.random() < 0.3){ // there is a 0.3 chance to drop an item
                     if (Math.random() > 0.5){
-                        this.fires.push({x:this.breakables[i].x,y:this.breakables[i].y})
+                        this.coins.push({x:this.breakables[i].x,y:this.breakables[i].y})
                     } else {
                         this.hearts.push({x:this.breakables[i].x,y:this.breakables[i].y})
                     }
                 }
-                this.breakables.splice(i,0);
+                this.breakables.splice(i,1);
                 break;
             }
         }
         return;
     }   
 
-    placeBomb(pos,id) {
-        this.bombs.push({x:pos.x,y:pos.y,bombID:id});
+    placeBomb(pos,id,playerNo) {
+        if (playerNo === 1){
+            this.player1Bomb = {x:pos.x,y:pos.y};
+        } else if (playerNo === 2){
+            this.player2Bomb = {x:pos.x,y:pos.y};
+        }
         return this.gameboardInfo();
     }
 
-    setOffBomb(id) {
+    setOffBomb(playerNo) {
         let points = 0;
         let bombX = null;
         let bombY = null;
-        for (let i = 0;i<this.bombs.length;i++){
-            if (this.bombs[i].bombID === id){
-                console.log("Found bomb")
-                bombX = this.bombs[i].x;
-                bombY = this.bombs[i].y;
-                this.bombs.splice(i,0);
-                console.log(this.bombs);
-                const up = this.findBlockByPos(bombX,bombY-1) !== "breakable" ? false : true;
-                const down = this.findBlockByPos(bombX,bombY+1) !== "breakable" ? false : true;
-                const left = this.findBlockByPos(bombX-1,bombY) !== "breakable" ? false : true;
-                const right = this.findBlockByPos(bombX+1,bombY) !== "breakable" ? false : true;
-                if (up){
-                    this.removeBlockByPos(bombX,bombY-1);
-                    points += 1;
-                }
-                if (down){
-                    this.removeBlockByPos(bombX,bombY+1);
-                    points += 1;
-                }
-                if (left){
-                    this.removeBlockByPos(bombX-1,bombY);
-                    points += 1;
-                }
-                if (right){
-                    this.removeBlockByPos(bombX+1,bombY);
-                    points += 1;
-                }
-                this.bombs.splice(i,0);
-                break;
+        if (playerNo === 1){
+            bombX = this.player1Bomb.x;
+            bombY = this.player1Bomb.y
+            const up = this.findBlockByPos(bombX,bombY-1) !== "breakable" ? false : true;
+            const down = this.findBlockByPos(bombX,bombY+1) !== "breakable" ? false : true;
+            const left = this.findBlockByPos(bombX-1,bombY) !== "breakable" ? false : true;
+            const right = this.findBlockByPos(bombX+1,bombY) !== "breakable" ? false : true;
+            if (up){
+                this.removeBlockByPos(bombX,bombY-1);
+                points += 1;
             }
+            if (down){
+                this.removeBlockByPos(bombX,bombY+1);
+                points += 1;
+            }
+            if (left){
+                console.log("bomb left")
+                this.removeBlockByPos(bombX-1,bombY);
+                points += 1;
+            }
+            if (right){
+                console.log("bomb left")
+                this.removeBlockByPos(bombX+1,bombY);
+                points += 1;
+            }
+        } else if (playerNo === 2){
+            bombX = this.player2Bomb.x;
+            bombY = this.player2Bomb.y
+            const up = this.findBlockByPos(bombX,bombY-1) !== "breakable" ? false : true;
+            const down = this.findBlockByPos(bombX,bombY+1) !== "breakable" ? false : true;
+            const left = this.findBlockByPos(bombX-1,bombY) !== "breakable" ? false : true;
+            const right = this.findBlockByPos(bombX+1,bombY) !== "breakable" ? false : true;
+            if (up){
+                this.removeBlockByPos(bombX,bombY-1);
+                points += 1;
+            }
+            if (down){
+                this.removeBlockByPos(bombX,bombY+1);
+                points += 1;
+            }
+            if (left){
+                this.removeBlockByPos(bombX-1,bombY);
+                points += 1;
+            }
+            if (right){
+                this.removeBlockByPos(bombX+1,bombY);
+                points += 1;
+            }
+        }
+        if (playerNo === 1){
+            this.player1Bomb = null;
+        } else if (playerNo === 2){
+            this.player2Bomb = null;
         }
         return {up:{x:bombX,y:bombY-1},down:{x:bombX,y:bombY+1},left:{x:bombX-1,y:bombY},right:{x:bombX+1,y:bombY},center:{x:bombX,y:bombY},points:points};
     }
 
     deleteItem(x,y){
-        for (let i = 0; i < this.fires.length;i++){
-            if (fires[i].x === x && fires[i].y === y){
-                this.fires.splice(i,0);
+        for (let i = 0; i < this.coins.length;i++){
+            if (this.coins[i].x === x && this.coins[i].y === y){
+                this.coins.splice(i,1);
                 break;
             }
         }
         for (let j = 0; j < this.hearts.length;j++){
-            if (hearts[j].x === x && hearts[j].y === y){
-                this.hearts.splice(j,0);
+            if (this.hearts[j].x === x && this.hearts[j].y === y){
+                this.hearts.splice(j,1);
                 break;
             }
         }

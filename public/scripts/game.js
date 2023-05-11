@@ -165,8 +165,10 @@ const Game = function (backgroundIMG,breakableIMG,bluePlayerIMG,blackPlayerIMG,y
         }
 
         for (const bomb of gameBoard.bombs){
-            const loc = {x:(bomb.x+2)*blockWidth,y:(bomb.y+1)*blockHeight};
-            context.drawImage(spritesheet,128,48,16,16,loc.x,loc.y,16,16);
+            if (bomb){
+                const loc = {x:(bomb.x+2)*blockWidth,y:(bomb.y+1)*blockHeight};
+                context.drawImage(spritesheet,128,48,16,16,loc.x,loc.y,16,16);
+            }
         }
 
     };
