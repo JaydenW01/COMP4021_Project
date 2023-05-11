@@ -257,6 +257,11 @@
     <script>
       const collect_sound =  new Audio('assets/audio/collect_item.mp3');
       const explode_sound = new Audio('assets/audio/explosion.mp3');
+      const supermario = new Audio('assets/audio/supermario.mp3');
+      const GG = new Audio('assets/audio/gameover.mp3');
+      const BGM = new Audio('assets/audio/menu.mp3');
+      BGM.volume = 0.5;
+      GG.volume = 0.8;
 
       const gameBGM = new Audio("./assets/audio/game_bgm.mp3");
       const bgIMG = new Image();
@@ -776,6 +781,7 @@
 
       socket.on("GameOver",(info)=>{
         gameBGM.pause();
+        supermario.pause();
         $("#game-info-display1").hide();
         $("#game-info-display2").hide();
         const obj = JSON.parse(info);

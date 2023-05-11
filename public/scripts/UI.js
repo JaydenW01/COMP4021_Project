@@ -1,7 +1,3 @@
-const GG = new Audio('assets/audio/gameover.mp3');
-const BGM = new Audio('assets/audio/menu.mp3');
-BGM.volume = 0.6;
-
 const SignInForm = (function () {
     // This function initializes the UI
     const initialize = function () {

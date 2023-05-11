@@ -21,7 +21,6 @@ const Game = function (sprites) {
         explode: new Audio('assets/audio/explosion.mp3'),
         gameover: new Audio('assets/audio/gameover.mp3')
     };
-    const supermario = new Audio('assets/audio/supermario.mp3');
 
     const blockWidth = 16;
     const blockHeight = 16;
@@ -74,6 +73,7 @@ const Game = function (sprites) {
                     case 67:
                         // TODO
                         socket.emit("enable cheat");
+                        gameBGM.pause();
                         supermario.pause();
                         supermario.currentTime = 0;
                         supermario.play();
@@ -83,6 +83,7 @@ const Game = function (sprites) {
                         // TODO
                         socket.emit("disable cheat");
                         supermario.pause();
+                        gameBGM.play();
                         break;
                 }
             });
