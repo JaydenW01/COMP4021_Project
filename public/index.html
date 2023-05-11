@@ -19,6 +19,8 @@
   <body>
     <div class="canvas-container">
       <p id="timer" style="display:none"></p>
+      <div id="game-info-display1"><p id="player1-points"></p><p id="player1-health"></p></div>
+      <div id="game-info-display2"><p id="player2-points"></p><p id="player2-health"></p></div>
       <canvas id="canvas"></canvas>
       <div id="signin-overlay" class="overlay row">
         <div class="content shadow row">
@@ -150,8 +152,9 @@
 
         <!-- ranking page -->
         <div id="ranking" style="display: none;">
-          <table>
-            <caption>Leaderboard</caption>
+          <caption style="font-size: 200px;">Leaderboard</caption>
+          <div id="table-container">
+          <table id="table-ranking">
             <thead>
               <tr>
                 <th scope="col">Ranking</th>
@@ -180,6 +183,7 @@
               </tr>
             </tbody>
           </table>
+        </div>
           <button id="back-button-ranking">Back</button>       
         </div>
         <!-- game info page  -->
@@ -317,6 +321,9 @@
       const player1CancelReady = document.getElementById('cancel-button-player1');
       const player2CancelReady = document.getElementById('cancel-button-player2');
       const postGameMsgButton = document.getElementById('send-button');
+
+      $("#game-info-display1").hide();
+      $("#game-info-display2").hide();
       //chat box
       // const chatbox = document.querySelector('.chatbox');
       // const messages = chatbox.querySelector('.messages');
@@ -732,6 +739,8 @@
       });
 
       socket.on("StartGame",(gameboardString)=>{
+        $("#game-info-display1").show();
+        $("#game-info-display2").show();
         const gameboardInfo = JSON.parse(gameboardString);
         console.log(gameboardInfo);
         $('#game-lobby').hide();
@@ -752,22 +761,29 @@
         });
 
       socket.on("GameOver",(info)=>{
-        const {message,player1Points,player2Points,player1Name,player2Name,player1Username,player2Username} = JSON.parse(info);
+        $("#game-info-display1").hide();
+        $("#game-info-display2").hide();
+        const obj = JSON.parse(info);
         socket.emit("reset");
+        socket.emit("stopRender");
         timer.timerreset();
         game.setInputEnabled(false);
-        console.log(message);
+        console.log(obj);
         BGM.pause();
         GG.play();
-        $('#game-over').show();
-        if (player1Points > player2Points){
-          $('#winner').text(`${player1Name} wins!`)
-        } else if (player1Points < player2Points){
-          $('#winner').text(`${player2Name} wins!`);
-        } else {
-          $('#winner').text("It's a TIE!!! WOW!!!");
-          // $('#winner').text(`It's a draw!`);
-        }
+        $('#game-over').show(()=>{
+          $("#game-over-content").text(obj.message);
+          console.log(obj.player1Points);
+          if (obj.player1Points > obj.player2Points){
+            $('#winner').text(`${obj.player1Name} wins!`)
+          } else if (obj.player1Points < obj.player2Points){
+            $('#winner').text(`${obj.player2Name} wins!`);
+          } else {
+            $('#winner').text("It's a TIE!!! WOW!!!");
+            // $('#winner').text(`It's a draw!`);
+          }
+
+        });
       })
 
     </script>

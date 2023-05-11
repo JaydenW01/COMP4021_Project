@@ -91,6 +91,13 @@ const Game = function (sprites) {
         // console.log(breakables);
         // Clear the screen
         context.clearRect(0, 0, canvas.width, canvas.height);
+        const player1info = gameBoard.players[0];
+        const player2info = gameBoard.players[1];
+
+        $("#player1-points").text(`Player 1 Points: ${player1info.points}`);
+        $("#player2-points").text(`Player 2 Points: ${player2info.points}`);
+        $("#player1-health").text(`Player 1 Remaining Life: ${player1info.health}/3`);
+        $("#player2-health").text(`Player 2 Remaining Life: ${player2info.health}/3`);
         // draw map
         // let img = new Image();
         // img.onload = () => {
@@ -109,6 +116,7 @@ const Game = function (sprites) {
         }
         console.log("num breakables draw: ", num_breakables_drawn);
 
+<<<<<<< HEAD
         for (const player of gameBoard.players) {
             const loc = {x: (player.location.x+2)*blockWidth, y: (player.location.y+1)*blockHeight};
             if (player in players) {
@@ -142,9 +150,69 @@ const Game = function (sprites) {
                 )
                 console.log("updating player "+player.playerNo);
                 players[player.playerNo].update(loc, player.facing, now);
+=======
+        // for (const player of gameBoard.players) {
+        //     const loc = {x: (player.location.x+2)*blockWidth, y: (player.location.y+1)*blockHeight};
+        //     if (player in players) {
+        //         console.log("updating player "+player.playerNo+" location: ("+loc.x+", "+loc.y+")");
+        //         players[player.playerNo].update(
+        //             loc,
+        //             player.facing,
+        //             now);
+        //     } else {
+        //         let spriteSheet;
+        //         switch(player.colour) {
+        //             case("blue"):
+        //                 spriteSheet = blueSprite;
+        //                 break;
+        //             case("red"):
+        //                 spriteSheet = redSprite;
+        //                 break;
+        //             case("yellow"):
+        //                 spriteSheet = yellowSprite;
+        //                 break;
+        //             case("black"):
+        //                 spriteSheet = blackSprite;
+        //                 break;
+        //         }
+        //         console.log("creating player "+player.playerNo+" location: ("+loc.x+", "+loc.y+")");
+        //         players[player.playerNo] = new Player(
+        //             context,
+        //             loc.x,
+        //             loc.y,
+        //             player.colour,
+        //             spriteSheet,                    
+        //         )
+        //         console.log("updating player "+player.playerNo);
+        //         players[player.playerNo].update(loc, player.facing, now);
+        //     }
+        //     console.log("drawing player "+player.playerNo+" location: ("+loc.x+", "+loc.y+")");
+        //     players[player.playerNo].draw();
+        // }
+
+        for (const player of gameBoard.players){
+            let sheet = null;
+            const loc = {x:(player.location.x+2)*blockWidth,y:(player.location.y+1)*blockHeight};
+            if (player.colour === "red"){
+                sheet = redSprite;
+            } else if (player.colour === "yellow"){
+                sheet = yellowSprite;
+            } else if (player.colour === "black"){
+                sheet = blackSprite;
+            } else if (player.colour === "blue"){
+                sheet = blueSprite;
             }
-            console.log("drawing player "+player.playerNo+" location: ("+loc.x+", "+loc.y+")");
-            players[player.playerNo].draw();
+
+            if (player.facing === "down"){
+                context.drawImage(sheet,0,0,16,16,loc.x,loc.y,16,16);
+            } else if (player.facing === "up"){
+                context.drawImage(sheet,3*16,0,16,16,loc.x,loc.y,16,16);
+            } else if (player.facing === "left"){
+                context.drawImage(sheet,32,16,16,16,loc.x,loc.y,16,16);
+            } else if (player.facing === "right"){
+                context.drawImage(sheet,48,16,16,16,loc.x,loc.y,16,16);
+>>>>>>> f2de65fb518bb7e4513b7de6e2b2346726635f24
+            }
         }
 
 
