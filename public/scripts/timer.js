@@ -1,4 +1,5 @@
 const Timer = function(time) {
+    const orgTime = time;
     let time_remaining = time;
 
     const startCountDown = ()=>{
@@ -14,7 +15,11 @@ const Timer = function(time) {
           }, 1000);
     }
 
-    return {startCountDown:startCountDown};
+    const reset = ()=>{
+      time_remaining = orgTime;
+    }
+
+    return {startCountDown:startCountDown,reset:reset};
 
 
 }

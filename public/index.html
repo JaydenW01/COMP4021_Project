@@ -230,11 +230,12 @@
           </div> -->
           <div class="message-box">
             <div>
-              <div class="display-message" id="message-player1">123456</div>
-              <div class="display-message" id="message-player2">456789</div>
-              <label for="user-message">Type your message:</label>
-              <input type="text" id="user-message" name="user-message" required>
-              <button id="send-button">Send</button>
+              <div class="display-message" id="message-player"></div>
+              <div id="chat-area">
+                <label for="user-message">Type your message:</label>
+                <input type="text" id="user-message" name="user-message" required>
+                <button id="send-button">Send</button>
+              </div>
             </div>
           </div>
           <div class="button-container-gameover">
@@ -273,7 +274,7 @@
       const spritesheet = new Image();
       spritesheet.src = './assets/object_sprites.png';
 
-      const timer = Timer(180);
+      const timer = Timer(3);
       const socket = io();
       const game = Game(bgIMG,breakableIMG,blueIMG,blackIMG,yellowIMG,redIMG,spritesheet);
       const menuPage = document.getElementById('menu');
@@ -294,11 +295,26 @@
       const player2Ready = document.getElementById('ready-button-player2');
       const player1CancelReady = document.getElementById('cancel-button-player1');
       const player2CancelReady = document.getElementById('cancel-button-player2');
+      const postGameMsgButton = document.getElementById('send-button');
       //chat box
       // const chatbox = document.querySelector('.chatbox');
       // const messages = chatbox.querySelector('.messages');
       // const input = chatbox.querySelector('input[type="text"]');
       // const button = chatbox.querySelector('button');
+      postGameMsgButton.addEventListener('click',()=>{
+        const content = $("#user-message").val();
+        console.log(content);
+        if (content !== ""){
+          socket.emit("post-game message",content);
+          $("#chat-area").hide();
+        }
+        $("#user-message").val("");
+      })
+
+      socket.on("new post-game message",(info)=>{
+        const {username,message} = JSON.parse(info);
+        $("#message-player").append(`<div class='display-message'>${username}: ${message}`);
+      })
 
       player1Ready.addEventListener('click',()=>{
         socket.emit('onReady',1);
@@ -411,7 +427,9 @@
       });
       backButtonGameover.addEventListener('click', () => {
         GG.pause();
+        $("#message-player").empty();
         $('#timer').hide();
+        $("#chat-area").show();
         $('#game-over').hide();
         menuPage.style.display = 'block';
         $('#canvas').css('background-image', "url('./assets/jayden/game_background.jpg')").css('background-color', 'none');
@@ -423,7 +441,9 @@
       });
       restartButton.addEventListener('click', () => {
         GG.pause();
+        $("#message-player").empty();
         $('#timer').hide();
+        $("#chat-area").show();
         $('#game-over').hide();
         characterPage.style.display = 'block';
         $('#canvas').css('background-image', "url('./assets/jayden/game_background.jpg')").css('background-color', 'none');
@@ -708,22 +728,22 @@
 
       socket.on("GameOver",(info)=>{
         const {message,player1Points,player2Points,player1Name,player2Name,player1Username,player2Username} = JSON.parse(info);
+        socket.emit("reset");
         console.log(message);
         console.log(player1Username);
         console.log(player2Username);
+        timer.reset();
         if (player1Points > player2Points){
-          
+          $('#winner').text(`${player1Name} wins!`)
         } else if (player1Points < player2Points){
           $('#winner').text(`${player2Name} wins!`);
         } else {
-          $('#winner').text(`${player1Name} wins!`);
+          $('#winner').text("It's a TIE!!! WOW!!!");
           // $('#winner').text(`It's a draw!`);
         }
         BGM.pause();
         GG.play();
         
-        socket.emit('leaveLobby',player1Username);
-        socket.emit('leaveLobby',player2Username);
         $('#game-over').show();
       })
 

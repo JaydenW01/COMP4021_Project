@@ -174,6 +174,7 @@ export default class Gameboard {
         let bombY = null;
         for (let i = 0;i<this.bombs.length;i++){
             if (this.bombs[i].bombID === id){
+                console.log("Found bomb")
                 bombX = this.bombs[i].x;
                 bombY = this.bombs[i].y;
                 this.bombs.splice(i,0);

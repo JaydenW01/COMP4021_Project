@@ -161,6 +161,7 @@ app.post("/post_score",(req,res)=>{
 
 
 
+
 // WebSocket codes ...
 const httpServer = createServer(app);
 const io = new Server(httpServer);
@@ -168,6 +169,13 @@ const io = new Server(httpServer);
 io.on("connection",(socket)=>{
     // print out who has connected 
     console.log(`${socket.request.session.user?.username} has logged in`);
+
+    socket.on('post-score',(obj)=>{
+        const {displayName,points} = JSON.parse(obj);
+        const ranking = JSON.parse(fs.readFileSync('data/ranking.json'));
+        ranking.push({displayName,points});
+        fs.writeFileSync('data/ranking.json', JSON.stringify(ranking, null, ' '));
+    })
 
     // when player is ready to start the game, for CHARLIE: to join lobby: socket.emit("joinLobby","red");
     socket.on('joinLobby',(object)=>{
@@ -243,6 +251,7 @@ io.on("connection",(socket)=>{
 
     socket.on("post-game message",(content)=>{
         const {username,displayName} = socket.request.session.user;
+        console.log(content);
         const message = {username,displayName,message:content};
         io.emit("new post-game message",JSON.stringify(message));
     })
@@ -443,6 +452,7 @@ io.on("connection",(socket)=>{
 
     let bombID = [];
     let playerPlaceBomb = [];
+    let timesup = 1;
 
     const explode = ()=>{
         console.log(bombID);
@@ -466,19 +476,23 @@ io.on("connection",(socket)=>{
             bombs: gameboard.gameboardInfo().bombs
         }));
         if (!player1AfterExplosion){ // does not survive after explosion
-            io.emit("GameOver",JSON.stringify({message:"Player1 died!",player1:player1.getPoints(),player2:player2.getPoints(),player1Name:player1.getDisplayName()
-            ,player2Name:player2.getDisplayName(),player1Username:player1.getUsername(),player2Username:player2.getUsername()}));
-            gameboard.reset();
-            player1.reset();
-            player2.reset();
+            io.emit("GameOver",JSON.stringify({message:"Player1 died!",player1:player1.getPoints(),player2:player2.getPoints()}));
+            const ranking = JSON.parse(fs.readFileSync('data/ranking.json'));
+            if (player1.getDisplayName() && player2.getDisplayName()){
+                ranking.push({displayName:player1.getDisplayName(),points:player1.getPoints()});
+                ranking.push({displayName:player2.getDisplayName(),points:player2.getPoints()});
+            }
+            fs.writeFileSync('data/ranking.json', JSON.stringify(ranking, null, ' '));
             return;
         }
         if (!player2AfterExplosion){ // does not survive after explosion
-            io.emit("GameOver",JSON.stringify({message:"Player2 died!",player1:player1.getPoints(),player2:player2.getPoints(),player1Name:player1.getDisplayName()
-            ,player2Name:player2.getDisplayName(),player1Username:player1.getUsername(),player2Username:player2.getUsername()}));
-            gameboard.reset();
-            player1.reset();
-            player2.reset();
+            io.emit("GameOver",JSON.stringify({message:"Player2 died!",player1:player1.getPoints(),player2:player2.getPoints()}));
+            const ranking = JSON.parse(fs.readFileSync('data/ranking.json'));
+            if (player1.getDisplayName() && player2.getDisplayName()){
+                ranking.push({displayName:player1.getDisplayName(),points:player1.getPoints()});
+                ranking.push({displayName:player2.getDisplayName(),points:player2.getPoints()});
+            }
+            fs.writeFileSync('data/ranking.json', JSON.stringify(ranking, null, ' '));
             return;
         }
     }
@@ -507,11 +521,24 @@ io.on("connection",(socket)=>{
     })
 
     socket.on("Time's Up",()=>{
-        io.emit("GameOver",JSON.stringify({message:"Time's up!",player1Points:player1.getPoints(),player2Points:player2.getPoints(),player1Name:player1.getDisplayName()
-        ,player2Name:player2.getDisplayName(),player1Username:player1.getUsername(),player2Username:player2.getUsername()}));
+        timesup -= 1;
+        if (timesup === 0){
+            io.emit("GameOver",JSON.stringify({message:"Time's up!",player1Points:player1.getPoints(),player2Points:player2.getPoints(),player1Name:player1.getDisplayName(),player2Name:player2.getDisplayName()}));
+            const ranking = JSON.parse(fs.readFileSync('data/ranking.json'));
+            if (player1.getDisplayName() && player2.getDisplayName()){
+                ranking.push({displayName:player1.getDisplayName(),points:player1.getPoints()});
+                ranking.push({displayName:player2.getDisplayName(),points:player2.getPoints()});
+            }
+            fs.writeFileSync('data/ranking.json', JSON.stringify(ranking, null, ' '));
+        }
+    })
+
+    socket.on("reset",()=>{
+        timesup = 1;
         gameboard.reset();
         player1.reset();
         player2.reset();
+        lobby.reset();
     })
 
     socket.on("debug",()=>{

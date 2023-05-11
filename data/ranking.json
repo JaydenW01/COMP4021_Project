@@ -1,18 +1,34 @@
 [
-    {
-        "displayName":"test2",
-        "points":100
-    },
-    {
-        "displayName":"test4",
-        "points":50
-    },
-    {
-        "displayName":"test1",
-        "points":120
-    },
-    {
-        "displayName":"test3",
-        "points":60
-    }
+ {
+  "displayName": "test2",
+  "points": 100
+ },
+ {
+  "displayName": "test4",
+  "points": 50
+ },
+ {
+  "displayName": "test1",
+  "points": 120
+ },
+ {
+  "displayName": "test3",
+  "points": 60
+ },
+ {
+  "displayName": "test3",
+  "points": 0
+ },
+ {
+  "displayName": "test2",
+  "points": 0
+ },
+ {
+  "displayName": "test2",
+  "points": 0
+ },
+ {
+  "displayName": "test3",
+  "points": 0
+ }
 ]
