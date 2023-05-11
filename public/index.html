@@ -752,6 +752,9 @@
         timer.timerreset();
         game.setInputEnabled(false);
         console.log(message);
+        BGM.pause();
+        GG.play();
+        $('#game-over').show();
         if (player1Points > player2Points){
           $('#winner').text(`${player1Name} wins!`)
         } else if (player1Points < player2Points){
@@ -760,10 +763,6 @@
           $('#winner').text("It's a TIE!!! WOW!!!");
           // $('#winner').text(`It's a draw!`);
         }
-        BGM.pause();
-        GG.play();
-        
-        $('#game-over').show();
       })
 
     </script>

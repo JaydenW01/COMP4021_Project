@@ -199,6 +199,20 @@ const Game = function (sprites) {
             }
         }
 
+        if (gameBoard.coins){
+            for (const coin of gameBoard.coins){
+                const loc = {x:(coin.x+2)*blockWidth,y:(coin.y+1)*blockHeight};
+                context.drawImage(spritesheet,12*16,32,16,16,loc.x,loc.y,16,16);
+            }
+        }
+
+        if (gameBoard.hearts){
+            for (const heart of gameBoard.hearts){
+                const loc = {x:(heart.x+2)*blockWidth,y:(heart.y+1)*blockHeight};
+                context.drawImage(spritesheet,0,16,16,16,loc.x,loc.y,16,16);
+            }
+        }
+
     };
 
     explodeBomb = function (bombID) {
