@@ -301,7 +301,7 @@ const Game = function (sprites) {
 
         console.log("fires list: "+JSON.stringify(fires));
 
-        if(repeat == true) {
+        if(repeat) {
             setTimeout(
                 this.updateBoard(lastGameBoard, false)
                 , 150);
