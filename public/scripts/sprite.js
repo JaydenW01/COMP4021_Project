@@ -5,8 +5,8 @@
 const Sprite = function(ctx, x, y, img) {
 
     // This is the image object for the sprite sheet.
-    const sheet = new Image();
-    const spriteimg = img;
+    let sheet = new Image();
+    let spriteimg = img;
 
     // This is an object containing the sprite sequence information used by the sprite containing:
     // - `x` - The starting x position of the sprite sequence in the sprite sheet
@@ -39,6 +39,11 @@ const Sprite = function(ctx, x, y, img) {
         sheet.src = spriteSheet;
         return this;
     };
+
+    const useSpriteImg = function(sprImg) {
+        spriteimg = sprImg;
+        return this;
+    }
 
     // This function returns the readiness of the sprite sheet image.
     const isReady = function() {
@@ -148,7 +153,10 @@ const Sprite = function(ctx, x, y, img) {
 		ctx.imageSmoothingEnabled = false;
 		ctx.drawImage(
 			spriteimg,
-			parseInt(x - size.width / 2), parseInt(y - size.height / 2),
+			sequence.x + index * sequence.width, sequence.y,
+			sequence.width, sequence.height,
+			//parseInt(x - size.width / 2), parseInt(y - size.height / 2),
+            x, y,
 			size.width, size.height
 		)
 
@@ -158,10 +166,11 @@ const Sprite = function(ctx, x, y, img) {
      
     // This function draws the shadow and the sprite.
     const draw = function() {
-        if (isReady()) {
-            // drawShadow();
-            drawSprite();
-        }
+        //if (isReady()) {
+        //    // drawShadow();
+        //    drawSprite();
+        //}
+        drawSprite();
         return this;
     };
 
@@ -189,6 +198,7 @@ const Sprite = function(ctx, x, y, img) {
     // The methods are returned as an object here.
     return {
         useSheet: useSheet,
+        useSpriteImg: useSpriteImg,
         getXY: getXY,
         setXY: setXY,
         setSequence: setSequence,
