@@ -50,7 +50,7 @@ export default class Gameboard {
         this.walls = initialWalls;
         this.breakables = initialBreakables;
         this.bombs = [];
-        this.fires = [];
+        this.conins = [];
         this.hearts = [];
     }
 
@@ -58,6 +58,8 @@ export default class Gameboard {
         this.walls = initialWalls;
         this.breakables = initialBreakables;
         this.bombs = [];
+        this.conins = [];
+        this.hearts = [];
     }
 
     findBlockByPos(x,y){
@@ -90,7 +92,7 @@ export default class Gameboard {
     }
 
     gameboardInfo() {
-        return {breakables:this.breakables,bombs:this.bombs,hearts:this.hearts,fires:this.fires};
+        return {breakables:this.breakables,bombs:this.bombs,hearts:this.hearts,coins:this.coins};
     }
 
     // up : x,y-1
@@ -178,6 +180,7 @@ export default class Gameboard {
                 bombX = this.bombs[i].x;
                 bombY = this.bombs[i].y;
                 this.bombs.splice(i,0);
+                console.log(this.bombs);
                 const up = this.findBlockByPos(bombX,bombY-1) !== "breakable" ? false : true;
                 const down = this.findBlockByPos(bombX,bombY+1) !== "breakable" ? false : true;
                 const left = this.findBlockByPos(bombX-1,bombY) !== "breakable" ? false : true;
